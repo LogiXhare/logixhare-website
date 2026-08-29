@@ -42,6 +42,10 @@ jobs:
 
       - name: Deploy to staging
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        env:
+          # vsftpd on the target host has a known TLS 1.3 handshake bug over explicit FTPS
+          # (OpenSSL "bad record type" on the control socket) — cap Node's TLS at 1.2 to avoid it.
+          NODE_OPTIONS: --tls-max-v1.2
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
@@ -75,6 +79,9 @@ jobs:
 
       - name: Deploy to production
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        env:
+          # See deploy-staging: vsftpd's TLS 1.3 handshake bug over explicit FTPS.
+          NODE_OPTIONS: --tls-max-v1.2
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
