@@ -61,6 +61,7 @@ jobs:
           lftp -c "
             set ftp:ssl-allow no;
             open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
+            mkdir -p ./public_html/staging;
             mirror -R --delete --verbose ./dist/ ./public_html/staging/;
             bye
           "
