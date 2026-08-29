@@ -1,0 +1,314 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import { serviceCategories } from '../data/nav';
+import { url } from '../lib/url';
+
+// Anchors come straight from the nav data, so a mega-menu link can never
+// point at a section id that doesn't exist on this page.
+const anchorOf = (href: string) => href.split('#')[1] ?? '';
+
+const hostingTiers = [
+  { name: 'Go', note: 'A first website, done properly.' },
+  { name: 'Starter', note: 'More disk and bandwidth to grow into.' },
+  { name: 'Medium', note: 'Busier sites and small applications.' },
+  { name: 'Advanced', note: 'Our largest shared tier.' },
+];
+---
+
+<BaseLayout
+  title="Services"
+  description="Web hosting, email, domains and DNS, server management, web and application development, network automation, security monitoring and SEO — from LogixHare Technologies, Dhaka."
+>
+  <section class="page-intro">
+    <div class="page-intro-bg" aria-hidden="true"></div>
+    <div class="container">
+      <p class="eyebrow">Services</p>
+      <h1 class="display">Everything we do, in plain terms</h1>
+      <p class="lede">
+        Four areas of work, and the specific things we deliver inside each one. If something you
+        need is not on this page, ask — we would rather tell you it is outside what we do than take
+        it on badly.
+      </p>
+
+      <ul class="cat-jump">
+        {
+          serviceCategories.map((cat) => (
+            <li>
+              <a href={`#${cat.id}`}>
+                <Icon name={cat.icon} class="jump-icon" />
+                {cat.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {
+    serviceCategories.map((cat, ci) => (
+      <section class={`section cat-section ${ci % 2 === 1 ? 'band' : ''}`} id={cat.id}>
+        <div class="container">
+          <div class="cat-head">
+            <span class="icon-tile">
+              <Icon name={cat.icon} />
+            </span>
+            <div>
+              <h2>{cat.label}</h2>
+              <p class="lede">{cat.summary}</p>
+            </div>
+          </div>
+
+          <div class="item-grid">
+            {cat.items.map((item) => (
+              <article class="item-card card" id={anchorOf(item.href)}>
+                <div class="item-head">
+                  <span class="item-icon">
+                    <Icon name={item.icon} />
+                  </span>
+                  <h3>{item.label}</h3>
+                </div>
+                <p>{item.detail}</p>
+
+                {anchorOf(item.href) === 'web-hosting' && (
+                  <div class="tier-block">
+                    <ul class="tier-list">
+                      {hostingTiers.map((tier) => (
+                        <li>
+                          <span class="tier-name">{tier.name}</span>
+                          <span class="tier-note">{tier.note}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href="https://billing.logixhare.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="btn btn-primary tier-cta"
+                    >
+                      See plans &amp; pricing <Icon name="arrow-right" class="btn-icon" />
+                    </a>
+                    <p class="tier-foot">
+                      Opens billing.logixhare.com, where plans, pricing and sign-up are self-service.
+                    </p>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <CtaBand
+    heading="Not sure which of these you need?"
+    body="Describe what you're trying to do and we'll point you at the right service — or tell you plainly if it isn't something we should be doing for you."
+    secondaryHref="/about/"
+    secondaryLabel="About LogixHare"
+  />
+</BaseLayout>
+
+<style>
+  .page-intro {
+    position: relative;
+    padding-block: clamp(3rem, 2.3rem + 3vw, 5rem) clamp(1.5rem, 1.2rem + 1vw, 2.5rem);
+    overflow: hidden;
+  }
+
+  .page-intro-bg {
+    position: absolute;
+    inset: -50% -20% auto -20%;
+    height: 700px;
+    background: radial-gradient(ellipse 55% 50% at 30% 30%, rgba(45, 199, 201, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .page-intro > .container {
+    position: relative;
+  }
+
+  .page-intro h1 {
+    margin-top: 1rem;
+    max-width: 20ch;
+  }
+
+  .page-intro .lede {
+    margin-top: 1.3rem;
+  }
+
+  .cat-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 2.25rem;
+  }
+
+  .cat-jump a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--slate);
+    transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+  }
+
+  .cat-jump a:hover {
+    border-color: rgba(45, 199, 201, 0.45);
+    background: var(--surface-2);
+    color: var(--on-dark);
+  }
+
+  /* Icon.astro renders a child <svg>, which never carries this page's
+     Astro scope hash — :global() is required for these to match. */
+  .cat-jump :global(.jump-icon) {
+    width: 16px;
+    height: 16px;
+    color: var(--teal);
+  }
+
+  .cat-section {
+    scroll-margin-top: 90px;
+  }
+
+  .cat-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.15rem;
+    margin-bottom: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+  }
+
+  .cat-head .lede {
+    margin-top: 0.6rem;
+    font-size: var(--text-base);
+  }
+
+  .item-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .item-card {
+    padding: 1.75rem;
+    scroll-margin-top: 100px;
+  }
+
+  /* The hosting card carries the tier table, so it takes the full row. */
+  .item-card:has(.tier-block) {
+    grid-column: 1 / -1;
+  }
+
+  .item-head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .item-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+    background: var(--teal-wash);
+    border: 1px solid rgba(45, 199, 201, 0.2);
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .item-icon :global(svg) {
+    width: 20px;
+    height: 20px;
+  }
+
+  .item-head h3 {
+    font-size: var(--text-lg);
+  }
+
+  .item-card p {
+    color: var(--slate);
+    font-size: var(--text-sm);
+    line-height: 1.75;
+    max-width: 68ch;
+  }
+
+  /* --- hosting tiers --- */
+
+  .tier-block {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .tier-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .tier-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--navy-deep);
+  }
+
+  .tier-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+
+  .tier-note {
+    font-size: 0.8rem;
+    color: var(--slate);
+    line-height: 1.45;
+  }
+
+  .tier-cta {
+    margin-top: 1.5rem;
+  }
+
+  .tier-foot {
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    color: var(--on-dark-muted);
+  }
+
+  @media (max-width: 900px) {
+    .item-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tier-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .cat-head {
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .tier-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

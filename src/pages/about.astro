@@ -1,0 +1,247 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+
+const beliefs = [
+  {
+    title: 'Say what’s true',
+    description:
+      "We'd rather tell you a plan won't work than sell you one that fails quietly later. Pricing, capabilities, and limitations get stated plainly, not buried in a proposal.",
+  },
+  {
+    title: 'Own what we build',
+    description:
+      'The people who set up your server or write your code are the same people who support it afterward. Nothing gets handed off to someone who has never seen your setup.',
+  },
+  {
+    title: 'Build for the long run',
+    description:
+      'Infrastructure choices are made to still make sense in three years, not just to close a deal this quarter.',
+  },
+  {
+    title: 'Stay reachable',
+    description:
+      "Support means talking to someone who already understands your setup — not re‑explaining it to a different person every time.",
+  },
+];
+---
+
+<BaseLayout
+  title="About"
+  description="LogixHare Technologies is a new, Dhaka-based technology company. Here's who we are, what we believe, and how we're building the company."
+>
+  <section class="page-intro">
+    <div class="container">
+      <p class="eyebrow">About LogixHare</p>
+      <h1 class="display">A new technology company, built to last past its first year</h1>
+      <p class="lede">
+        LogixHare Technologies is based in Dhaka, Bangladesh. We're young — that matters enough to say plainly
+        rather than dress up.
+      </p>
+    </div>
+  </section>
+
+  <section class="section about-narrative">
+    <div class="container narrative-grid">
+      <div class="narrative-copy">
+        <p>
+          We started LogixHare to do a small number of things well: host and build the infrastructure and
+          software that businesses in Bangladesh depend on, and support it directly — ourselves — without
+          layers of ticket queues in between. We're not the biggest name in this market yet. We're the company
+          that answers when you call.
+        </p>
+        <p>
+          What we have today is real infrastructure, a working hosting and billing platform, and a small team
+          that stays hands-on with every account we run. What we don't have is decades of history or a long
+          client list to point to as proof — we're earning that the same way any new company does: one project,
+          one server, one conversation at a time.
+        </p>
+      </div>
+      <aside class="narrative-fact-panel">
+        <p class="eyebrow">At a glance</p>
+        <ul>
+          <li>
+            <span class="fact-label">Based in</span>
+            <span class="fact-value">Dhaka, Bangladesh</span>
+          </li>
+          <li>
+            <span class="fact-label">Focus</span>
+            <span class="fact-value">Hosting, software, and IT infrastructure</span>
+          </li>
+          <li>
+            <span class="fact-label">Support model</span>
+            <span class="fact-value">Direct — no outsourced ticket desk</span>
+          </li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section beliefs-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">What we believe</p>
+        <h2>The principles we're building the company on</h2>
+      </div>
+      <div class="beliefs-grid">
+        {
+          beliefs.map((belief) => (
+            <div class="belief-card card">
+              <span class="belief-check"><Icon name="check" /></span>
+              <h3>{belief.title}</h3>
+              <p>{belief.description}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Want to know more before you commit?"
+    body="Ask us anything — about the team, the infrastructure, or how we'd approach your project specifically."
+  />
+</BaseLayout>
+
+<style>
+  .page-intro {
+    padding-block: clamp(2.5rem, 2rem + 2.5vw, 4rem) clamp(1.5rem, 1.2rem + 1vw, 2.5rem);
+  }
+
+  .page-intro h1 {
+    margin-top: 0.75rem;
+    max-width: 26ch;
+  }
+
+  .page-intro .lede {
+    margin-top: 1.1rem;
+  }
+
+  .narrative-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  .narrative-copy p {
+    color: var(--navy);
+    font-size: var(--text-lg);
+    line-height: 1.75;
+  }
+
+  .narrative-copy p + p {
+    margin-top: 1.4rem;
+  }
+
+  .narrative-fact-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+    position: sticky;
+    top: 110px;
+  }
+
+  .narrative-fact-panel ul {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .narrative-fact-panel li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .narrative-fact-panel li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .fact-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+
+  .fact-value {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: var(--text-sm);
+  }
+
+  .beliefs-section {
+    background: var(--surface);
+    border-block: 1px solid var(--line);
+  }
+
+  .section-head {
+    max-width: 62ch;
+    margin-bottom: clamp(2rem, 1.6rem + 1.5vw, 2.75rem);
+  }
+
+  .section-head h2 {
+    margin-top: 0.6rem;
+  }
+
+  .beliefs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .belief-card {
+    padding: 1.75rem;
+  }
+
+  .belief-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(45, 199, 201, 0.14);
+    color: var(--teal);
+    margin-bottom: 1rem;
+  }
+
+  .belief-check :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .belief-card h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .belief-card p {
+    color: var(--slate);
+    font-size: var(--text-sm);
+    line-height: 1.65;
+  }
+
+  @media (max-width: 900px) {
+    .narrative-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .narrative-fact-panel {
+      position: static;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .beliefs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

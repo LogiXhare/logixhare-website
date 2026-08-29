@@ -1,0 +1,270 @@
+---
+import Icon from './Icon.astro';
+import { serviceCategories } from '../data/nav';
+import { url } from '../lib/url';
+
+const year = new Date().getFullYear();
+
+// Contact cards. LogixHare runs one office — this is that office, split by
+// how people actually reach us, rather than padded out with invented branches.
+const contactCards = [
+  {
+    icon: 'pin' as const,
+    label: 'Head office',
+    lines: ['101, Gulshan Avenue', 'Gulshan, Dhaka 1212, Bangladesh'],
+  },
+  {
+    icon: 'phone' as const,
+    label: 'Sales & support',
+    lines: ['+880 1915-749496'],
+    href: 'tel:+8801915749496',
+  },
+  {
+    icon: 'mail' as const,
+    label: 'Email us',
+    lines: ['info@logixhare.com'],
+    href: 'mailto:info@logixhare.com',
+  },
+];
+
+const companyLinks = [
+  { label: 'About us', href: url('/about/') },
+  { label: 'Services', href: url('/services/') },
+  { label: 'Contact', href: url('/contact/') },
+];
+
+// One representative link per service category, so the footer stays scannable
+// instead of reprinting the whole mega-menu.
+const serviceLinks = serviceCategories.map((cat) => ({
+  label: cat.label,
+  href: url(`/services/#${cat.id}`),
+}));
+
+const clientLinks = [
+  { label: 'Client billing portal', href: 'https://billing.logixhare.com/', external: true },
+  { label: 'Hosting plans & pricing', href: 'https://billing.logixhare.com/', external: true },
+  { label: 'Request support', href: url('/contact/') },
+];
+---
+
+<footer class="site-footer">
+  <!-- Contact strip -->
+  <div class="container contact-strip">
+    {
+      contactCards.map((card) => (
+        <div class="contact-card card">
+          <span class="icon-tile">
+            <Icon name={card.icon} />
+          </span>
+          <div>
+            <span class="contact-label">{card.label}</span>
+            {card.href ? (
+              <a href={card.href} class="contact-value">
+                {card.lines[0]}
+              </a>
+            ) : (
+              card.lines.map((line) => <p class="contact-value">{line}</p>)
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <img
+        src={url('/logo-dark.png')}
+        alt="LogixHare Technologies"
+        width="200"
+        height="67"
+        class="footer-logo"
+      />
+      <p class="footer-tagline">
+        Hosting, networks and software for Bangladeshi businesses — built and supported from Dhaka,
+        by the engineers who run it.
+      </p>
+      <a href="https://billing.logixhare.com/" class="btn btn-ghost footer-portal" target="_blank" rel="noopener noreferrer">
+        Client portal <Icon name="arrow-right" class="btn-icon" />
+      </a>
+    </div>
+
+    <nav class="footer-col" aria-label="Company">
+      <span class="footer-heading">Company</span>
+      <ul>{companyLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+    </nav>
+
+    <nav class="footer-col" aria-label="Services">
+      <span class="footer-heading">Services</span>
+      <ul>{serviceLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+    </nav>
+
+    <nav class="footer-col" aria-label="Clients">
+      <span class="footer-heading">Clients</span>
+      <ul>
+        {
+          clientLinks.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                target={l.external ? '_blank' : undefined}
+                rel={l.external ? 'noopener noreferrer' : undefined}
+              >
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>&copy; {year} LogixHare Technologies. All rights reserved.</p>
+    <p class="footer-reg">Dhaka, Bangladesh</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--navy-deep);
+    border-top: 1px solid var(--line);
+    padding-top: clamp(3rem, 2.4rem + 2vw, 4.5rem);
+  }
+
+  /* --- contact strip --- */
+
+  .contact-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+    padding-bottom: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  }
+
+  .contact-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.4rem;
+  }
+
+  .contact-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-value {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--on-dark);
+    line-height: 1.55;
+    transition: color 0.15s ease;
+  }
+
+  a.contact-value:hover {
+    color: var(--teal);
+  }
+
+  /* --- link grid --- */
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.3fr 1.2fr;
+    gap: 2.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .footer-logo {
+    height: 34px;
+    width: auto;
+    margin-bottom: 1rem;
+  }
+
+  .footer-tagline {
+    color: var(--slate);
+    font-size: var(--text-sm);
+    max-width: 34ch;
+    line-height: 1.65;
+  }
+
+  .footer-portal {
+    margin-top: 1.4rem;
+    padding: 0.7em 1.3em;
+  }
+
+  .footer-heading {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--on-dark);
+    margin-bottom: 1rem;
+  }
+
+  .footer-col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .footer-col a {
+    font-size: var(--text-sm);
+    color: var(--slate);
+    transition: color 0.15s ease;
+  }
+
+  .footer-col a:hover {
+    color: var(--teal);
+  }
+
+  /* --- bottom bar --- */
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .footer-bottom p {
+    font-size: var(--text-xs);
+    color: var(--on-dark-muted);
+  }
+
+  .footer-reg {
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 900px) {
+    .contact-strip {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

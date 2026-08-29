@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The PR preview build is deployed here and is a byte-for-byte duplicate of the
+# live site. Keep it out of the index so it can't compete with logixhare.com/
+# for the same content.
+Disallow: /staging/

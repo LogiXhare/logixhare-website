@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,13 +18,17 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
+      # BASE_PATH makes generated asset URLs (CSS/JS/images) resolve correctly under
+      # /staging/ for PR previews; production builds (push to main) get the default '/'.
       - name: Build
+        env:
+          BASE_PATH: ${{ github.event_name == 'pull_request' && '/staging' || '' }}
         run: npm run build
 
       - name: Upload build artifact
@@ -40,16 +48,34 @@ jobs:
           name: site-build
           path: dist/
 
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      # Deploys over SFTP (SSH), not FTP/FTPS. vsftpd on this host turned out to have two
+      # separate, unrelated bugs that made FTP/FTPS unworkable: a broken TLS 1.3 handshake on
+      # explicit FTPS, and allow_writeable_chroot=NO refusing to CWD into any directory the
+      # login account itself owns/can write (which is every deploy target, by definition).
+      # SFTP via OpenSSH's own chroot (Match User + ForceCommand internal-sftp) has neither
+      # problem. See logixhare-website-build.md for the full debugging story.
+      - name: Set up SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
       - name: Deploy to staging
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
-          protocol: ftps
-          local-dir: ./dist/
-          server-dir: ./staging/
-          security: strict
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          lftp -c "
+            set sftp:connect-program 'ssh -a -x -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no';
+            open -u \"$SSH_USER\",\"\" \"sftp://$SSH_HOST\";
+            mirror -R --delete --verbose ./dist/ ./public_html/staging/;
+            bye
+          "
 
       - name: Comment staging link on PR
         uses: actions/github-script@v7
@@ -73,15 +99,25 @@ jobs:
           name: site-build
           path: dist/
 
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Set up SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
       - name: Deploy to production
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
-          protocol: ftps
-          local-dir: ./dist/
-          server-dir: ./
-          security: strict
-          exclude: |
-            **/staging/**
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          lftp -c "
+            set sftp:connect-program 'ssh -a -x -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no';
+            open -u \"$SSH_USER\",\"\" \"sftp://$SSH_HOST\";
+            mirror -R --delete --verbose --exclude-glob staging/ ./dist/ ./public_html/;
+            bye
+          "

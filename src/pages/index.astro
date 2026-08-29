@@ -1,0 +1,1048 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import NodeLattice from '../components/NodeLattice.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/url';
+
+// --- hero rotator ---
+// Each slide leads with a different capability, the way a company with more
+// than one line of work introduces itself. Copy is deliberately concrete.
+const slides = [
+  {
+    eyebrow: 'Managed web hosting',
+    heading: 'Hosting you never have to chase support about',
+    body: 'Websites, mail and databases on infrastructure we own and run ourselves — with published pricing and a portal you can actually self-serve from.',
+  },
+  {
+    eyebrow: 'Web design & development',
+    heading: 'Websites built around how your business really works',
+    body: 'Custom sites and web applications, designed and written to fit your process instead of bending your process around a template.',
+  },
+  {
+    eyebrow: 'Networks & infrastructure',
+    heading: 'Network and server work, done the way operators do it',
+    body: 'Design, automation, hardening and monitoring — the same discipline used on carrier networks, applied at the size your business needs.',
+  },
+];
+
+const standards = [
+  { icon: 'lock' as const, title: 'Free SSL', note: 'Issued, installed and auto-renewed on every plan.' },
+  { icon: 'server' as const, title: 'NVMe storage', note: 'Solid-state throughout, not spinning disk.' },
+  { icon: 'refresh' as const, title: 'Scheduled backups', note: 'Taken on a schedule, restorable on request.' },
+  { icon: 'phone' as const, title: 'Direct support', note: 'You reach the engineers, not a call queue.' },
+];
+
+const stack = ['Ubuntu LTS', 'Nginx', 'HestiaCP', 'MariaDB', "Let's Encrypt", 'Cloudflare'];
+
+const services = [
+  {
+    icon: 'server' as const,
+    title: 'Web Hosting',
+    description:
+      'Shared, NVMe-backed hosting across four tiers — sized for a first website or a growing application, provisioned from our own portal.',
+    href: '/services/#web-hosting',
+  },
+  {
+    icon: 'code' as const,
+    title: 'Web Design & Development',
+    description:
+      'Custom websites and web applications, designed and built around how your business actually operates.',
+    href: '/services/#web-development',
+  },
+  {
+    icon: 'network' as const,
+    title: 'Networks & Automation',
+    description:
+      'Network design, setup and automation — repeatable, reviewed changes instead of undocumented manual work.',
+    href: '/services/#network-consulting',
+  },
+  {
+    icon: 'cloud' as const,
+    title: 'Server Management',
+    description:
+      'Day-to-day administration of your VPS or dedicated server: updates, configuration, backups and troubleshooting.',
+    href: '/services/#server-management',
+  },
+  {
+    icon: 'shield' as const,
+    title: 'Security & Monitoring',
+    description:
+      'Baseline hardening for servers and network gear, plus monitoring so problems surface before your customers find them.',
+    href: '/services/#security',
+  },
+  {
+    icon: 'search' as const,
+    title: 'SEO & Digital Marketing',
+    description:
+      'Technical SEO and practical campaign support, so the site you paid for gets found by people already searching.',
+    href: '/services/#seo',
+  },
+];
+
+// Who the work is actually for — positioning, not invented case studies.
+const audiences = [
+  {
+    icon: 'globe' as const,
+    title: 'Small & growing businesses',
+    body: 'A proper website, business email on your own domain, and hosting that stays out of your way.',
+    points: ['Website + hosting together', 'Business email', 'One point of contact'],
+  },
+  {
+    icon: 'network' as const,
+    title: 'ISPs & network operators',
+    body: 'Infrastructure work at operator scale: automation, monitoring and change discipline on live networks.',
+    points: ['Network automation', 'Monitoring & alerting', 'Change review and rollback'],
+  },
+  {
+    icon: 'code' as const,
+    title: 'Agencies & developers',
+    body: 'Somewhere reliable to put client sites, with the server-side handled so you can stay on the build.',
+    points: ['Multi-site hosting', 'Deploy access', 'Server administration'],
+  },
+  {
+    icon: 'layers' as const,
+    title: 'Schools & organisations',
+    body: 'Straightforward systems — a site, mail, and the infrastructure under them — supported without jargon.',
+    points: ['Site and mail setup', 'Backups', 'Plain-language support'],
+  },
+];
+
+// The platform we operate for our own clients. Real systems, not a portfolio
+// of client logos — this is what a customer is actually buying into.
+const platform = [
+  {
+    icon: 'server' as const,
+    title: 'Managed hosting platform',
+    body: 'Control panel accounts, isolated per client, with quotas on disk, bandwidth, databases and mailboxes.',
+  },
+  {
+    icon: 'monitor' as const,
+    title: 'Self-service billing portal',
+    body: 'Plans, invoices and sign-up live at billing.logixhare.com — no back-and-forth to see what something costs.',
+  },
+  {
+    icon: 'mail' as const,
+    title: 'Business email',
+    body: 'Mailboxes on your own domain, with webmail, and the DNS records set correctly for deliverability.',
+  },
+  {
+    icon: 'globe' as const,
+    title: 'DNS & SSL automation',
+    body: 'Zones managed for you and HTTPS certificates issued and renewed automatically, not diarised.',
+  },
+  {
+    icon: 'refresh' as const,
+    title: 'Backups & recovery',
+    body: 'Scheduled backups of sites, mail and databases, with a documented restore path when it matters.',
+  },
+  {
+    icon: 'shield' as const,
+    title: 'Hardening & monitoring',
+    body: 'Firewalling, brute-force protection and service monitoring applied as standard on the platform.',
+  },
+];
+
+const process = [
+  {
+    title: 'Talk it through',
+    body: 'You tell us what you are trying to do. We tell you plainly whether it is something we do well — and if it is not, we say so.',
+  },
+  {
+    title: 'Scope and quote',
+    body: 'A written scope with what is included, what is not, and what it costs. Standard hosting plans skip this entirely — the pricing is already published.',
+  },
+  {
+    title: 'Build and deploy',
+    body: 'Work is reviewed before it goes live. Infrastructure changes are made in a way we can roll back, not improvised on the box.',
+  },
+  {
+    title: 'Support and iterate',
+    body: 'You keep direct access to the people who did the work — for changes, questions, or the thing that broke at an inconvenient hour.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Where are your servers?',
+    a: 'We run our hosting on infrastructure we manage ourselves, and we are happy to tell you exactly where a given service is hosted before you sign up. Ask us and you will get a straight answer rather than a marketing map.',
+  },
+  {
+    q: 'Can I see pricing without talking to sales?',
+    a: 'Yes. Hosting plans and pricing are published in our client portal at billing.logixhare.com, and you can sign up there directly. Project work — websites, network jobs — is quoted, because the scope genuinely varies.',
+  },
+  {
+    q: 'Do you help move an existing site to you?',
+    a: 'Yes, migration is part of onboarding. Send us access to where the site lives now and we will handle moving the files, database, mail and DNS, and tell you honestly if anything about the current setup will not carry over cleanly.',
+  },
+  {
+    q: 'Who actually answers when I have a problem?',
+    a: 'The people who run the platform. LogixHare is a small technical team by design — there is no tier-one script between you and someone who can fix the thing.',
+  },
+  {
+    q: 'Do you work with clients outside Dhaka?',
+    a: 'Yes. Hosting and remote infrastructure work are location-independent, and we work with clients across Bangladesh. On-site work is arranged case by case.',
+  },
+];
+---
+
+<BaseLayout
+  title="Home"
+  description="LogixHare Technologies — managed web hosting, custom web development, network automation and IT infrastructure services, built and supported from Dhaka, Bangladesh."
+>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-grid-lines" aria-hidden="true"></div>
+
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <div class="hero-slides" id="hero-slides">
+          {
+            slides.map((slide, i) => (
+              <article class="hero-slide" data-slide={i} aria-hidden={i !== 0 ? 'true' : 'false'}>
+                <p class="eyebrow">{slide.eyebrow}</p>
+                <h1 class="display">{slide.heading}</h1>
+                <p class="lede">{slide.body}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <div class="hero-actions">
+          <a href={url('/contact/')} class="btn btn-primary">
+            Contact us <Icon name="arrow-right" class="btn-icon" />
+          </a>
+          <a href={url('/services/')} class="btn btn-ghost">Explore our services</a>
+        </div>
+
+        <div class="hero-dots" role="tablist" aria-label="Hero slides">
+          {
+            slides.map((slide, i) => (
+              <button
+                type="button"
+                class="hero-dot"
+                role="tab"
+                data-dot={i}
+                aria-selected={i === 0 ? 'true' : 'false'}
+              >
+                <span class="visually-hidden">{slide.eyebrow}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="hero-art-panel">
+          <NodeLattice />
+        </div>
+      </div>
+    </div>
+
+    <!-- What every plan includes — the honest version of a stats bar. -->
+    <div class="container">
+      <ul class="standards">
+        {
+          standards.map((item) => (
+            <li class="standard">
+              <span class="standard-icon">
+                <Icon name={item.icon} />
+              </span>
+              <div>
+                <strong>{item.title}</strong>
+                <small>{item.note}</small>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== STACK STRIP ===================== -->
+  <section class="stack-strip">
+    <div class="container stack-inner">
+      <p class="stack-label">Built on infrastructure you already trust</p>
+      <ul class="stack-list">
+        {stack.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICES ===================== -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Services</p>
+        <h2>Services we offer</h2>
+        <p class="lede">
+          From the server your site runs on to the search results it shows up in — a focused set of
+          services we actually staff, rather than a checklist we sub out.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        {services.map((service) => <ServiceCard {...service} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHO WE BUILD FOR ===================== -->
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Solutions</p>
+        <h2>Who we build for</h2>
+        <p class="lede">
+          The same infrastructure discipline, scoped to what each kind of client actually needs.
+        </p>
+      </div>
+
+      <div class="audience-grid">
+        {
+          audiences.map((a) => (
+            <article class="audience-card card">
+              <span class="icon-tile">
+                <Icon name={a.icon} />
+              </span>
+              <h3>{a.title}</h3>
+              <p>{a.body}</p>
+              <ul class="audience-points">
+                {a.points.map((p) => (
+                  <li>
+                    <Icon name="check" class="tick" />
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THE PLATFORM ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">The platform</p>
+        <h2>What you are actually buying</h2>
+        <p class="lede">
+          Not a reseller account with someone else's name on the support desk. This is the platform
+          we build, run and answer for ourselves.
+        </p>
+      </div>
+
+      <div class="platform-grid">
+        {
+          platform.map((p) => (
+            <article class="platform-item">
+              <span class="platform-icon">
+                <Icon name={p.icon} />
+              </span>
+              <div>
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOSTING TEASER ===================== -->
+  <section class="section band">
+    <div class="container hosting-inner">
+      <div class="hosting-copy">
+        <p class="eyebrow">Web hosting</p>
+        <h2>Four tiers. Published pricing. No quote required.</h2>
+        <p class="lede">
+          Hosting scales from a single first website up to a busier site or small application. Every
+          tier includes free SSL, business email on your domain, and the same support.
+        </p>
+        <div class="hosting-actions">
+          <a
+            href="https://billing.logixhare.com/"
+            class="btn btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            See plans & pricing <Icon name="arrow-right" class="btn-icon" />
+          </a>
+          <a href={url('/services/#web-hosting')} class="btn btn-ghost">What's included</a>
+        </div>
+      </div>
+
+      <ul class="tier-list">
+        <li>
+          <span class="tier-name">Go</span><span class="tier-note">A first website, done properly.</span>
+        </li>
+        <li>
+          <span class="tier-name">Starter</span><span class="tier-note">More disk and bandwidth to grow into.</span>
+        </li>
+        <li>
+          <span class="tier-name">Medium</span><span class="tier-note">Busier sites and small applications.</span>
+        </li>
+        <li>
+          <span class="tier-name">Advanced</span><span class="tier-note">Our largest shared tier.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== PROCESS ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">How we work</p>
+        <h2>What working with us looks like</h2>
+        <p class="lede">
+          Four steps, in this order. The numbering is the actual sequence, not decoration.
+        </p>
+      </div>
+
+      <ol class="process-grid">
+        {
+          process.map((step, i) => (
+            <li class="process-step">
+              <span class="step-num">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="section band">
+    <div class="container faq-inner">
+      <div class="faq-head">
+        <p class="eyebrow">FAQs</p>
+        <h2>Questions worth asking</h2>
+        <p class="lede">
+          The things people ask before signing up — answered straight, including where the answer is
+          "ask us".
+        </p>
+        <a href={url('/contact/')} class="btn btn-ghost faq-cta">Ask us something else</a>
+      </div>
+
+      <div class="faq-list">
+        {
+          faqs.map((faq, i) => (
+            <details class="faq-item" open={i === 0}>
+              <summary>
+                {faq.q}
+                <Icon name="chevron-down" class="faq-chevron" />
+              </summary>
+              <p>{faq.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Ready to move your site somewhere it gets looked after?"
+    body="Tell us what you're running today. We'll tell you plainly what we'd change, what it costs, and whether it's worth doing at all."
+  />
+</BaseLayout>
+
+<style>
+  /* ===================== HERO ===================== */
+
+  .hero {
+    position: relative;
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(2.5rem, 2rem + 2vw, 4rem);
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: -30% -20% auto -20%;
+    height: 900px;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 25%, rgba(45, 199, 201, 0.16), transparent 70%),
+      radial-gradient(ellipse 50% 45% at 82% 12%, rgba(45, 130, 201, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(147, 169, 192, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(147, 169, 192, 0.055) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  /* Slides stack in the same grid cell so the hero never jumps height. */
+  .hero-slides {
+    display: grid;
+  }
+
+  .hero-slide {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+  }
+
+  .hero-slide[aria-hidden='false'] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .hero-slide h1 {
+    margin-top: 1.1rem;
+  }
+
+  .hero-slide .lede {
+    margin-top: 1.4rem;
+    max-width: 54ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 2.2rem;
+  }
+
+  .hero-dots {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 2.1rem;
+  }
+
+  .hero-dot {
+    width: 34px;
+    height: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: var(--line);
+    cursor: pointer;
+    transition: background-color 0.25s ease, width 0.25s ease;
+  }
+
+  .hero-dot[aria-selected='true'] {
+    background: var(--teal);
+    width: 52px;
+  }
+
+  .hero-art {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-art-panel {
+    width: 100%;
+    max-width: 430px;
+    aspect-ratio: 1 / 0.95;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
+    padding: 2.25rem;
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  }
+
+  /* --- standards strip --- */
+
+  .standards {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: clamp(3rem, 2.4rem + 2vw, 4.5rem);
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .standard {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1.35rem 1.4rem;
+    background: var(--surface);
+  }
+
+  .standard-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: var(--teal-wash);
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .standard-icon :global(svg) {
+    width: 19px;
+    height: 19px;
+  }
+
+  .standard strong {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--on-dark);
+  }
+
+  .standard small {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+    color: var(--on-dark-muted);
+    line-height: 1.45;
+  }
+
+  /* ===================== STACK STRIP ===================== */
+
+  .stack-strip {
+    border-block: 1px solid var(--line);
+    background: var(--navy-deep);
+  }
+
+  .stack-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem 2rem;
+    padding-block: 1.5rem;
+  }
+
+  .stack-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--on-dark-muted);
+  }
+
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 0.75rem;
+  }
+
+  .stack-list li {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--slate);
+  }
+
+  /* ===================== SERVICES ===================== */
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* ===================== AUDIENCES ===================== */
+
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .audience-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1.75rem;
+    height: 100%;
+  }
+
+  .audience-card p {
+    color: var(--slate);
+    font-size: var(--text-sm);
+    line-height: 1.7;
+  }
+
+  .audience-points {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .audience-points li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.84rem;
+    color: var(--on-dark-muted);
+  }
+
+  /* Icon.astro renders a child <svg>, which never carries this page's
+     Astro scope hash — :global() is required for these to match. */
+  .audience-points :global(.tick) {
+    width: 14px;
+    height: 14px;
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+
+  /* ===================== PLATFORM ===================== */
+
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem 2.5rem;
+  }
+
+  .platform-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .platform-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--teal-wash);
+    border: 1px solid rgba(45, 199, 201, 0.2);
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .platform-icon :global(svg) {
+    width: 21px;
+    height: 21px;
+  }
+
+  .platform-item h3 {
+    font-size: var(--text-base);
+    margin-bottom: 0.4rem;
+  }
+
+  .platform-item p {
+    color: var(--slate);
+    font-size: var(--text-sm);
+    line-height: 1.65;
+  }
+
+  /* ===================== HOSTING TEASER ===================== */
+
+  .hosting-inner {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .hosting-copy h2 {
+    margin-top: 0.75rem;
+  }
+
+  .hosting-copy .lede {
+    margin-top: 1.1rem;
+  }
+
+  .hosting-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 1.9rem;
+  }
+
+  .tier-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .tier-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.35rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    transition: border-color 0.18s ease, background-color 0.18s ease;
+  }
+
+  .tier-list li:hover {
+    border-color: rgba(45, 199, 201, 0.4);
+    background: var(--surface-2);
+  }
+
+  .tier-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+
+  .tier-note {
+    font-size: 0.85rem;
+    color: var(--slate);
+    text-align: right;
+  }
+
+  /* ===================== PROCESS ===================== */
+
+  /* An <ol> because the steps really are ordered — but the visible numbering is
+     the .step-num element, so the browser's own markers are suppressed. */
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .process-step {
+    position: relative;
+    padding: 1.75rem 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
+
+  .step-num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+    color: rgba(45, 199, 201, 0.35);
+    margin-bottom: 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .process-step h3 {
+    font-size: var(--text-base);
+    margin-bottom: 0.55rem;
+  }
+
+  .process-step p {
+    color: var(--slate);
+    font-size: var(--text-sm);
+    line-height: 1.65;
+  }
+
+  /* ===================== FAQ ===================== */
+
+  .faq-inner {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+
+  .faq-head h2 {
+    margin-top: 0.7rem;
+  }
+
+  .faq-head .lede {
+    margin-top: 0.9rem;
+    font-size: var(--text-base);
+  }
+
+  .faq-cta {
+    margin-top: 1.75rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    padding: 0 1.35rem;
+    transition: border-color 0.18s ease;
+  }
+
+  .faq-item[open] {
+    border-color: rgba(45, 199, 201, 0.35);
+  }
+
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.15rem;
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--on-dark);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item :global(.faq-chevron) {
+    width: 18px;
+    height: 18px;
+    color: var(--teal);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] :global(.faq-chevron) {
+    transform: rotate(180deg);
+  }
+
+  .faq-item p {
+    padding-bottom: 1.25rem;
+    color: var(--slate);
+    font-size: var(--text-sm);
+    line-height: 1.75;
+    max-width: 68ch;
+  }
+
+  /* ===================== RESPONSIVE ===================== */
+
+  @media (max-width: 1080px) {
+    .services-grid,
+    .platform-grid,
+    .process-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .audience-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .standards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 980px) {
+    .hero-inner,
+    .hosting-inner,
+    .faq-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-art {
+      order: -1;
+    }
+
+    .hero-art-panel {
+      max-width: 320px;
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .services-grid,
+    .audience-grid,
+    .platform-grid,
+    .process-grid,
+    .standards {
+      grid-template-columns: 1fr;
+    }
+
+    .stack-inner {
+      gap: 0.9rem;
+    }
+  }
+</style>
+
+<script>
+  // Hero rotator. Pauses on hover/focus and while the tab is hidden, and does
+  // not auto-advance at all when the visitor prefers reduced motion — the dots
+  // still work as manual controls in that case.
+  const slides = Array.from(document.querySelectorAll<HTMLElement>('.hero-slide'));
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('.hero-dot'));
+
+  if (slides.length > 1) {
+    let index = 0;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    let paused = false;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const show = (next: number) => {
+      index = (next + slides.length) % slides.length;
+      slides.forEach((s, i) => s.setAttribute('aria-hidden', String(i !== index)));
+      dots.forEach((d, i) => d.setAttribute('aria-selected', String(i === index)));
+    };
+
+    const start = () => {
+      if (reduced.matches || timer) return;
+      timer = setInterval(() => {
+        if (!paused) show(index + 1);
+      }, 6500);
+    };
+
+    const stop = () => {
+      if (timer) clearInterval(timer);
+      timer = undefined;
+    };
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        show(i);
+        // A manual pick shouldn't be yanked away a moment later.
+        stop();
+        start();
+      });
+    });
+
+    const hero = document.querySelector('.hero');
+    hero?.addEventListener('mouseenter', () => (paused = true));
+    hero?.addEventListener('mouseleave', () => (paused = false));
+    hero?.addEventListener('focusin', () => (paused = true));
+    hero?.addEventListener('focusout', () => (paused = false));
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else start();
+    });
+
+    reduced.addEventListener('change', () => (reduced.matches ? stop() : start()));
+
+    start();
+  }
+</script>

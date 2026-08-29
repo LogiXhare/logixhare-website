@@ -1,0 +1,25 @@
+---
+// Renders one icon from the shared set in src/data/icons.ts.
+// set:html is safe here: the markup is static and author-controlled,
+// never derived from user input.
+import { iconPaths, type IconName } from '../data/icons';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  aria-hidden="true"
+  set:html={iconPaths[name]}
+/>
