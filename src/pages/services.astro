@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+
+const hostingTiers = [
+  { name: 'Go', note: 'Entry shared hosting' },
+  { name: 'Starter', note: 'More NVMe disk & bandwidth' },
+  { name: 'Medium', note: 'Growing sites & small apps' },
+  { name: 'Advanced', note: 'Highest disk & bandwidth tier' },
+];
+
+const services = [
+  {
+    id: 'hosting',
+    icon: 'server' as const,
+    title: 'Web Hosting',
+    description:
+      'We host websites and applications on our own infrastructure, across four shared-hosting tiers that scale up in NVMe disk, storage, and bandwidth as a site grows. Plans are provisioned and managed through our self-service billing portal — no manual quote needed to sign up or upgrade.',
+    extra: 'tiers',
+  },
+  {
+    id: 'web-development',
+    icon: 'code' as const,
+    title: 'Web Design & Development',
+    description:
+      'We design and build custom websites and web applications — marketing sites, business tools, and everything the two need to talk to each other — matched to how your business actually operates rather than squeezed into a template. We handle the front end, the back end, and the hosting underneath it.',
+  },
+  {
+    id: 'network-consulting',
+    icon: 'network' as const,
+    title: 'IT & Network Consulting',
+    description:
+      'We design and implement network infrastructure, from office LAN setups to automation for larger, multi-site networks. If you need a second opinion on an infrastructure decision, or hands-on help setting one up and documenting it properly, this is where that happens.',
+  },
+  {
+    id: 'server-management',
+    icon: 'cloud' as const,
+    title: 'Cloud & Server Management',
+    description:
+      'We take day-to-day administration of your VPS or dedicated server off your plate — updates, configuration, backups, monitoring, and troubleshooting — so your team can stay focused on the application instead of the box it runs on.',
+  },
+  {
+    id: 'security',
+    icon: 'shield' as const,
+    title: 'Cybersecurity & Monitoring',
+    description:
+      "We apply baseline security hardening to servers and networks and keep an eye on them, so problems get flagged early instead of discovered after the fact. This is foundational hardening and monitoring — a solid baseline, not a full security operations centre.",
+  },
+  {
+    id: 'marketing',
+    icon: 'chart' as const,
+    title: 'Digital Marketing & SEO',
+    description:
+      'We provide practical SEO and digital marketing support — technical SEO fundamentals, on-page optimisation, and campaign basics — to help a website get found by the people already searching for what it offers.',
+  },
+];
+---
+
+<BaseLayout
+  title="Services"
+  description="Web hosting, custom development, network consulting, server management, security monitoring, and digital marketing from LogixHare Technologies."
+>
+  <section class="page-intro">
+    <div class="container">
+      <p class="eyebrow">Services</p>
+      <h1>What we do, in plain terms</h1>
+      <p class="lede">
+        Six services, each one something we actually staff and support — not a checklist of buzzwords we don't
+        follow through on.
+      </p>
+    </div>
+  </section>
+
+  <section class="services-detail">
+    <div class="container">
+      {
+        services.map((service, index) => (
+          <div class="service-row" id={service.id}>
+            <div class="service-row-head">
+              <span class="icon-tile"><Icon name={service.icon} /></span>
+              <h2>{service.title}</h2>
+            </div>
+            <div class="service-row-body">
+              <p>{service.description}</p>
+              {service.extra === 'tiers' && (
+                <>
+                  <ul class="tier-list">
+                    {hostingTiers.map((tier) => (
+                      <li>
+                        <span class="tier-name">{tier.name}</span>
+                        <span class="tier-note">{tier.note}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    href="https://billing.logixhare.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-primary service-cta"
+                  >
+                    View plans & pricing <Icon name="arrow-right" class="btn-icon" />
+                  </a>
+                  <p class="service-note">Opens our billing portal at billing.logixhare.com, where plans, pricing, and sign-up are self-service.</p>
+                </>
+              )}
+            </div>
+            {index < services.length - 1 && <div class="row-divider" aria-hidden="true" />}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Not sure which service fits?"
+    body="Describe what you're trying to do and we'll point you at the right service — or tell you plainly if it isn't something we do."
+  />
+</BaseLayout>
+
+<style>
+  .page-intro {
+    padding-block: clamp(2.5rem, 2rem + 2.5vw, 4rem) clamp(1.5rem, 1.2rem + 1vw, 2.5rem);
+  }
+
+  .page-intro h1 {
+    margin-top: 0.75rem;
+    max-width: 24ch;
+  }
+
+  .page-intro .lede {
+    margin-top: 1.1rem;
+  }
+
+  .services-detail {
+    padding-block: 0.5rem clamp(3rem, 2.5rem + 2vw, 5rem);
+  }
+
+  .service-row {
+    display: grid;
+    grid-template-columns: minmax(0, 300px) 1fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding-block: clamp(2.25rem, 1.9rem + 1.5vw, 3rem);
+    scroll-margin-top: 96px;
+  }
+
+  .service-row-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .service-row-head h2 {
+    padding-top: 0.55rem;
+  }
+
+  .service-row-body p {
+    color: var(--slate);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    max-width: 62ch;
+  }
+
+  .row-divider {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--line);
+    margin-top: clamp(2.25rem, 1.9rem + 1.5vw, 3rem);
+  }
+
+  .tier-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    max-width: 640px;
+  }
+
+  .tier-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.9rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+
+  .tier-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .tier-note {
+    font-size: 0.8rem;
+    color: var(--slate);
+    line-height: 1.4;
+  }
+
+  .service-cta {
+    margin-top: 1.5rem;
+  }
+
+  .service-note {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--slate);
+    max-width: 50ch;
+  }
+
+  @media (max-width: 820px) {
+    .service-row {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .tier-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

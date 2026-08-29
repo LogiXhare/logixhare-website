@@ -1,0 +1,263 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import NodeLattice from '../components/NodeLattice.astro';
+import Icon from '../components/Icon.astro';
+
+const services = [
+  {
+    icon: 'server' as const,
+    title: 'Web Hosting',
+    description: 'Shared, NVMe-backed hosting across four tiers — sized for a first website or a growing application.',
+    href: '/services/#hosting',
+  },
+  {
+    icon: 'code' as const,
+    title: 'Web Design & Development',
+    description: 'Custom websites and web applications, designed and built around how your business actually works.',
+    href: '/services/#web-development',
+  },
+  {
+    icon: 'network' as const,
+    title: 'IT & Network Consulting',
+    description: 'Network design, setup, and automation, plus straightforward advice on infrastructure decisions.',
+    href: '/services/#network-consulting',
+  },
+  {
+    icon: 'cloud' as const,
+    title: 'Cloud & Server Management',
+    description: 'Ongoing administration of your VPS or dedicated server — updates, monitoring, and troubleshooting handled.',
+    href: '/services/#server-management',
+  },
+  {
+    icon: 'shield' as const,
+    title: 'Cybersecurity & Monitoring',
+    description: 'Baseline security hardening and monitoring for servers and networks, so problems get caught early.',
+    href: '/services/#security',
+  },
+  {
+    icon: 'chart' as const,
+    title: 'Digital Marketing & SEO',
+    description: 'Practical SEO and digital marketing support to help your website get found by the people looking for it.',
+    href: '/services/#marketing',
+  },
+];
+
+const trustPoints = [
+  {
+    title: 'Transparent pricing',
+    description: 'Hosting pricing is published and self-service through our billing portal — no quote request required for standard plans.',
+  },
+  {
+    title: 'Direct support',
+    description: "When something needs attention, you reach the people who manage your service — not a ticket queue that starts over every time.",
+  },
+  {
+    title: 'Modern infrastructure',
+    description: 'NVMe-backed hosting and current server stacks, kept patched and monitored as standard practice, not an add-on.',
+  },
+];
+---
+
+<BaseLayout
+  title="Home"
+  description="LogixHare Technologies is a Dhaka-based technology company providing web hosting, custom development, network consulting, and managed IT services."
+>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">LogixHare Technologies · Dhaka, Bangladesh</p>
+        <h1>Hosting, networks, and software — built by people you can actually reach.</h1>
+        <p class="lede">
+          We host and build the infrastructure and software Bangladeshi businesses run on, with transparent
+          pricing and direct access to the engineers doing the work.
+        </p>
+        <div class="hero-actions">
+          <a href="/services/" class="btn btn-primary">Explore services <Icon name="arrow-right" class="btn-icon" /></a>
+          <a href="/contact/" class="btn btn-ghost">Talk to us</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="hero-art-panel">
+          <NodeLattice />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section services-overview">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">What we do</p>
+        <h2>A focused set of services, done properly</h2>
+        <p class="lede">Six capabilities, not sixty. Each one is something we actually staff and stand behind.</p>
+      </div>
+      <div class="services-grid">
+        {services.map((service) => <ServiceCard {...service} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section trust-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Why LogixHare</p>
+        <h2>How we work with clients</h2>
+      </div>
+      <div class="trust-grid">
+        {
+          trustPoints.map((point) => (
+            <div class="trust-item">
+              <span class="trust-check"><Icon name="check" /></span>
+              <div>
+                <h3>{point.title}</h3>
+                <p>{point.description}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Have a project or a server that needs a home?"
+    body="Tell us what you're working on and we'll tell you plainly whether — and how — we can help."
+  />
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: clamp(2.75rem, 2rem + 3vw, 5.5rem) clamp(3rem, 2.4rem + 2vw, 4.5rem);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .hero-copy h1 {
+    margin-top: 1rem;
+  }
+
+  .hero-copy .lede {
+    margin-top: 1.35rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 2.1rem;
+  }
+
+  .hero-art {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-art-panel {
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1 / 0.95;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(155deg, var(--navy-deep), #16324f 65%, var(--navy-deep));
+    padding: 2.25rem;
+    box-shadow: var(--shadow-lift);
+  }
+
+  .section-head {
+    max-width: 62ch;
+    margin-bottom: clamp(2rem, 1.6rem + 1.5vw, 2.75rem);
+  }
+
+  .section-head h2 {
+    margin-top: 0.6rem;
+  }
+
+  .section-head .lede {
+    margin-top: 0.85rem;
+    font-size: var(--text-base);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .trust-section {
+    background: var(--surface);
+    border-block: 1px solid var(--line);
+  }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .trust-item {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+
+  .trust-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(45, 199, 201, 0.14);
+    color: var(--teal-deep);
+    flex-shrink: 0;
+  }
+
+  .trust-check :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .trust-item h3 {
+    font-size: var(--text-base);
+    margin-bottom: 0.4rem;
+  }
+
+  .trust-item p {
+    color: var(--slate);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 980px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-art {
+      order: -1;
+    }
+
+    .hero-art-panel {
+      max-width: 340px;
+      padding: 1.5rem;
+    }
+
+    .services-grid,
+    .trust-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .services-grid,
+    .trust-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
