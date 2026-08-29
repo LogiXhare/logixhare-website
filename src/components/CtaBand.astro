@@ -36,7 +36,19 @@ const {
 </section>
 
 <style>
+  /* This band stays dark in BOTH themes — it is the page's one high-contrast
+     moment, and on a light page it reads as a deliberate closing statement.
+     Because of that the theme tokens are re-pointed locally: without this, the
+     light theme's dark text and hairlines would land on a dark ground and
+     vanish. Descendants (headings, copy, .btn-*) inherit these overrides. */
   .cta-band {
+    --text: #eaf3f8;
+    --text-muted: #9db3c8;
+    --line: #22395a;
+    --teal: #2dc7c9;
+    --teal-bright: #5ce6e8;
+    --on-accent: #04101d;
+
     position: relative;
     background: linear-gradient(120deg, #08182c 0%, #0b2036 55%, #071626 100%);
     border-block: 1px solid var(--line);
@@ -79,7 +91,7 @@ const {
 
   .cta-copy p {
     margin-top: 1rem;
-    color: var(--slate);
+    color: var(--text-muted);
     font-size: var(--text-base);
     line-height: 1.65;
   }
