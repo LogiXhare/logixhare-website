@@ -1,4 +1,6 @@
 ---
+import { url } from '../lib/url';
+
 interface Props {
   heading: string;
   body: string;
@@ -12,38 +14,58 @@ const {
   heading,
   body,
   primaryHref = '/contact/',
-  primaryLabel = 'Get in touch',
+  primaryLabel = 'Talk to an engineer',
   secondaryHref = '/services/',
   secondaryLabel = 'View services',
 } = Astro.props;
 ---
 
 <section class="cta-band">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <div class="cta-lattice" aria-hidden="true"></div>
   <div class="container cta-inner">
-    <div class="cta-lattice" aria-hidden="true"></div>
     <div class="cta-copy">
-      <h2>{heading}</h2>
+      <h2 class="display">{heading}</h2>
       <p>{body}</p>
     </div>
     <div class="cta-actions">
-      <a href={primaryHref} class="btn btn-on-dark">{primaryLabel}</a>
-      {secondaryLabel && <a href={secondaryHref} class="btn btn-ghost-on-dark">{secondaryLabel}</a>}
+      <a href={url(primaryHref)} class="btn btn-primary">{primaryLabel}</a>
+      {secondaryLabel && <a href={url(secondaryHref)} class="btn btn-ghost">{secondaryLabel}</a>}
     </div>
   </div>
 </section>
 
 <style>
   .cta-band {
-    background: var(--navy-deep);
-    background-image: radial-gradient(circle at 12% 20%, rgba(45, 199, 201, 0.16), transparent 55%);
-    color: var(--on-dark);
     position: relative;
+    background: linear-gradient(120deg, #08182c 0%, #0b2036 55%, #071626 100%);
+    border-block: 1px solid var(--line);
     overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    inset: auto auto -60% -10%;
+    width: 620px;
+    height: 620px;
+    background: radial-gradient(circle, rgba(45, 199, 201, 0.22), transparent 65%);
+    pointer-events: none;
+  }
+
+  .cta-lattice {
+    position: absolute;
+    inset: -25% -8% auto auto;
+    width: 380px;
+    height: 380px;
+    background-image: radial-gradient(circle, rgba(45, 199, 201, 0.55) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+    opacity: 0.2;
+    pointer-events: none;
   }
 
   .cta-inner {
     position: relative;
-    padding-block: clamp(3rem, 2.5rem + 2vw, 4.5rem);
+    padding-block: clamp(3.25rem, 2.6rem + 2.4vw, 5rem);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -52,34 +74,19 @@ const {
   }
 
   .cta-copy {
-    max-width: 40ch;
-  }
-
-  .cta-copy h2 {
-    color: #ffffff;
+    max-width: 42ch;
   }
 
   .cta-copy p {
-    margin-top: 0.85rem;
-    color: var(--on-dark-muted);
+    margin-top: 1rem;
+    color: var(--slate);
     font-size: var(--text-base);
-    line-height: 1.6;
+    line-height: 1.65;
   }
 
   .cta-actions {
     display: flex;
     gap: 0.85rem;
     flex-wrap: wrap;
-  }
-
-  .cta-lattice {
-    position: absolute;
-    inset: -20% -5% auto auto;
-    width: 340px;
-    height: 340px;
-    background-image: radial-gradient(circle, rgba(45, 199, 201, 0.5) 1.5px, transparent 1.5px);
-    background-size: 26px 26px;
-    opacity: 0.18;
-    pointer-events: none;
   }
 </style>

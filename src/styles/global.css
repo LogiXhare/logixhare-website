@@ -1,22 +1,36 @@
 /* ===========================================================
    LogixHare Technologies — design tokens & base styles
-   Palette: navy #152a4a / teal #2dc7c9 / slate #5b6b7c
-            bg #f5f8fa / line #e2e8ee (established brand tokens)
+
+   Dark-first, single committed visual world (no light variant):
+   deep navy grounds, hairline borders, one teal accent carried
+   from the LogixHare logo. Every colour is painted explicitly so
+   the page never borrows a host background.
+
    Type: Manrope (display + body), JetBrains Mono (labels/data)
    =========================================================== */
 
 :root {
-  /* --- color --- */
-  --navy: #152a4a;
-  --navy-deep: #0d1c33;
+  /* --- ground & surfaces (darkest -> lightest) --- */
+  --ink: #060d18;          /* page ground */
+  --navy-deep: #0a1425;    /* deep bands, footer */
+  --surface: #101d33;      /* cards, panels */
+  --surface-2: #16263f;    /* raised / hover state */
+
+  /* --- accent --- */
   --teal: #2dc7c9;
+  --teal-bright: #5ce6e8;
   --teal-deep: #1a9fa1;
-  --slate: #5b6b7c;
-  --bg: #f5f8fa;
-  --surface: #ffffff;
-  --line: #e2e8ee;
-  --on-dark: #eef4f6;
-  --on-dark-muted: #9fb3c8;
+  --teal-wash: rgba(45, 199, 201, 0.1);
+
+  /* --- text --- */
+  --on-dark: #e9f2f7;      /* primary text */
+  --slate: #93a9c0;        /* muted body text */
+  --on-dark-muted: #7f95ad;
+  --navy: var(--on-dark);  /* legacy alias: headings read as light on dark */
+
+  /* --- lines --- */
+  --line: #1d3050;
+  --line-soft: rgba(147, 169, 192, 0.14);
 
   /* --- type --- */
   --font-display: 'Manrope', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -28,17 +42,17 @@
   --text-base: 1.0625rem; /* 17px — body */
   --text-lg: 1.1875rem;   /* 19px — lead paragraphs */
   --text-xl: 1.5rem;      /* 24px — card headings */
-  --text-2xl: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);   /* section h2 */
-  --text-3xl: clamp(2.25rem, 1.7rem + 2.2vw, 3.4rem); /* page h1 */
+  --text-2xl: clamp(1.75rem, 1.45rem + 1.4vw, 2.6rem);  /* section h2 */
+  --text-3xl: clamp(2.35rem, 1.6rem + 3vw, 4rem);       /* page h1 / hero */
 
   /* --- layout --- */
   --container: 1180px;
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
-  --space-section: clamp(3.5rem, 3rem + 2vw, 6rem);
-  --shadow-card: 0 1px 2px rgba(21, 42, 74, 0.06), 0 12px 28px -16px rgba(21, 42, 74, 0.18);
-  --shadow-lift: 0 8px 20px -8px rgba(21, 42, 74, 0.28);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --space-section: clamp(3.75rem, 3rem + 2.6vw, 6.5rem);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 40px -24px rgba(0, 0, 0, 0.85);
+  --shadow-lift: 0 10px 30px -12px rgba(45, 199, 201, 0.45);
 }
 
 *,
@@ -50,6 +64,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
+  background: var(--ink);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -67,11 +82,11 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--navy);
+  background: var(--ink);
+  color: var(--on-dark);
   font-family: var(--font-body);
   font-size: var(--text-base);
-  line-height: 1.6;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -87,11 +102,11 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  color: var(--navy);
-  line-height: 1.15;
+  color: var(--on-dark);
+  line-height: 1.13;
   margin: 0;
   text-wrap: balance;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
 h1 {
@@ -107,6 +122,15 @@ h2 {
 h3 {
   font-size: var(--text-xl);
   font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* The heavy uppercase display treatment IntrigueIT-style headlines use.
+   Applied only to hero and band headings, never to running copy. */
+.display {
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
 }
 
 p {
@@ -130,11 +154,11 @@ button {
 
 ::selection {
   background: var(--teal);
-  color: var(--navy-deep);
+  color: var(--ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--teal-deep);
+  outline: 2px solid var(--teal-bright);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -152,6 +176,12 @@ button {
   padding-block: var(--space-section);
 }
 
+/* A slightly lifted band, used to separate adjacent sections without a rule. */
+.band {
+  background: var(--navy-deep);
+  border-block: 1px solid var(--line);
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -159,9 +189,9 @@ button {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--teal);
 }
 
 .eyebrow::before {
@@ -170,6 +200,7 @@ button {
   height: 7px;
   border-radius: 50%;
   background: var(--teal);
+  box-shadow: 0 0 0 4px rgba(45, 199, 201, 0.18);
   flex-shrink: 0;
 }
 
@@ -177,6 +208,22 @@ button {
   font-size: var(--text-lg);
   color: var(--slate);
   max-width: 60ch;
+}
+
+/* --- section heading block, shared across pages --- */
+
+.section-head {
+  max-width: 64ch;
+  margin-bottom: clamp(2.25rem, 1.8rem + 1.6vw, 3rem);
+}
+
+.section-head h2 {
+  margin-top: 0.7rem;
+}
+
+.section-head .lede {
+  margin-top: 0.9rem;
+  font-size: var(--text-base);
 }
 
 /* --- buttons --- */
@@ -189,11 +236,12 @@ button {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: var(--text-sm);
-  padding: 0.9em 1.6em;
+  padding: 0.9em 1.7em;
   border-radius: 999px;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease,
+    color 0.18s ease, border-color 0.18s ease;
   white-space: nowrap;
 }
 
@@ -211,40 +259,41 @@ button {
 
 .btn-primary {
   background: var(--teal);
-  color: var(--navy-deep);
+  color: var(--ink);
   box-shadow: var(--shadow-lift);
 }
 
 .btn-primary:hover {
-  background: var(--teal-deep);
-  color: #ffffff;
+  background: var(--teal-bright);
+  color: var(--ink);
 }
 
 .btn-ghost {
   background: transparent;
-  color: var(--navy);
+  color: var(--on-dark);
   border-color: var(--line);
 }
 
 .btn-ghost:hover {
   border-color: var(--teal);
-  color: var(--teal-deep);
+  color: var(--teal);
 }
 
+/* Aliases kept so existing pages that use the on-dark variants
+   still resolve now that the whole site is dark. */
 .btn-on-dark {
   background: var(--teal);
-  color: var(--navy-deep);
+  color: var(--ink);
 }
 
 .btn-on-dark:hover {
-  background: #ffffff;
-  color: var(--navy-deep);
+  background: var(--teal-bright);
 }
 
 .btn-ghost-on-dark {
   background: transparent;
   color: var(--on-dark);
-  border-color: rgba(238, 244, 246, 0.28);
+  border-color: rgba(233, 242, 247, 0.24);
 }
 
 .btn-ghost-on-dark:hover {
@@ -270,15 +319,16 @@ button {
   width: 52px;
   height: 52px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(155deg, rgba(45, 199, 201, 0.16), rgba(21, 42, 74, 0.06));
-  color: var(--navy);
+  background: linear-gradient(155deg, rgba(45, 199, 201, 0.2), rgba(45, 199, 201, 0.04));
+  border: 1px solid rgba(45, 199, 201, 0.22);
+  color: var(--teal);
   flex-shrink: 0;
 }
 
 .icon-tile svg {
   width: 26px;
   height: 26px;
-  stroke: var(--navy);
+  stroke: currentColor;
 }
 
 /* --- visually hidden (for skip link / a11y text) --- */

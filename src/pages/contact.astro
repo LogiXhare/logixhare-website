@@ -26,11 +26,13 @@ const contactMethods = [
 const serviceOptions = [
   'General inquiry',
   'Web Hosting',
+  'Email, Domains & DNS',
   'Web Design & Development',
-  'IT & Network Consulting',
-  'Cloud & Server Management',
-  'Cybersecurity & Monitoring',
-  'Digital Marketing & SEO',
+  'Web Application Development',
+  'Server Management',
+  'Networks & Automation',
+  'Security & Monitoring',
+  'SEO & Digital Marketing',
 ];
 ---
 
@@ -41,7 +43,7 @@ const serviceOptions = [
   <section class="page-intro">
     <div class="container">
       <p class="eyebrow">Contact</p>
-      <h1>Let's talk about what you need</h1>
+      <h1 class="display">Let’s talk about what you need</h1>
       <p class="lede">Reach us directly — no ticket portal, no call centre. Use whichever channel works for you.</p>
     </div>
   </section>
@@ -172,7 +174,7 @@ const serviceOptions = [
   }
 
   .contact-value-link:hover {
-    color: var(--teal-deep);
+    color: var(--teal);
   }
 
   .contact-billing-note {
@@ -230,8 +232,8 @@ const serviceOptions = [
     font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 400;
-    color: var(--navy);
-    background: var(--bg);
+    color: var(--on-dark);
+    background: var(--navy-deep);
     border: 1px solid var(--line);
     border-radius: var(--radius-sm);
     padding: 0.75em 0.9em;
@@ -241,9 +243,9 @@ const serviceOptions = [
   .field input:focus,
   .field select:focus,
   .field textarea:focus {
-    outline: 2px solid var(--teal-deep);
+    outline: 2px solid var(--teal);
     outline-offset: 1px;
-    border-color: var(--teal-deep);
+    border-color: var(--teal);
   }
 
   .contact-form .btn {
@@ -258,7 +260,7 @@ const serviceOptions = [
   }
 
   .form-note a {
-    color: var(--teal-deep);
+    color: var(--teal);
     font-weight: 600;
   }
 
