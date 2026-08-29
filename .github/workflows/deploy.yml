@@ -24,7 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # BASE_PATH makes generated asset URLs (CSS/JS/images) resolve correctly under
+      # /staging/ for PR previews; production builds (push to main) get the default '/'.
       - name: Build
+        env:
+          BASE_PATH: ${{ github.event_name == 'pull_request' && '/staging' || '' }}
         run: npm run build
 
       - name: Upload build artifact
