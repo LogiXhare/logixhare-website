@@ -61,7 +61,7 @@ jobs:
           lftp -c "
             set ftp:ssl-allow no;
             open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
-            mirror -R --delete --verbose ./dist/ ./staging/;
+            mirror -R --delete --verbose ./dist/ ./public_html/staging/;
             bye
           "
 
@@ -100,6 +100,6 @@ jobs:
           lftp -c "
             set ftp:ssl-allow no;
             open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
-            mirror -R --delete --verbose --exclude-glob staging/ ./dist/ ./;
+            mirror -R --delete --verbose --exclude-glob staging/ ./dist/ ./public_html/;
             bye
           "
