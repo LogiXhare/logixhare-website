@@ -477,8 +477,8 @@ const faqs = [
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(to right, rgba(147, 169, 192, 0.055) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(147, 169, 192, 0.055) 1px, transparent 1px);
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
     background-size: 64px 64px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
     pointer-events: none;
@@ -608,14 +608,14 @@ const faqs = [
     display: block;
     font-size: var(--text-sm);
     font-weight: 700;
-    color: var(--on-dark);
+    color: var(--text);
   }
 
   .standard small {
     display: block;
     margin-top: 0.2rem;
     font-size: 0.8rem;
-    color: var(--on-dark-muted);
+    color: var(--text-soft);
     line-height: 1.45;
   }
 
@@ -623,7 +623,7 @@ const faqs = [
 
   .stack-strip {
     border-block: 1px solid var(--line);
-    background: var(--navy-deep);
+    background: var(--bg-alt);
   }
 
   .stack-inner {
@@ -640,7 +640,7 @@ const faqs = [
     font-size: var(--text-xs);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--on-dark-muted);
+    color: var(--text-soft);
   }
 
   .stack-list {
@@ -655,7 +655,7 @@ const faqs = [
     border-radius: 999px;
     font-size: 0.82rem;
     font-weight: 600;
-    color: var(--slate);
+    color: var(--text-muted);
   }
 
   /* ===================== SERVICES ===================== */
@@ -683,7 +683,7 @@ const faqs = [
   }
 
   .audience-card p {
-    color: var(--slate);
+    color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.7;
   }
@@ -702,7 +702,7 @@ const faqs = [
     align-items: center;
     gap: 0.5rem;
     font-size: 0.84rem;
-    color: var(--on-dark-muted);
+    color: var(--text-soft);
   }
 
   /* Icon.astro renders a child <svg>, which never carries this page's
@@ -752,7 +752,7 @@ const faqs = [
   }
 
   .platform-item p {
-    color: var(--slate);
+    color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.65;
   }
@@ -814,7 +814,7 @@ const faqs = [
 
   .tier-note {
     font-size: 0.85rem;
-    color: var(--slate);
+    color: var(--text-muted);
     text-align: right;
   }
 
@@ -856,7 +856,7 @@ const faqs = [
   }
 
   .process-step p {
-    color: var(--slate);
+    color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.65;
   }
@@ -910,7 +910,7 @@ const faqs = [
     font-family: var(--font-display);
     font-size: var(--text-base);
     font-weight: 700;
-    color: var(--on-dark);
+    color: var(--text);
     cursor: pointer;
     list-style: none;
   }
@@ -933,7 +933,7 @@ const faqs = [
 
   .faq-item p {
     padding-bottom: 1.25rem;
-    color: var(--slate);
+    color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.75;
     max-width: 68ch;

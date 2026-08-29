@@ -25,6 +25,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <meta name="theme-color" content="#060d18" />
 
+    {/* Applies the saved theme before first paint. Must stay inline and in
+        <head>: deferred to the body it would render one frame of the wrong
+        theme. Dark is the brand default, so no saved choice — and an
+        unreadable localStorage — both fall through to dark. The OS
+        prefers-color-scheme setting is deliberately NOT consulted. */}
+    <script is:inline>
+      try {
+        if (localStorage.getItem('lx-theme') === 'light') {
+          document.documentElement.dataset.theme = 'light';
+        }
+      } catch (e) {
+        /* private mode / storage blocked — dark default is correct anyway */
+      }
+    </script>
+
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />

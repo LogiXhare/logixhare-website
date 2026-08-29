@@ -156,14 +156,14 @@ const hostingTiers = [
     background: var(--surface);
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--slate);
+    color: var(--text-muted);
     transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
   }
 
   .cat-jump a:hover {
     border-color: rgba(45, 199, 201, 0.45);
     background: var(--surface-2);
-    color: var(--on-dark);
+    color: var(--text);
   }
 
   /* Icon.astro renders a child <svg>, which never carries this page's
@@ -236,7 +236,7 @@ const hostingTiers = [
   }
 
   .item-card p {
-    color: var(--slate);
+    color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.75;
     max-width: 68ch;
@@ -263,7 +263,7 @@ const hostingTiers = [
     padding: 1rem;
     border: 1px solid var(--line);
     border-radius: var(--radius-sm);
-    background: var(--navy-deep);
+    background: var(--bg);
   }
 
   .tier-name {
@@ -277,7 +277,7 @@ const hostingTiers = [
 
   .tier-note {
     font-size: 0.8rem;
-    color: var(--slate);
+    color: var(--text-muted);
     line-height: 1.45;
   }
 
@@ -288,7 +288,7 @@ const hostingTiers = [
   .tier-foot {
     margin-top: 0.8rem;
     font-size: 0.8rem;
-    color: var(--on-dark-muted);
+    color: var(--text-soft);
   }
 
   @media (max-width: 900px) {

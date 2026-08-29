@@ -16,7 +16,23 @@ const isActive = (href: string) =>
 <header class="site-header" id="site-header">
   <div class="container header-row">
     <a href={url('/')} class="brand" aria-label="LogixHare Technologies — home">
-      <img src={url('/logo-dark.png')} alt="LogixHare Technologies" class="brand-mark" width="220" height="73" />
+      {/* Two variants rather than one filtered image: the source art is dark type
+          on a white plate, which no CSS blend can make work on both grounds. */}
+      <img
+        src={url('/logo-dark.png')}
+        alt="LogixHare Technologies"
+        class="brand-mark brand-mark-dark"
+        width="220"
+        height="73"
+      />
+      <img
+        src={url('/logo-light.png')}
+        alt=""
+        aria-hidden="true"
+        class="brand-mark brand-mark-light"
+        width="220"
+        height="73"
+      />
     </a>
 
     <nav class="nav-desktop" aria-label="Primary">
@@ -56,6 +72,11 @@ const isActive = (href: string) =>
         target="_blank"
         rel="noopener noreferrer">Client portal</a
       >
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">
+        <Icon name="sun" class="icon-sun" />
+        <Icon name="moon" class="icon-moon" />
+        <span class="visually-hidden">Switch to light theme</span>
+      </button>
       <a href={url('/contact/')} class="btn btn-primary header-cta">Contact us</a>
       <button
         type="button"
@@ -173,7 +194,7 @@ const isActive = (href: string) =>
     position: sticky;
     top: 0;
     z-index: 60;
-    background: rgba(6, 13, 24, 0.86);
+    background: var(--header-bg);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--line);
   }
@@ -197,6 +218,61 @@ const isActive = (href: string) =>
     width: auto;
   }
 
+  /* Dark art shows in the light theme and vice versa. Driven off the root
+     data-theme stamp, which BaseLayout sets before first paint. */
+  .brand-mark-light {
+    display: none;
+  }
+
+  :global(:root[data-theme='light']) .brand-mark-dark {
+    display: none;
+  }
+
+  :global(:root[data-theme='light']) .brand-mark-light {
+    display: block;
+  }
+
+  /* --- theme toggle --- */
+
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .theme-toggle:hover {
+    color: var(--teal);
+    border-color: var(--teal);
+    background: var(--teal-wash);
+  }
+
+  .theme-toggle :global(svg) {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Dark theme is showing -> offer the sun (switch to light), and vice versa. */
+  .theme-toggle :global(.icon-moon) {
+    display: none;
+  }
+
+  :global(:root[data-theme='light']) .theme-toggle :global(.icon-sun) {
+    display: none;
+  }
+
+  :global(:root[data-theme='light']) .theme-toggle :global(.icon-moon) {
+    display: block;
+  }
+
   .nav-desktop ul {
     display: flex;
     align-items: center;
@@ -211,7 +287,7 @@ const isActive = (href: string) =>
     font-family: var(--font-display);
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--slate);
+    color: var(--text-muted);
     background: none;
     border: 0;
     padding: 0.3rem 0;
@@ -223,12 +299,12 @@ const isActive = (href: string) =>
   .nav-desktop a:hover,
   .mega-trigger:hover,
   .mega-trigger[aria-expanded='true'] {
-    color: var(--on-dark);
+    color: var(--text);
   }
 
   .nav-desktop a[aria-current='page'],
   .mega-trigger[aria-current='page'] {
-    color: var(--on-dark);
+    color: var(--text);
   }
 
   .nav-desktop a[aria-current='page']::after,
@@ -262,7 +338,7 @@ const isActive = (href: string) =>
   .portal-link {
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--slate);
+    color: var(--text-muted);
     transition: color 0.15s ease;
   }
 
@@ -280,7 +356,7 @@ const isActive = (href: string) =>
   .mega {
     position: absolute;
     inset: 100% 0 auto 0;
-    background: var(--navy-deep);
+    background: var(--bg-alt);
     border-block: 1px solid var(--line);
     box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
   }
@@ -310,7 +386,7 @@ const isActive = (href: string) =>
     border-radius: var(--radius-sm);
     border: 1px solid transparent;
     background: transparent;
-    color: var(--slate);
+    color: var(--text-muted);
     font-family: var(--font-display);
     font-size: var(--text-sm);
     font-weight: 600;
@@ -320,14 +396,14 @@ const isActive = (href: string) =>
   }
 
   .mega-tab:hover {
-    color: var(--on-dark);
+    color: var(--text);
     background: var(--surface);
   }
 
   .mega-tab[aria-selected='true'] {
     background: var(--teal-wash);
     border-color: rgba(45, 199, 201, 0.3);
-    color: var(--on-dark);
+    color: var(--text);
   }
 
   .mega-tab-icon {
@@ -366,7 +442,7 @@ const isActive = (href: string) =>
   }
 
   .mega-summary {
-    color: var(--slate);
+    color: var(--text-muted);
     font-size: var(--text-sm);
     max-width: 60ch;
     margin-bottom: 1.25rem;
@@ -419,13 +495,13 @@ const isActive = (href: string) =>
   .mega-item-text strong {
     font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--on-dark);
+    color: var(--text);
     line-height: 1.35;
   }
 
   .mega-item-text small {
     font-size: 0.78rem;
-    color: var(--on-dark-muted);
+    color: var(--text-soft);
     line-height: 1.4;
   }
 
@@ -440,7 +516,7 @@ const isActive = (href: string) =>
     border-radius: var(--radius-sm);
     border: 1px solid var(--line);
     background: var(--surface);
-    color: var(--on-dark);
+    color: var(--text);
     cursor: pointer;
   }
 
@@ -464,7 +540,7 @@ const isActive = (href: string) =>
   .nav-mobile {
     display: none;
     border-top: 1px solid var(--line);
-    background: var(--navy-deep);
+    background: var(--bg-alt);
     max-height: calc(100vh - 70px);
     overflow-y: auto;
   }
@@ -485,7 +561,7 @@ const isActive = (href: string) =>
     font-family: var(--font-display);
     font-size: var(--text-base);
     font-weight: 600;
-    color: var(--on-dark);
+    color: var(--text);
     background: none;
     border: 0;
     border-bottom: 1px solid var(--line);
@@ -519,7 +595,7 @@ const isActive = (href: string) =>
     display: block;
     padding: 0.45rem 0;
     font-size: var(--text-sm);
-    color: var(--slate);
+    color: var(--text-muted);
   }
 
   .m-sub a:hover {
@@ -530,7 +606,7 @@ const isActive = (href: string) =>
     margin-top: 1rem;
     justify-content: center;
     border-bottom: none !important;
-    color: var(--ink) !important;
+    color: var(--on-accent) !important;
   }
 
   @media (max-width: 1000px) {
@@ -557,6 +633,44 @@ const isActive = (href: string) =>
 </style>
 
 <script>
+  // --- theme toggle ---
+  // The theme is already applied by the inline script in BaseLayout's <head>;
+  // this only handles switching and persisting it.
+  const themeToggle = document.getElementById('theme-toggle');
+
+  const syncToggleLabel = () => {
+    const isLight = document.documentElement.dataset.theme === 'light';
+    themeToggle?.setAttribute('aria-pressed', String(isLight));
+    const label = themeToggle?.querySelector('.visually-hidden');
+    if (label) label.textContent = isLight ? 'Switch to dark theme' : 'Switch to light theme';
+  };
+
+  syncToggleLabel();
+
+  themeToggle?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+
+    // Suppress every component transition for one frame so the swap is instant
+    // rather than a ragged cross-fade of differing durations. Cleared on a
+    // timer rather than requestAnimationFrame: rAF does not fire in some
+    // headless/background contexts, and a stuck class would kill every hover
+    // transition on the page for the rest of the session.
+    document.documentElement.classList.add('theme-switching');
+    window.setTimeout(
+      () => document.documentElement.classList.remove('theme-switching'),
+      80
+    );
+
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('lx-theme', next);
+    } catch {
+      // Private mode or blocked storage: the switch still applies for this page
+      // view, it just won't be remembered. Not worth surfacing to the visitor.
+    }
+    syncToggleLabel();
+  });
+
   // --- mobile drawer ---
   const toggle = document.getElementById('nav-toggle');
   const header = document.getElementById('site-header');

@@ -44,6 +44,8 @@ export const iconPaths = {
   close: '<line x1="5.5" y1="5.5" x2="18.5" y2="18.5"/><line x1="18.5" y1="5.5" x2="5.5" y2="18.5"/>',
   'arrow-right': '<line x1="4.5" y1="12" x2="18" y2="12"/><polyline points="12.5 6.5 18 12 12.5 17.5"/>',
   'chevron-down': '<polyline points="6.5 9.5 12 15 17.5 9.5"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><line x1="12" y1="2.8" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.2"/><line x1="2.8" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.2" y2="12"/><line x1="5.5" y1="5.5" x2="7.1" y2="7.1"/><line x1="16.9" y1="16.9" x2="18.5" y2="18.5"/><line x1="5.5" y1="18.5" x2="7.1" y2="16.9"/><line x1="16.9" y1="7.1" x2="18.5" y2="5.5"/>',
+  moon: '<path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2Z"/>',
 } as const;
 
 export type IconName = keyof typeof iconPaths;

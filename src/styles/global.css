@@ -1,36 +1,53 @@
 /* ===========================================================
    LogixHare Technologies — design tokens & base styles
 
-   Dark-first, single committed visual world (no light variant):
-   deep navy grounds, hairline borders, one teal accent carried
-   from the LogixHare logo. Every colour is painted explicitly so
-   the page never borrows a host background.
+   Two themes, one teal accent carried from the LogixHare logo.
+
+   DARK is the brand look and the default for every first-time
+   visitor — deliberately NOT `prefers-color-scheme`, because most
+   visitors here browse with a light OS setting and would otherwise
+   never see the intended design. The header toggle switches themes
+   and the choice is remembered in localStorage; BaseLayout stamps
+   data-theme on <html> before first paint so there is no flash.
+
+   Every colour is painted explicitly, and every component styles
+   itself through these tokens — never a literal hex — so both
+   themes stay consistent.
 
    Type: Manrope (display + body), JetBrains Mono (labels/data)
    =========================================================== */
 
 :root {
-  /* --- ground & surfaces (darkest -> lightest) --- */
-  --ink: #060d18;          /* page ground */
-  --navy-deep: #0a1425;    /* deep bands, footer */
+  /* ---------- DARK (default) ---------- */
+
+  /* ground & surfaces (darkest -> lightest) */
+  --bg: #060d18;           /* page ground */
+  --bg-alt: #0a1425;       /* alternating bands, footer */
   --surface: #101d33;      /* cards, panels */
   --surface-2: #16263f;    /* raised / hover state */
 
-  /* --- accent --- */
+  /* accent */
   --teal: #2dc7c9;
   --teal-bright: #5ce6e8;
   --teal-deep: #1a9fa1;
   --teal-wash: rgba(45, 199, 201, 0.1);
+  /* Text placed ON the teal accent. Theme-specific: the dark theme's accent is
+     bright and takes dark text, the light theme's is darkened and takes white. */
+  --on-accent: #04101d;
 
-  /* --- text --- */
-  --on-dark: #e9f2f7;      /* primary text */
-  --slate: #93a9c0;        /* muted body text */
-  --on-dark-muted: #7f95ad;
-  --navy: var(--on-dark);  /* legacy alias: headings read as light on dark */
+  /* text */
+  --text: #e9f2f7;         /* primary */
+  --text-muted: #93a9c0;   /* body copy, secondary */
+  --text-soft: #7f95ad;    /* captions, fine print */
 
-  /* --- lines --- */
+  /* lines & decoration */
   --line: #1d3050;
   --line-soft: rgba(147, 169, 192, 0.14);
+  --grid-line: rgba(147, 169, 192, 0.055);  /* hero graph-paper overlay */
+  --header-bg: rgba(6, 13, 24, 0.86);       /* sticky header, over blur */
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 40px -24px rgba(0, 0, 0, 0.85);
+  --shadow-lift: 0 10px 30px -12px rgba(45, 199, 201, 0.45);
 
   /* --- type --- */
   --font-display: 'Manrope', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -51,8 +68,36 @@
   --radius-md: 16px;
   --radius-lg: 24px;
   --space-section: clamp(3.75rem, 3rem + 2.6vw, 6.5rem);
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 40px -24px rgba(0, 0, 0, 0.85);
-  --shadow-lift: 0 10px 30px -12px rgba(45, 199, 201, 0.45);
+}
+
+/* ---------- LIGHT ----------
+   Redefines only the colour tokens. Not an inversion of the dark palette:
+   the neutrals carry a slight blue bias toward the teal accent so the two
+   themes read as the same brand, and teal is darkened to teal-deep for text
+   and rules because the bright accent fails contrast on a light ground. */
+:root[data-theme='light'] {
+  --bg: #f4f8fb;
+  --bg-alt: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #eef4f9;
+
+  --teal: #12878c;         /* darkened: the bright teal is unreadable on white */
+  --teal-bright: #0d6f74;  /* hover goes darker here, not lighter */
+  --teal-deep: #0a5c60;
+  --teal-wash: rgba(18, 135, 140, 0.09);
+  --on-accent: #ffffff;    /* the light-theme accent is dark enough for white */
+
+  --text: #0f2038;
+  --text-muted: #4a6076;
+  --text-soft: #6b8199;
+
+  --line: #dbe5ee;
+  --line-soft: rgba(15, 32, 56, 0.09);
+  --grid-line: rgba(15, 32, 56, 0.045);
+  --header-bg: rgba(244, 248, 251, 0.88);
+
+  --shadow-card: 0 1px 2px rgba(15, 32, 56, 0.06), 0 16px 34px -22px rgba(15, 32, 56, 0.3);
+  --shadow-lift: 0 10px 26px -12px rgba(23, 149, 154, 0.45);
 }
 
 *,
@@ -61,10 +106,19 @@
   box-sizing: border-box;
 }
 
+/* Components carry their own hover transitions at a range of durations. On a
+   theme switch they all fire at once and cross-fade raggedly, so the toggle
+   sets this class for one frame to make the swap instantaneous. */
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition: none !important;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
-  background: var(--ink);
+  background: var(--bg);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -82,8 +136,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--ink);
-  color: var(--on-dark);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: 1.65;
@@ -102,7 +156,7 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  color: var(--on-dark);
+  color: var(--text);
   line-height: 1.13;
   margin: 0;
   text-wrap: balance;
@@ -154,7 +208,7 @@ button {
 
 ::selection {
   background: var(--teal);
-  color: var(--ink);
+  color: var(--on-accent);
 }
 
 :focus-visible {
@@ -178,7 +232,7 @@ button {
 
 /* A slightly lifted band, used to separate adjacent sections without a rule. */
 .band {
-  background: var(--navy-deep);
+  background: var(--bg-alt);
   border-block: 1px solid var(--line);
 }
 
@@ -206,7 +260,7 @@ button {
 
 .lede {
   font-size: var(--text-lg);
-  color: var(--slate);
+  color: var(--text-muted);
   max-width: 60ch;
 }
 
@@ -259,18 +313,18 @@ button {
 
 .btn-primary {
   background: var(--teal);
-  color: var(--ink);
+  color: var(--on-accent);
   box-shadow: var(--shadow-lift);
 }
 
 .btn-primary:hover {
   background: var(--teal-bright);
-  color: var(--ink);
+  color: var(--on-accent);
 }
 
 .btn-ghost {
   background: transparent;
-  color: var(--on-dark);
+  color: var(--text);
   border-color: var(--line);
 }
 
@@ -283,7 +337,7 @@ button {
    still resolve now that the whole site is dark. */
 .btn-on-dark {
   background: var(--teal);
-  color: var(--ink);
+  color: var(--on-accent);
 }
 
 .btn-on-dark:hover {
@@ -292,7 +346,7 @@ button {
 
 .btn-ghost-on-dark {
   background: transparent;
-  color: var(--on-dark);
+  color: var(--text);
   border-color: rgba(233, 242, 247, 0.24);
 }
 
