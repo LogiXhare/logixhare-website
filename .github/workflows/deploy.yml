@@ -56,6 +56,7 @@ jobs:
             set ftp:ssl-force true;
             set ftp:ssl-protect-data true;
             set ssl:verify-certificate no;
+            set ssl:priority "NORMAL:-VERS-TLS1.3";
             open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
             mirror -R --delete --verbose ./dist/ ./staging/;
             bye
@@ -96,6 +97,7 @@ jobs:
             set ftp:ssl-force true;
             set ftp:ssl-protect-data true;
             set ssl:verify-certificate no;
+            set ssl:priority "NORMAL:-VERS-TLS1.3";
             open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
             mirror -R --delete --verbose --exclude-glob staging/ ./dist/ ./;
             bye
