@@ -52,13 +52,14 @@ jobs:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASS: ${{ secrets.FTP_PASS }}
         run: |
-          lftp -e "
+          lftp -c "
             set ftp:ssl-force true;
             set ftp:ssl-protect-data true;
             set ssl:verify-certificate no;
+            open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
             mirror -R --delete --verbose ./dist/ ./staging/;
             bye
-          " -u "$FTP_USER,$FTP_PASS" "$FTP_HOST"
+          "
 
       - name: Comment staging link on PR
         uses: actions/github-script@v7
@@ -91,10 +92,11 @@ jobs:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASS: ${{ secrets.FTP_PASS }}
         run: |
-          lftp -e "
+          lftp -c "
             set ftp:ssl-force true;
             set ftp:ssl-protect-data true;
             set ssl:verify-certificate no;
+            open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
             mirror -R --delete --verbose --exclude-glob staging/ ./dist/ ./;
             bye
-          " -u "$FTP_USER,$FTP_PASS" "$FTP_HOST"
+          "
