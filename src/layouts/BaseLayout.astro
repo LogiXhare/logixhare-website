@@ -23,21 +23,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="apple-touch-icon" href={url('/icon.jpg')} />
     <meta name="generator" content={Astro.generator} />
 
-    <meta name="theme-color" content="#060d18" />
+    <meta name="theme-color" content="#f4f8fb" />
 
     {/* Applies the saved theme before first paint. Must stay inline and in
         <head>: deferred to the body it would render one frame of the wrong
-        theme. Dark is the brand default, so no saved choice — and an
-        unreadable localStorage — both fall through to dark. The OS
-        prefers-color-scheme setting is deliberately NOT consulted. */}
+        theme. The stamp is always written explicitly, never left off for the
+        default, so the toggle and the logo/icon swaps can read one value
+        rather than treating "absent" as a third state. Light is the default,
+        so no saved choice — and an unreadable localStorage — both land on
+        light. The OS prefers-color-scheme setting is deliberately NOT
+        consulted: the default is a brand decision. */}
     <script is:inline>
+      var t = 'light';
       try {
-        if (localStorage.getItem('lx-theme') === 'light') {
-          document.documentElement.dataset.theme = 'light';
-        }
+        if (localStorage.getItem('lx-theme') === 'dark') t = 'dark';
       } catch (e) {
-        /* private mode / storage blocked — dark default is correct anyway */
+        /* private mode / storage blocked — the light default is correct anyway */
       }
+      document.documentElement.dataset.theme = t;
     </script>
 
     <title>{pageTitle}</title>

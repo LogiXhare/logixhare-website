@@ -3,11 +3,13 @@
 
    Two themes, one teal accent carried from the LogixHare logo.
 
-   DARK is the brand look and the default for every first-time
-   visitor — deliberately NOT `prefers-color-scheme`, because most
-   visitors here browse with a light OS setting and would otherwise
-   never see the intended design. The header toggle switches themes
-   and the choice is remembered in localStorage; BaseLayout stamps
+   LIGHT is the default for every first-time visitor: the sectors this
+   work is sold into read light as the expected register, and the
+   service artwork sits in an always-dark panel that carries far more
+   contrast against a light page than a dark one. DARK remains a first-
+   class theme behind the header toggle, and the choice is remembered in
+   localStorage. `prefers-color-scheme` is deliberately NOT consulted —
+   the default is a brand decision, not an OS one. BaseLayout stamps
    data-theme on <html> before first paint so there is no flash.
 
    Every colour is painted explicitly, and every component styles
@@ -18,36 +20,40 @@
    =========================================================== */
 
 :root {
-  /* ---------- DARK (default) ---------- */
+  /* ---------- LIGHT (default) ----------
+     Not an inversion of the dark palette: the neutrals carry a slight blue
+     bias toward the teal accent so the two themes read as the same brand, and
+     teal is darkened for text and rules because the bright accent fails
+     contrast on a light ground. */
 
-  /* ground & surfaces (darkest -> lightest) */
-  --bg: #060d18;           /* page ground */
-  --bg-alt: #0a1425;       /* alternating bands, footer */
-  --surface: #101d33;      /* cards, panels */
-  --surface-2: #16263f;    /* raised / hover state */
+  /* ground & surfaces */
+  --bg: #f4f8fb;           /* page ground */
+  --bg-alt: #ffffff;       /* alternating bands, footer */
+  --surface: #ffffff;      /* cards, panels */
+  --surface-2: #eef4f9;    /* raised / hover state */
 
   /* accent */
-  --teal: #2dc7c9;
-  --teal-bright: #5ce6e8;
-  --teal-deep: #1a9fa1;
-  --teal-wash: rgba(45, 199, 201, 0.1);
-  /* Text placed ON the teal accent. Theme-specific: the dark theme's accent is
-     bright and takes dark text, the light theme's is darkened and takes white. */
-  --on-accent: #04101d;
+  --teal: #12878c;         /* darkened: the bright teal is unreadable on white */
+  --teal-bright: #0d6f74;  /* hover goes darker here, not lighter */
+  --teal-deep: #0a5c60;
+  --teal-wash: rgba(18, 135, 140, 0.09);
+  /* Text placed ON the teal accent. Theme-specific: this theme's accent is
+     dark enough for white, the dark theme's is bright and takes dark text. */
+  --on-accent: #ffffff;
 
   /* text */
-  --text: #e9f2f7;         /* primary */
-  --text-muted: #93a9c0;   /* body copy, secondary */
-  --text-soft: #7f95ad;    /* captions, fine print */
+  --text: #0f2038;         /* primary */
+  --text-muted: #4a6076;   /* body copy, secondary */
+  --text-soft: #6b8199;    /* captions, fine print */
 
   /* lines & decoration */
-  --line: #1d3050;
-  --line-soft: rgba(147, 169, 192, 0.14);
-  --grid-line: rgba(147, 169, 192, 0.055);  /* hero graph-paper overlay */
-  --header-bg: rgba(6, 13, 24, 0.86);       /* sticky header, over blur */
+  --line: #dbe5ee;
+  --line-soft: rgba(15, 32, 56, 0.09);
+  --grid-line: rgba(15, 32, 56, 0.045);       /* hero graph-paper overlay */
+  --header-bg: rgba(244, 248, 251, 0.88);     /* sticky header, over blur */
 
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 40px -24px rgba(0, 0, 0, 0.85);
-  --shadow-lift: 0 10px 30px -12px rgba(45, 199, 201, 0.45);
+  --shadow-card: 0 1px 2px rgba(15, 32, 56, 0.06), 0 16px 34px -22px rgba(15, 32, 56, 0.3);
+  --shadow-lift: 0 10px 26px -12px rgba(23, 149, 154, 0.45);
 
   /* --- type --- */
   --font-display: 'Manrope', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -70,34 +76,31 @@
   --space-section: clamp(3.75rem, 3rem + 2.6vw, 6.5rem);
 }
 
-/* ---------- LIGHT ----------
-   Redefines only the colour tokens. Not an inversion of the dark palette:
-   the neutrals carry a slight blue bias toward the teal accent so the two
-   themes read as the same brand, and teal is darkened to teal-deep for text
-   and rules because the bright accent fails contrast on a light ground. */
-:root[data-theme='light'] {
-  --bg: #f4f8fb;
-  --bg-alt: #ffffff;
-  --surface: #ffffff;
-  --surface-2: #eef4f9;
+/* ---------- DARK ----------
+   Redefines only the colour tokens; type and layout stay as declared above. */
+:root[data-theme='dark'] {
+  --bg: #060d18;
+  --bg-alt: #0a1425;
+  --surface: #101d33;
+  --surface-2: #16263f;
 
-  --teal: #12878c;         /* darkened: the bright teal is unreadable on white */
-  --teal-bright: #0d6f74;  /* hover goes darker here, not lighter */
-  --teal-deep: #0a5c60;
-  --teal-wash: rgba(18, 135, 140, 0.09);
-  --on-accent: #ffffff;    /* the light-theme accent is dark enough for white */
+  --teal: #2dc7c9;
+  --teal-bright: #5ce6e8;
+  --teal-deep: #1a9fa1;
+  --teal-wash: rgba(45, 199, 201, 0.1);
+  --on-accent: #04101d;    /* the dark-theme accent is bright, so dark text */
 
-  --text: #0f2038;
-  --text-muted: #4a6076;
-  --text-soft: #6b8199;
+  --text: #e9f2f7;
+  --text-muted: #93a9c0;
+  --text-soft: #7f95ad;
 
-  --line: #dbe5ee;
-  --line-soft: rgba(15, 32, 56, 0.09);
-  --grid-line: rgba(15, 32, 56, 0.045);
-  --header-bg: rgba(244, 248, 251, 0.88);
+  --line: #1d3050;
+  --line-soft: rgba(147, 169, 192, 0.14);
+  --grid-line: rgba(147, 169, 192, 0.055);
+  --header-bg: rgba(6, 13, 24, 0.86);
 
-  --shadow-card: 0 1px 2px rgba(15, 32, 56, 0.06), 0 16px 34px -22px rgba(15, 32, 56, 0.3);
-  --shadow-lift: 0 10px 26px -12px rgba(23, 149, 154, 0.45);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 40px -24px rgba(0, 0, 0, 0.85);
+  --shadow-lift: 0 10px 30px -12px rgba(45, 199, 201, 0.45);
 }
 
 *,
