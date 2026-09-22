@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import CtaBand from '../components/CtaBand.astro';
-import NodeLattice from '../components/NodeLattice.astro';
 import Icon from '../components/Icon.astro';
 import { serviceCategories } from '../data/nav';
 import { url } from '../lib/url';
@@ -21,21 +20,25 @@ const artFor = new Map(serviceCategories.map((cat) => [cat.id, cat]));
 const slides = [
   {
     eyebrow: 'Managed web hosting',
+    art: 'hosting',
     heading: 'Hosting you never have to chase support about',
     body: 'Websites, mail and databases on infrastructure we own and run ourselves — with published pricing and a portal you can actually self-serve from.',
   },
   {
     eyebrow: 'Web design & development',
+    art: 'web',
     heading: 'Websites built around how your business really works',
     body: 'Custom sites and web applications, designed and written to fit your process instead of bending your process around a template.',
   },
   {
     eyebrow: 'Software & ERP',
+    art: 'software',
     heading: 'Business software modelled on your process, not a template',
     body: 'ERP, HRM, CRM, POS and industry platforms — including RMG ERP and ISP billing — built to match how your organisation already runs.',
   },
   {
     eyebrow: 'Networks & infrastructure',
+    art: 'network',
     heading: 'Network and server work, done the way operators do it',
     body: 'Design, automation, hardening and monitoring — the same discipline used on carrier networks, applied at the size your business needs.',
   },
@@ -291,7 +294,21 @@ const faqs = [
 
       <div class="hero-art" aria-hidden="true">
         <div class="hero-art-panel">
-          <NodeLattice />
+          {
+            slides.map((slide, i) => (
+              <img
+                class="hero-art-img"
+                data-art={i}
+                data-active={i === 0 ? 'true' : 'false'}
+                src={url(artFor.get(slide.art)?.image ?? '')}
+                alt=""
+                width="640"
+                height="400"
+                loading="eager"
+                decoding="async"
+              />
+            ))
+          }
         </div>
       </div>
     </div>
@@ -627,14 +644,43 @@ const faqs = [
   }
 
   .hero-art-panel {
+    position: relative;
     width: 100%;
-    max-width: 430px;
-    aspect-ratio: 1 / 0.95;
+    max-width: 460px;
+    aspect-ratio: 16 / 10;
     border-radius: var(--radius-lg);
     border: 1px solid var(--line);
     background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
-    padding: 2.25rem;
+    overflow: hidden;
     box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  }
+
+  /* All four stack in the same box and cross-fade, so the artwork changes with
+     the slide instead of one static image sitting under rotating copy. */
+  /* Scaled past the frame: the artwork's subject sits mid-canvas with margin
+     around it, which reads as too small in a panel this size. */
+  .hero-art-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.28);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .hero-art-img[data-active='true'] {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-art-img,
+    .hero-art-img[data-active='true'] {
+      transition: opacity 0.2s ease;
+      transform: scale(1.2);
+    }
   }
 
   /* --- standards strip --- */
@@ -1119,6 +1165,7 @@ const faqs = [
   // still work as manual controls in that case.
   const slides = Array.from(document.querySelectorAll<HTMLElement>('.hero-slide'));
   const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('.hero-dot'));
+  const art = Array.from(document.querySelectorAll<HTMLImageElement>('.hero-art-img'));
 
   if (slides.length > 1) {
     let index = 0;
@@ -1131,6 +1178,7 @@ const faqs = [
       index = (next + slides.length) % slides.length;
       slides.forEach((s, i) => s.setAttribute('aria-hidden', String(i !== index)));
       dots.forEach((d, i) => d.setAttribute('aria-selected', String(i === index)));
+      art.forEach((a, i) => a.setAttribute('data-active', String(i === index)));
     };
 
     const start = () => {

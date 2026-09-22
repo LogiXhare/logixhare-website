@@ -1,86 +1,125 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="A staged roadmap with milestone markers, a compass, and an SLA response-time panel">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="An isometric desk with an open laptop and a planning board, beside a staged roadmap of milestone markers leading to a client building">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#0b1c31"/><stop offset=".6" stop-color="#0e2740"/><stop offset="1" stop-color="#081524"/>
+      <stop offset="0" stop-color="#0d2136"/><stop offset=".55" stop-color="#0e2740"/><stop offset="1" stop-color="#071320"/>
     </linearGradient>
-    <linearGradient id="ln" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2dc7c9"/><stop offset="1" stop-color="#8fb7cf"/>
+    <linearGradient id="fTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d5675"/><stop offset="1" stop-color="#22455f"/>
     </linearGradient>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity=".035" stroke-width="1"/>
-    </pattern>
+    <linearGradient id="fLeft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d3f5a"/><stop offset="1" stop-color="#142e46"/>
+    </linearGradient>
+    <linearGradient id="fRight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#112436"/><stop offset="1" stop-color="#0a1a29"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123048"/><stop offset="1" stop-color="#0b2034"/>
+    </linearGradient>
+    <radialGradient id="pool" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#2dc7c9" stop-opacity=".2"/><stop offset="1" stop-color="#2dc7c9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shadow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#04101b" stop-opacity=".7"/><stop offset="1" stop-color="#04101b" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="lapScreen"><polygon points="0,-16 -76,-60 -76,-108 0,-64"/></clipPath>
+    <clipPath id="boardFace"><polygon points="0,-108 -86,-158 -86,-72 0,-22"/></clipPath>
   </defs>
 
   <rect width="640" height="400" fill="url(#bg)"/>
-  <rect width="640" height="400" fill="url(#grid)"/>
 
-  <!-- roadmap path -->
-  <path d="M72 300C140 300 132 216 200 216s60-84 128-84 60-64 128-64h40"
-        fill="none" stroke="#8fb7cf" stroke-opacity=".28" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M72 300C140 300 132 216 200 216s60-84 128-84"
-        fill="none" stroke="url(#ln)" stroke-width="2.6" stroke-linecap="round"/>
-
-  <!-- milestones -->
-  <g>
-    <circle cx="72" cy="300" r="9" fill="#0b1c31" stroke="#2dc7c9" stroke-width="2.2"/>
-    <circle cx="72" cy="300" r="3.5" fill="#2dc7c9"/>
-    <circle cx="200" cy="216" r="9" fill="#0b1c31" stroke="#2dc7c9" stroke-width="2.2"/>
-    <circle cx="200" cy="216" r="3.5" fill="#2dc7c9"/>
-    <circle cx="328" cy="132" r="11" fill="#0b1c31" stroke="#2dc7c9" stroke-width="2.4" class="blink"/>
-    <circle cx="328" cy="132" r="4" fill="#2dc7c9"/>
-    <circle cx="456" cy="68" r="9" fill="#0b1c31" stroke="#8fb7cf" stroke-opacity=".5" stroke-width="2"/>
+  <polygon points="320,120 630,300 320,480 10,300" fill="#0a1b2b" opacity=".5"/>
+  <g stroke="#2dc7c9" stroke-opacity=".1" stroke-width="1">
+    <path d="M165 210L475 390M245 164L555 344"/><path d="M475 210L165 390"/>
   </g>
+  <ellipse cx="300" cy="292" rx="240" ry="115" fill="url(#pool)"/>
 
-  <!-- stage labels -->
-  <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" letter-spacing="1.4" fill="#8fb7cf" fill-opacity=".6">
-    <text x="56" y="334">01</text><text x="184" y="250">02</text>
-    <text x="312" y="166" fill="#2dc7c9" fill-opacity=".9">03</text><text x="440" y="102">04</text>
+  <!-- ===== roadmap across the floor ===== -->
+  <g fill="none" stroke="#2dc7c9" stroke-width="3" stroke-linecap="round" stroke-opacity=".4">
+    <path d="M128 336L242 278"/>
   </g>
-
-  <!-- gap-analysis bars, current vs target -->
-  <g fill="none" stroke="#8fb7cf" stroke-opacity=".4" stroke-width="1.3">
-    <rect x="60" y="72" width="184" height="104" rx="8"/>
+  <g fill="none" stroke="#8fb7cf" stroke-width="3" stroke-linecap="round" stroke-opacity=".18" stroke-dasharray="6 9">
+    <path d="M242 278L420 190 524 164"/>
   </g>
   <g>
-    <rect x="78" y="98" width="70" height="10" rx="5" fill="#2dc7c9" fill-opacity=".8"/>
-    <rect x="152" y="98" width="74" height="10" rx="5" fill="#8fb7cf" fill-opacity=".18"/>
-    <rect x="78" y="122" width="104" height="10" rx="5" fill="#2dc7c9" fill-opacity=".8"/>
-    <rect x="186" y="122" width="40" height="10" rx="5" fill="#8fb7cf" fill-opacity=".18"/>
-    <rect x="78" y="146" width="48" height="10" rx="5" fill="#2dc7c9" fill-opacity=".8"/>
-    <rect x="130" y="146" width="96" height="10" rx="5" fill="#8fb7cf" fill-opacity=".18"/>
+    <g transform="translate(128 336)">
+      <ellipse rx="13" ry="7" fill="#0e2740" stroke="#2dc7c9" stroke-width="2.4"/>
+      <ellipse rx="4.5" ry="2.4" fill="#2dc7c9"/>
+    </g>
+    <g transform="translate(242 278)">
+      <ellipse rx="13" ry="7" fill="#0e2740" stroke="#2dc7c9" stroke-width="2.4"/>
+      <ellipse rx="4.5" ry="2.4" fill="#2dc7c9"/>
+    </g>
+    <g transform="translate(420 190)">
+      <ellipse rx="14" ry="8" fill="#0e2740" stroke="#2dc7c9" stroke-width="2.6" class="b"/>
+      <ellipse rx="5" ry="2.8" fill="#2dc7c9"/>
+    </g>
   </g>
 
-  <!-- compass -->
-  <g transform="translate(508 232)">
-    <circle r="62" fill="#0b1c31" stroke="url(#ln)" stroke-width="2" stroke-opacity=".9"/>
-    <circle r="48" fill="none" stroke="#8fb7cf" stroke-opacity=".25" stroke-width="1.2"/>
-    <g stroke="#8fb7cf" stroke-opacity=".4" stroke-width="1.4" stroke-linecap="round">
-      <line x1="0" y1="-62" x2="0" y2="-52"/><line x1="0" y1="52" x2="0" y2="62"/>
-      <line x1="-62" y1="0" x2="-52" y2="0"/><line x1="52" y1="0" x2="62" y2="0"/>
+  <!-- ===== client building at the end of the road ===== -->
+  <g transform="translate(548 200)">
+    <ellipse cx="0" cy="16" rx="56" ry="24" fill="url(#shadow)"/>
+    <polygon points="0,-96 42,-72 0,-48 -42,-72" fill="url(#fTop)"/>
+    <polygon points="-42,-72 0,-48 0,16 -42,-8" fill="url(#fLeft)"/>
+    <polygon points="0,-48 42,-72 42,-8 0,16" fill="url(#fRight)"/>
+    <g fill="#2dc7c9">
+      <polygon points="-33,-62 -22,-56 -22,-45 -33,-51" fill-opacity=".5"/>
+      <polygon points="-17,-53 -6,-47 -6,-36 -17,-42" fill-opacity=".7" class="b b2"/>
+      <polygon points="-33,-38 -22,-32 -22,-21 -33,-27" fill-opacity=".35"/>
+      <polygon points="-17,-29 -6,-23 -6,-12 -17,-18" fill-opacity=".55"/>
     </g>
-    <g transform="rotate(38)">
-      <polygon points="0,-38 11,0 0,9 -11,0" fill="#2dc7c9" fill-opacity=".95"/>
-      <polygon points="0,38 11,0 0,-9 -11,0" fill="#8fb7cf" fill-opacity=".3"/>
+    <g fill="#8fb7cf" fill-opacity=".12">
+      <polygon points="8,-48 20,-55 20,-44 8,-37"/>
+      <polygon points="26,-58 38,-65 38,-54 26,-47"/>
     </g>
-    <circle r="4.5" fill="#0b1c31" stroke="#2dc7c9" stroke-width="1.6"/>
   </g>
 
-  <!-- SLA panel -->
-  <g fill="none" stroke="#8fb7cf" stroke-opacity=".4" stroke-width="1.3">
-    <rect x="396" y="316" width="196" height="56" rx="8"/>
+  <!-- ===== planning board, standing behind ===== -->
+  <g transform="translate(266 252)">
+    <ellipse cx="-44" cy="6" rx="94" ry="30" fill="url(#shadow)"/>
+    <!-- easel legs -->
+    <g stroke="#1d3f5a" stroke-width="5" stroke-linecap="round">
+      <path d="M-12 -18L-4 10"/><path d="M-76 -54L-84 6"/>
+    </g>
+    <polygon points="0,-108 -86,-158 -86,-72 0,-22" fill="#16344c"/>
+    <polygon points="-4,-106 -82,-151 -82,-77 -4,-32" fill="url(#screen)"/>
+    <g clip-path="url(#boardFace)">
+      <g fill="#2dc7c9">
+        <polygon points="-12,-98 -46,-118 -46,-110 -12,-90" fill-opacity=".85"/>
+        <polygon points="-50,-120 -76,-135 -76,-127 -50,-112" fill-opacity=".22"/>
+        <polygon points="-12,-84 -58,-111 -58,-103 -12,-76" fill-opacity=".85"/>
+        <polygon points="-62,-113 -76,-121 -76,-113 -62,-105" fill-opacity=".22"/>
+        <polygon points="-12,-70 -36,-84 -36,-76 -12,-62" fill-opacity=".85"/>
+        <polygon points="-40,-86 -76,-107 -76,-99 -40,-78" fill-opacity=".22"/>
+      </g>
+    </g>
+    <polyline points="0,-108 -86,-158" fill="none" stroke="#2dc7c9" stroke-opacity=".35" stroke-width="1.4"/>
   </g>
-  <g transform="translate(424 344)" fill="none" stroke="#2dc7c9" stroke-width="1.8" stroke-linecap="round">
-    <circle r="14" stroke-opacity=".85"/>
-    <polyline points="0,-8 0,0 6,4"/>
-  </g>
-  <g fill="#8fb7cf" fill-opacity=".45">
-    <rect x="452" y="334" width="96" height="8" rx="4"/>
-    <rect x="452" y="350" width="62" height="6" rx="3"/>
+
+  <!-- ===== laptop, the object in front ===== -->
+  <g transform="translate(180 336)">
+    <ellipse cx="-44" cy="6" rx="92" ry="30" fill="url(#shadow)"/>
+    <!-- lid -->
+    <polygon points="0,-20 -92,-74 -92,-130 0,-76" fill="#1d3f5a"/>
+    <polygon points="-4,-25 -86,-77 -86,-123 -4,-71" fill="url(#screen)"/>
+    <g clip-path="url(#lapScreen)">
+      <polygon points="-10,-70 -80,-111 -80,-101 -10,-60" fill="#2dc7c9" fill-opacity=".34"/>
+      <g fill="#8fb7cf" fill-opacity=".32">
+        <polygon points="-10,-56 -80,-97 -80,-103 -10,-62"/>
+        <polygon points="-10,-44 -52,-69 -52,-75 -10,-50"/>
+      </g>
+      <polygon points="-12,-30 -44,-49 -44,-59 -12,-40" fill="#2dc7c9" fill-opacity=".8"/>
+    </g>
+    <polyline points="0,-76 -92,-130" fill="none" stroke="#2dc7c9" stroke-opacity=".35" stroke-width="1.4"/>
+    <!-- keyboard deck -->
+    <polygon points="0,-20 -92,-74 -128,-53 -36,1" fill="#24496a"/>
+    <polygon points="-16,-23 -88,-65 -112,-51 -40,-9" fill="#14304a"/>
+    <polygon points="-44,-6 -66,-19 -82,-10 -60,3" fill="#1d3f5a"/>
   </g>
 
   <style>
-    .blink { animation: lx 3.4s ease-in-out infinite; }
-    @keyframes lx { 0%,100% { opacity:.55 } 50% { opacity:1 } }
-    @media (prefers-reduced-motion: reduce) { .blink { animation: none } }
+    .b { animation: blink 3.4s ease-in-out infinite }
+    .b2 { animation-delay: 1.2s }
+    @keyframes blink { 0%,100% { opacity:.4 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: reduce) { .b { animation: none } }
   </style>
 </svg>

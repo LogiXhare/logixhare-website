@@ -1,82 +1,132 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="Business modules feeding a central database, with a reporting panel drawn from it">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="An isometric ERP dashboard on screen, wired to a stack of database drums and a row of module blocks">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#0b1c31"/><stop offset=".6" stop-color="#0e2740"/><stop offset="1" stop-color="#081524"/>
+      <stop offset="0" stop-color="#0d2136"/><stop offset=".55" stop-color="#0e2740"/><stop offset="1" stop-color="#071320"/>
     </linearGradient>
-    <linearGradient id="ln" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2dc7c9"/><stop offset="1" stop-color="#8fb7cf"/>
+    <linearGradient id="fTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d5675"/><stop offset="1" stop-color="#22455f"/>
     </linearGradient>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity=".035" stroke-width="1"/>
-    </pattern>
+    <linearGradient id="fLeft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d3f5a"/><stop offset="1" stop-color="#142e46"/>
+    </linearGradient>
+    <linearGradient id="fRight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#112436"/><stop offset="1" stop-color="#0a1a29"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123048"/><stop offset="1" stop-color="#0b2034"/>
+    </linearGradient>
+    <linearGradient id="drum" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1d3f5a"/><stop offset=".5" stop-color="#173549"/><stop offset="1" stop-color="#0d2134"/>
+    </linearGradient>
+    <radialGradient id="pool" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#2dc7c9" stop-opacity=".2"/><stop offset="1" stop-color="#2dc7c9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shadow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#04101b" stop-opacity=".7"/><stop offset="1" stop-color="#04101b" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="dashScreen"><polygon points="0,-16 -152,-104 -152,-198 0,-110"/></clipPath>
   </defs>
 
   <rect width="640" height="400" fill="url(#bg)"/>
-  <rect width="640" height="400" fill="url(#grid)"/>
 
-  <!-- module boxes feeding the core -->
-  <g fill="none" stroke="#8fb7cf" stroke-opacity=".45" stroke-width="1.3">
-    <rect x="48" y="56" width="128" height="46" rx="7"/>
-    <rect x="48" y="128" width="128" height="46" rx="7"/>
-    <rect x="48" y="200" width="128" height="46" rx="7"/>
-    <rect x="48" y="272" width="128" height="46" rx="7"/>
+  <polygon points="330,116 630,290 330,464 30,290" fill="#0a1b2b" opacity=".5"/>
+  <g stroke="#2dc7c9" stroke-opacity=".1" stroke-width="1">
+    <path d="M180 203L480 377M255 160L555 334"/><path d="M480 203L180 377"/>
   </g>
-  <g fill="#8fb7cf" fill-opacity=".34">
-    <rect x="64" y="72" width="68" height="7" rx="3.5"/><rect x="64" y="85" width="44" height="6" rx="3"/>
-    <rect x="64" y="144" width="80" height="7" rx="3.5"/><rect x="64" y="157" width="40" height="6" rx="3"/>
-    <rect x="64" y="216" width="56" height="7" rx="3.5"/><rect x="64" y="229" width="52" height="6" rx="3"/>
-    <rect x="64" y="288" width="74" height="7" rx="3.5"/><rect x="64" y="301" width="36" height="6" rx="3"/>
-  </g>
-  <g fill="#2dc7c9" fill-opacity=".7">
-    <circle cx="62" cy="79" r="3.5"/><circle cx="62" cy="151" r="3.5"/>
-    <circle cx="62" cy="223" r="3.5"/><circle cx="62" cy="295" r="3.5"/>
+  <ellipse cx="310" cy="284" rx="235" ry="115" fill="url(#pool)"/>
+
+  <!-- ===== dashboard screen ===== -->
+  <g transform="translate(400 296)">
+    <ellipse cx="-80" cy="-6" rx="128" ry="44" fill="url(#shadow)"/>
+    <g>
+      <polygon points="-58,-24 -34,-10 -58,4 -82,-10" fill="url(#fTop)"/>
+      <polygon points="-82,-10 -58,4 -58,14 -82,0" fill="url(#fLeft)"/>
+      <polygon points="-58,4 -34,-10 -34,0 -58,14" fill="url(#fRight)"/>
+      <polygon points="-64,-48 -52,-41 -52,-17 -64,-24" fill="#1a3750"/>
+    </g>
+    <polygon points="0,-110 -152,-198 -134,-188 18,-100" fill="url(#fTop)"/>
+    <polygon points="0,-16 18,-6 18,-100 0,-110" fill="url(#fRight)"/>
+    <polygon points="0,-16 -152,-104 -152,-198 0,-110" fill="#16344c"/>
+    <polygon points="0,-22 -144,-106 -144,-192 0,-108" fill="url(#screen)"/>
+
+    <g clip-path="url(#dashScreen)">
+      <polygon points="-6,-108 -142,-186 -142,-176 -6,-98" fill="#8fb7cf" fill-opacity=".14"/>
+      <!-- KPI bars, drawn along the screen plane -->
+      <g fill="#2dc7c9">
+        <polygon points="-30,-52 -42,-59 -42,-95 -30,-88" fill-opacity=".85" class="b"/>
+        <polygon points="-52,-65 -64,-72 -64,-100 -52,-93" fill-opacity=".65"/>
+        <polygon points="-74,-78 -86,-85 -86,-125 -74,-118" fill-opacity=".8"/>
+        <polygon points="-96,-90 -108,-97 -108,-131 -96,-124" fill-opacity=".6"/>
+        <polygon points="-118,-103 -130,-110 -130,-162 -118,-155" fill-opacity=".9" class="b b2"/>
+      </g>
+      <g fill="#8fb7cf" fill-opacity=".26">
+        <polygon points="-24,-96 -70,-123 -70,-130 -24,-103"/>
+        <polygon points="-78,-128 -140,-164 -140,-171 -78,-135"/>
+      </g>
+    </g>
+    <polyline points="0,-110 -152,-198" fill="none" stroke="#2dc7c9" stroke-opacity=".3" stroke-width="1.2"/>
   </g>
 
-  <!-- feeds -->
-  <g fill="none" stroke="url(#ln)" stroke-width="1.4" stroke-opacity=".6">
-    <path d="M176 79h44q20 0 20 20v58"/>
-    <path d="M176 151h64q0 0 0 0"/>
-    <path d="M176 223h64"/>
-    <path d="M176 295h44q20 0 20-20v-58"/>
-  </g>
-  <g fill="#2dc7c9">
-    <circle cx="196" cy="79" r="3" class="flow"/>
-    <circle cx="210" cy="151" r="3" class="flow f2"/>
-    <circle cx="210" cy="223" r="3" class="flow f3"/>
-    <circle cx="196" cy="295" r="3" class="flow f4"/>
+  <!-- ===== database drums ===== -->
+  <g transform="translate(150 286)">
+    <ellipse cx="0" cy="8" rx="82" ry="34" fill="url(#shadow)"/>
+    <g>
+      <path d="M-58 -26v34c0 12 26 21 58 21s58-9 58-21v-34Z" fill="url(#drum)"/>
+      <ellipse cx="0" cy="-26" rx="58" ry="21" fill="#23496a"/>
+      <ellipse cx="0" cy="-26" rx="44" ry="15" fill="#2dc7c9" fill-opacity=".16"/>
+    </g>
+    <g transform="translate(0 -46)">
+      <path d="M-58 -26v34c0 12 26 21 58 21s58-9 58-21v-34Z" fill="url(#drum)"/>
+      <ellipse cx="0" cy="-26" rx="58" ry="21" fill="#23496a"/>
+      <ellipse cx="0" cy="-26" rx="44" ry="15" fill="#2dc7c9" fill-opacity=".16"/>
+    </g>
+    <g transform="translate(0 -92)">
+      <path d="M-58 -26v34c0 12 26 21 58 21s58-9 58-21v-34Z" fill="url(#drum)"/>
+      <ellipse cx="0" cy="-26" rx="58" ry="21" fill="#2a5274"/>
+      <ellipse cx="0" cy="-26" rx="44" ry="15" fill="#2dc7c9" fill-opacity=".22"/>
+    </g>
+    <g fill="#2dc7c9">
+      <circle cx="-44" cy="-4" r="3.4" class="b"/>
+      <circle cx="-44" cy="-50" r="3.4" class="b b2"/>
+      <circle cx="-44" cy="-96" r="3.4" class="b b3"/>
+    </g>
   </g>
 
-  <!-- central database -->
-  <g transform="translate(300 200)" fill="none" stroke="url(#ln)" stroke-width="1.8">
-    <ellipse cx="0" cy="-54" rx="58" ry="22"/>
-    <path d="M-58 -54v108c0 12 26 22 58 22s58-10 58-22V-54"/>
-    <path d="M-58 -18c0 12 26 22 58 22s58-10 58-22"/>
-    <path d="M-58 18c0 12 26 22 58 22s58-10 58-22" stroke-opacity=".6"/>
+  <!-- link, drums to dashboard -->
+  <g fill="none" stroke="#2dc7c9" stroke-opacity=".45" stroke-width="2.2" stroke-linecap="round">
+    <path d="M208 232q46 -16 84 -4"/>
   </g>
-  <ellipse cx="300" cy="146" rx="58" ry="22" fill="#2dc7c9" fill-opacity=".12"/>
 
-  <!-- reporting panel -->
-  <g fill="none" stroke="url(#ln)" stroke-width="1.6" stroke-opacity=".9">
-    <rect x="430" y="118" width="162" height="164" rx="9"/>
-    <line x1="430" y1="150" x2="592" y2="150" stroke-opacity=".5"/>
+  <!-- ===== module blocks feeding in ===== -->
+  <g>
+    <g transform="translate(112 148)">
+      <polygon points="0,-18 30,-1 0,16 -30,-1" fill="url(#fTop)"/>
+      <polygon points="-30,-1 0,16 0,30 -30,13" fill="url(#fLeft)"/>
+      <polygon points="0,16 30,-1 30,13 0,30" fill="url(#fRight)"/>
+      <ellipse cx="0" cy="-16" rx="9" ry="5" fill="#2dc7c9" fill-opacity=".55"/>
+    </g>
+    <g transform="translate(184 112)">
+      <polygon points="0,-18 30,-1 0,16 -30,-1" fill="url(#fTop)"/>
+      <polygon points="-30,-1 0,16 0,30 -30,13" fill="url(#fLeft)"/>
+      <polygon points="0,16 30,-1 30,13 0,30" fill="url(#fRight)"/>
+      <ellipse cx="0" cy="-16" rx="9" ry="5" fill="#2dc7c9" fill-opacity=".75" class="b b2"/>
+    </g>
+    <g transform="translate(256 76)">
+      <polygon points="0,-18 30,-1 0,16 -30,-1" fill="url(#fTop)"/>
+      <polygon points="-30,-1 0,16 0,30 -30,13" fill="url(#fLeft)"/>
+      <polygon points="0,16 30,-1 30,13 0,30" fill="url(#fRight)"/>
+      <ellipse cx="0" cy="-16" rx="9" ry="5" fill="#2dc7c9" fill-opacity=".55"/>
+    </g>
+    <g fill="none" stroke="#2dc7c9" stroke-opacity=".32" stroke-width="1.6" stroke-dasharray="4 6">
+      <path d="M142 162L154 128M214 126L226 92"/>
+      <path d="M112 178v16"/>
+    </g>
   </g>
-  <rect x="446" y="130" width="60" height="8" rx="4" fill="#8fb7cf" fill-opacity=".4"/>
-  <g fill="#2dc7c9" fill-opacity=".75">
-    <rect x="452" y="226" width="20" height="36" rx="3"/>
-    <rect x="484" y="206" width="20" height="56" rx="3"/>
-    <rect x="516" y="184" width="20" height="78" rx="3"/>
-    <rect x="548" y="164" width="20" height="98" rx="3" class="blink"/>
-  </g>
-  <path d="M452 200l32-18 32-16 32-22" fill="none" stroke="#8fb7cf" stroke-opacity=".55" stroke-width="1.5"/>
-
-  <!-- core to report -->
-  <path d="M358 200h72" fill="none" stroke="url(#ln)" stroke-width="1.4" stroke-opacity=".6"/>
 
   <style>
-    .flow { animation: lx 3.2s ease-in-out infinite; }
-    .f2 { animation-delay: .8s } .f3 { animation-delay: 1.6s } .f4 { animation-delay: 2.4s }
-    .blink { animation: lx 3.6s ease-in-out infinite; }
-    @keyframes lx { 0%,100% { opacity:.4 } 50% { opacity:1 } }
-    @media (prefers-reduced-motion: reduce) { .flow, .blink { animation: none } }
+    .b { animation: blink 3.4s ease-in-out infinite }
+    .b2 { animation-delay: 1.1s } .b3 { animation-delay: 2.2s }
+    @keyframes blink { 0%,100% { opacity:.35 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: reduce) { .b { animation: none } }
   </style>
 </svg>

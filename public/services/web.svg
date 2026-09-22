@@ -1,90 +1,120 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="A browser window with a product grid and checkout, beside a phone showing the same layout">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="An isometric desktop monitor showing an online store, with a phone beside it displaying the same layout">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#0b1c31"/><stop offset=".6" stop-color="#0e2740"/><stop offset="1" stop-color="#081524"/>
+      <stop offset="0" stop-color="#0d2136"/><stop offset=".55" stop-color="#0e2740"/><stop offset="1" stop-color="#071320"/>
     </linearGradient>
-    <linearGradient id="ln" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2dc7c9"/><stop offset="1" stop-color="#8fb7cf"/>
+    <linearGradient id="fTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d5675"/><stop offset="1" stop-color="#22455f"/>
     </linearGradient>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity=".035" stroke-width="1"/>
-    </pattern>
+    <linearGradient id="fLeft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d3f5a"/><stop offset="1" stop-color="#142e46"/>
+    </linearGradient>
+    <linearGradient id="fRight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#112436"/><stop offset="1" stop-color="#0a1a29"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123048"/><stop offset="1" stop-color="#0b2034"/>
+    </linearGradient>
+    <radialGradient id="pool" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#2dc7c9" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#2dc7c9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shadow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#04101b" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#04101b" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="monScreen"><polygon points="0,-14 -150,-100 -150,-196 0,-110"/></clipPath>
+    <clipPath id="phScreen"><polygon points="0,-8 -46,-34 -46,-104 0,-78"/></clipPath>
   </defs>
 
   <rect width="640" height="400" fill="url(#bg)"/>
-  <rect width="640" height="400" fill="url(#grid)"/>
 
-  <!-- browser window -->
-  <g fill="none" stroke="url(#ln)" stroke-width="1.6">
-    <rect x="56" y="62" width="400" height="276" rx="10" stroke-opacity=".9"/>
-    <line x1="56" y1="98" x2="456" y2="98" stroke-opacity=".6"/>
+  <!-- desk plane -->
+  <polygon points="330,116 630,290 330,464 30,290" fill="#0a1b2b" opacity=".5"/>
+  <g stroke="#2dc7c9" stroke-opacity=".1" stroke-width="1">
+    <path d="M180 203L480 377M255 160L555 334"/>
+    <path d="M480 203L180 377"/>
   </g>
-  <g fill="#8fb7cf" fill-opacity=".5">
-    <circle cx="76" cy="80" r="4"/><circle cx="92" cy="80" r="4"/><circle cx="108" cy="80" r="4"/>
-  </g>
-  <rect x="132" y="73" width="200" height="14" rx="7" fill="#8fb7cf" fill-opacity=".18"/>
+  <ellipse cx="300" cy="280" rx="230" ry="115" fill="url(#pool)"/>
 
-  <!-- product grid -->
-  <g fill="none" stroke="#8fb7cf" stroke-opacity=".4" stroke-width="1.3">
-    <rect x="80" y="122" width="108" height="86" rx="6"/>
-    <rect x="202" y="122" width="108" height="86" rx="6"/>
-    <rect x="324" y="122" width="108" height="86" rx="6"/>
-  </g>
-  <g fill="#2dc7c9" fill-opacity=".22">
-    <rect x="80" y="122" width="108" height="46" rx="6"/>
-    <rect x="202" y="122" width="108" height="46" rx="6"/>
-    <rect x="324" y="122" width="108" height="46" rx="6"/>
-  </g>
-  <g fill="#8fb7cf" fill-opacity=".35">
-    <rect x="92" y="180" width="60" height="7" rx="3.5"/>
-    <rect x="214" y="180" width="72" height="7" rx="3.5"/>
-    <rect x="336" y="180" width="54" height="7" rx="3.5"/>
-    <rect x="92" y="193" width="36" height="6" rx="3"/>
-    <rect x="214" y="193" width="36" height="6" rx="3"/>
-    <rect x="336" y="193" width="36" height="6" rx="3"/>
+  <!-- ===== monitor ===== -->
+  <g transform="translate(392 300)">
+    <ellipse cx="-80" cy="-6" rx="130" ry="46" fill="url(#shadow)"/>
+
+    <!-- stand -->
+    <g>
+      <polygon points="-58,-24 -34,-10 -58,4 -82,-10" fill="url(#fTop)"/>
+      <polygon points="-82,-10 -58,4 -58,14 -82,0" fill="url(#fLeft)"/>
+      <polygon points="-58,4 -34,-10 -34,0 -58,14" fill="url(#fRight)"/>
+      <polygon points="-64,-46 -52,-39 -52,-17 -64,-24" fill="#1a3750"/>
+    </g>
+
+    <!-- panel body: thin slab, screen on the left-facing plane -->
+    <polygon points="0,-110 -150,-196 -132,-186 18,-100" fill="url(#fTop)"/>
+    <polygon points="0,-14 18,-4 18,-100 0,-110" fill="url(#fRight)"/>
+    <polygon points="0,-14 -150,-100 -150,-196 0,-110" fill="#16344c"/>
+    <polygon points="0,-20 -142,-102 -142,-190 0,-108" fill="url(#screen)"/>
+
+    <!-- what is on the screen -->
+    <g clip-path="url(#monScreen)">
+      <!-- browser bar -->
+      <polygon points="-6,-107 -140,-184 -140,-172 -6,-95" fill="#8fb7cf" fill-opacity=".14"/>
+      <g fill="#2dc7c9" fill-opacity=".7">
+        <ellipse cx="-16" cy="-97" rx="3" ry="2.6"/>
+        <ellipse cx="-26" cy="-103" rx="3" ry="2.6" fill-opacity=".5"/>
+        <ellipse cx="-36" cy="-109" rx="3" ry="2.6" fill-opacity=".35"/>
+      </g>
+      <!-- product tiles -->
+      <g fill="#2dc7c9" fill-opacity=".3">
+        <polygon points="-24,-84 -60,-105 -60,-131 -24,-110"/>
+        <polygon points="-66,-108 -102,-129 -102,-155 -66,-134"/>
+        <polygon points="-108,-132 -144,-153 -144,-179 -108,-158"/>
+      </g>
+      <g fill="#8fb7cf" fill-opacity=".3">
+        <polygon points="-24,-106 -60,-127 -60,-134 -24,-113"/>
+        <polygon points="-66,-130 -102,-151 -102,-158 -66,-137"/>
+        <polygon points="-108,-154 -144,-175 -144,-182 -108,-161"/>
+      </g>
+      <!-- checkout row -->
+      <g fill="#8fb7cf" fill-opacity=".22">
+        <polygon points="-30,-38 -120,-90 -120,-104 -30,-52"/>
+      </g>
+      <polygon points="-8,-32 -32,-46 -32,-62 -8,-48" fill="#2dc7c9" fill-opacity=".85"/>
+    </g>
+
+    <polyline points="0,-110 -150,-196" fill="none" stroke="#2dc7c9" stroke-opacity=".3" stroke-width="1.2"/>
   </g>
 
-  <!-- checkout row -->
-  <g fill="none" stroke="#8fb7cf" stroke-opacity=".35" stroke-width="1.3">
-    <rect x="80" y="232" width="248" height="76" rx="6"/>
+  <!-- ===== phone ===== -->
+  <g transform="translate(176 314)">
+    <ellipse cx="-22" cy="4" rx="56" ry="24" fill="url(#shadow)"/>
+    <polygon points="0,-78 -46,-104 -38,-99 8,-73" fill="url(#fTop)"/>
+    <polygon points="0,-8 8,-3 8,-73 0,-78" fill="url(#fRight)"/>
+    <polygon points="0,-8 -46,-34 -46,-104 0,-78" fill="#16344c"/>
+    <polygon points="0,-13 -41,-36 -41,-99 0,-76" fill="url(#screen)"/>
+    <g clip-path="url(#phScreen)">
+      <polygon points="-4,-74 -38,-93 -38,-79 -4,-60" fill="#2dc7c9" fill-opacity=".32"/>
+      <g fill="#8fb7cf" fill-opacity=".3">
+        <polygon points="-4,-56 -38,-75 -38,-80 -4,-61"/>
+        <polygon points="-4,-44 -26,-56 -26,-61 -4,-49"/>
+      </g>
+      <polygon points="-6,-27 -34,-43 -34,-53 -6,-37" fill="#2dc7c9" fill-opacity=".7"/>
+    </g>
+    <polyline points="0,-78 -46,-104" fill="none" stroke="#2dc7c9" stroke-opacity=".28" stroke-width="1.1"/>
   </g>
-  <g fill="#8fb7cf" fill-opacity=".3">
-    <rect x="96" y="250" width="140" height="8" rx="4"/>
-    <rect x="96" y="268" width="96" height="7" rx="3.5"/>
-    <rect x="96" y="285" width="118" height="7" rx="3.5"/>
-  </g>
-  <rect x="348" y="258" width="84" height="30" rx="15" fill="#2dc7c9" fill-opacity=".85"/>
-  <path d="M370 273h22m-6-6 6 6-6 6" stroke="#06202b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- phone, same layout narrower -->
-  <g fill="none" stroke="url(#ln)" stroke-width="1.6">
-    <rect x="490" y="104" width="94" height="196" rx="14" stroke-opacity=".9"/>
-    <line x1="524" y1="118" x2="550" y2="118" stroke-opacity=".6" stroke-linecap="round"/>
-  </g>
-  <g fill="#2dc7c9" fill-opacity=".22">
-    <rect x="504" y="132" width="66" height="40" rx="5"/>
-  </g>
-  <g fill="#8fb7cf" fill-opacity=".32">
-    <rect x="504" y="182" width="66" height="7" rx="3.5"/>
-    <rect x="504" y="196" width="44" height="6" rx="3"/>
-    <rect x="504" y="214" width="66" height="7" rx="3.5"/>
-    <rect x="504" y="228" width="50" height="6" rx="3"/>
-  </g>
-  <rect x="504" y="254" width="66" height="24" rx="12" fill="#2dc7c9" fill-opacity=".55"/>
-
-  <!-- cart badge -->
-  <g transform="translate(432 118)">
-    <circle r="22" fill="#0b1c31" stroke="#2dc7c9" stroke-width="1.6"/>
-    <g stroke="#2dc7c9" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(-11,-11) scale(.92)">
-      <circle cx="9.5" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/>
+  <!-- cart marker floating over the store -->
+  <g transform="translate(300 128)">
+    <circle r="26" fill="#0e2740" stroke="#2dc7c9" stroke-width="1.8" class="float"/>
+    <g stroke="#2dc7c9" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(-11,-11)">
+      <circle cx="9.5" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>
       <path d="M3 4h2.2l2.4 11.2h10.6l1.8-7.6H6.2"/>
     </g>
-    <circle cx="13" cy="-13" r="6" fill="#2dc7c9" class="blink"/>
   </g>
 
   <style>
-    .blink { animation: lx 3.6s ease-in-out infinite; }
-    @keyframes lx { 0%,100% { opacity:.45 } 50% { opacity:1 } }
-    @media (prefers-reduced-motion: reduce) { .blink { animation: none } }
+    .float { animation: bob 4s ease-in-out infinite }
+    @keyframes bob { 0%,100% { opacity:.75 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: reduce) { .float { animation: none } }
   </style>
 </svg>
