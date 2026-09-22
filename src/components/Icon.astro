@@ -15,7 +15,7 @@
  * never derived from user input.
  */
 import { iconPaths, type IconName } from '../data/icons';
-import { isoIconPaths } from '../data/iso-icons';
+import { isoIconPaths, isoIconTransforms } from '../data/iso-icons';
 
 interface Props {
   name: IconName;
@@ -25,11 +25,16 @@ interface Props {
 
 const { name, class: className, line = false } = Astro.props;
 const iso = line ? undefined : (isoIconPaths as Record<string, string>)[name];
+// Measured centring, so every icon sits optically centred in its chip at a
+// consistent size rather than wherever its own drawing happened to land.
+const isoTransform = isoIconTransforms[name];
 ---
 
 {
   iso ? (
-    <svg viewBox="0 0 32 32" class={className} aria-hidden="true" set:html={iso} />
+    <svg viewBox="0 0 32 32" class={className} aria-hidden="true">
+      <g transform={isoTransform} set:html={iso} />
+    </svg>
   ) : (
     <svg
       viewBox="0 0 24 24"

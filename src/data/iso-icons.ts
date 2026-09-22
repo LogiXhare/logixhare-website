@@ -333,4 +333,48 @@ export const isoIconPaths = {
     `<polyline points="12.4,15.4 14.8,17.4 19.4,12.6" fill="none" stroke="${A2}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`,
 } as const;
 
+
+/**
+ * Per-icon centring, measured rather than eyeballed: each icon's rendered
+ * bounding box is computed, then translated so its centre lands at 16,16 and
+ * scaled toward a common optical size. Kept separate from the art above so
+ * the drawings stay readable and these can be re-derived if one changes.
+ * Regenerate with scratchpad/center.mjs.
+ */
+export const isoIconTransforms: Record<string, string> = {
+  server: 'translate(1.6 0.88) scale(0.9)',
+  code: 'translate(-0.53 -0.22) scale(1.033)',
+  database: 'translate(-2.02 -2.47) scale(1.126)',
+  network: 'translate(-1.62 -3.44) scale(1.101)',
+  cloud: 'translate(0.87 0.96) scale(0.95)',
+  shield: 'translate(0 0) scale(1)',
+  search: 'translate(-2.62 -1.29) scale(1.064)',
+  compass: 'translate(-0.67 -2.96) scale(1.042)',
+  building: 'translate(0.91 1.14) scale(0.943)',
+  lock: 'translate(-1.7 -3.58) scale(1.106)',
+  heart: 'translate(-4 -5.63) scale(1.25)',
+  book: 'translate(-3.42 -7.91) scale(1.214)',
+  cart: 'translate(-0.85 -2.15) scale(1.087)',
+  box: 'translate(-0.67 -0.67) scale(1.042)',
+  pin: 'translate(0.62 0.13) scale(0.962)',
+  chart: 'translate(-2.18 -8.37) scale(1.136)',
+  globe: 'translate(0.62 -0.35) scale(0.962)',
+  wifi: 'translate(-4 -6.27) scale(1.25)',
+  refresh: 'translate(-3.04 -3.04) scale(1.168)',
+  layers: 'translate(-4 -6.38) scale(1.25)',
+  mobile: 'translate(-0.67 -0.67) scale(1.042)',
+  monitor: 'translate(-0.53 -0.22) scale(1.033)',
+  wrench: 'translate(-0.5 -2.02) scale(1.031)',
+  mail: 'translate(-2.18 -3.32) scale(1.136)',
+  phone: 'translate(0 -1.1) scale(1)',
+  clock: 'translate(-4 -1.5) scale(1.25)',
+  users: 'translate(-0.53 -2.49) scale(1.033)',
+  chat: 'translate(-2.18 -0.82) scale(1.136)',
+  camera: 'translate(-2.18 -4.11) scale(1.136)',
+  video: 'translate(0.62 -0.54) scale(0.962)',
+  palette: 'translate(-0.67 -3.38) scale(1.042)',
+  zap: 'translate(0.73 0.45) scale(0.954)',
+  clipboard: 'translate(0.73 0.64) scale(0.954)',
+};
+
 export type IsoIconName = keyof typeof isoIconPaths;
