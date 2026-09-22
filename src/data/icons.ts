@@ -46,6 +46,24 @@ export const iconPaths = {
   'chevron-down': '<polyline points="6.5 9.5 12 15 17.5 9.5"/>',
   sun: '<circle cx="12" cy="12" r="4"/><line x1="12" y1="2.8" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.2"/><line x1="2.8" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.2" y2="12"/><line x1="5.5" y1="5.5" x2="7.1" y2="7.1"/><line x1="16.9" y1="16.9" x2="18.5" y2="18.5"/><line x1="5.5" y1="18.5" x2="7.1" y2="16.9"/><line x1="16.9" y1="7.1" x2="18.5" y2="5.5"/>',
   moon: '<path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2Z"/>',
+  users:
+    '<circle cx="9.2" cy="8.4" r="3.2"/><path d="M3.5 19.5a5.7 5.7 0 0 1 11.4 0"/><path d="M16 5.6a3.2 3.2 0 0 1 0 5.6"/><path d="M17.4 14.6a5.7 5.7 0 0 1 3.1 4.9"/>',
+  chat: '<path d="M20.5 12.5c0 3.6-3.8 6.5-8.5 6.5a10 10 0 0 1-2.6-.33L4.5 20.5l1.1-3.4A6.2 6.2 0 0 1 3.5 12.5C3.5 8.9 7.3 6 12 6s8.5 2.9 8.5 6.5Z"/><circle cx="8.8" cy="12.5" r="0.9" fill="currentColor" stroke="none"/><circle cx="12" cy="12.5" r="0.9" fill="currentColor" stroke="none"/><circle cx="15.2" cy="12.5" r="0.9" fill="currentColor" stroke="none"/>',
+  camera:
+    '<path d="M3.5 8.5h3.2l1.4-2.2h7.8l1.4 2.2h3.2v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5v-10Z"/><circle cx="12" cy="13.5" r="3.4"/>',
+  video: '<rect x="3" y="6" width="12.5" height="12" rx="2"/><path d="M15.5 11 21 8v8l-5.5-3v-2Z"/>',
+  palette:
+    '<path d="M12 3.5a8.5 8.5 0 0 0 0 17c1.3 0 1.9-.9 1.9-1.8 0-1.3-1-1.7-1-2.7 0-.8.6-1.4 1.5-1.4h1.7a4.4 4.4 0 0 0 4.4-4.4c0-3.7-3.6-6.7-8.5-6.7Z"/><circle cx="8" cy="9.4" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="7.6" r="1.1" fill="currentColor" stroke="none"/><circle cx="15.8" cy="9.6" r="1.1" fill="currentColor" stroke="none"/>',
+  box: '<polygon points="12 3.2 20.5 7.6 20.5 16.4 12 20.8 3.5 16.4 3.5 7.6"/><polyline points="3.5 7.6 12 12 20.5 7.6"/><line x1="12" y1="12" x2="12" y2="20.8"/>',
+  building:
+    '<rect x="4" y="3.5" width="11" height="17" rx="1.3"/><path d="M15 9.5h4.2a.8.8 0 0 1 .8.8v10.2"/><line x1="7.3" y1="7.5" x2="11.7" y2="7.5"/><line x1="7.3" y1="11.5" x2="11.7" y2="11.5"/><line x1="7.3" y1="15.5" x2="11.7" y2="15.5"/>',
+  zap: '<polygon points="13.2 2.8 5 13.6 11 13.6 10.2 21.2 18.5 10.2 12.5 10.2"/>',
+  clipboard:
+    '<path d="M9 4.5H7a1.5 1.5 0 0 0-1.5 1.5v13A1.5 1.5 0 0 0 7 20.5h10a1.5 1.5 0 0 0 1.5-1.5V6A1.5 1.5 0 0 0 17 4.5h-2"/><rect x="9" y="2.8" width="6" height="3.4" rx="1"/><polyline points="9.3 13 11 14.7 14.8 10.9"/>',
+  book: '<path d="M4 4.8A1.8 1.8 0 0 1 5.8 3H19v15.5H5.8A1.8 1.8 0 0 0 4 20.3V4.8Z"/><path d="M4 18.5A1.8 1.8 0 0 1 5.8 16.7H19"/><line x1="8" y1="7.5" x2="15" y2="7.5"/>',
+  compass: '<circle cx="12" cy="12" r="8.5"/><polygon points="15.6 8.4 13.5 13.5 8.4 15.6 10.5 10.5"/>',
+  heart:
+    '<path d="M12 20.3 4.9 13.4a4.6 4.6 0 0 1 6.5-6.5l.6.6.6-.6a4.6 4.6 0 0 1 6.5 6.5L12 20.3Z"/>',
 } as const;
 
 export type IconName = keyof typeof iconPaths;
