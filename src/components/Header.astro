@@ -75,7 +75,7 @@ const isActive = (href: string) =>
       <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">
         <Icon name="sun" class="icon-sun" />
         <Icon name="moon" class="icon-moon" />
-        <span class="visually-hidden">Switch to light theme</span>
+        <span class="visually-hidden">Switch to dark theme</span>
       </button>
       <a href={url('/contact/')} class="btn btn-primary header-cta">Contact us</a>
       <button
@@ -234,17 +234,18 @@ const isActive = (href: string) =>
     width: auto;
   }
 
-  /* Dark art shows in the light theme and vice versa. Driven off the root
-     data-theme stamp, which BaseLayout sets before first paint. */
-  .brand-mark-light {
+  /* logo-light.png is the original dark type, for a light ground; logo-dark.png
+     is the lightness-inverted art, for a dark one. Light is the default, so the
+     light-ground file shows unless the root is stamped dark. */
+  .brand-mark-dark {
     display: none;
   }
 
-  :global(:root[data-theme='light']) .brand-mark-dark {
+  :global(:root[data-theme='dark']) .brand-mark-light {
     display: none;
   }
 
-  :global(:root[data-theme='light']) .brand-mark-light {
+  :global(:root[data-theme='dark']) .brand-mark-dark {
     display: block;
   }
 
@@ -276,16 +277,16 @@ const isActive = (href: string) =>
     height: 18px;
   }
 
-  /* Dark theme is showing -> offer the sun (switch to light), and vice versa. */
-  .theme-toggle :global(.icon-moon) {
+  /* Light theme is showing -> offer the moon (switch to dark), and vice versa. */
+  .theme-toggle :global(.icon-sun) {
     display: none;
   }
 
-  :global(:root[data-theme='light']) .theme-toggle :global(.icon-sun) {
+  :global(:root[data-theme='dark']) .theme-toggle :global(.icon-moon) {
     display: none;
   }
 
-  :global(:root[data-theme='light']) .theme-toggle :global(.icon-moon) {
+  :global(:root[data-theme='dark']) .theme-toggle :global(.icon-sun) {
     display: block;
   }
 
@@ -736,10 +737,11 @@ const isActive = (href: string) =>
   const themeToggle = document.getElementById('theme-toggle');
 
   const syncToggleLabel = () => {
-    const isLight = document.documentElement.dataset.theme === 'light';
-    themeToggle?.setAttribute('aria-pressed', String(isLight));
+    // Pressed means "the non-default theme is on", which is now dark.
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    themeToggle?.setAttribute('aria-pressed', String(isDark));
     const label = themeToggle?.querySelector('.visually-hidden');
-    if (label) label.textContent = isLight ? 'Switch to dark theme' : 'Switch to light theme';
+    if (label) label.textContent = isDark ? 'Switch to light theme' : 'Switch to dark theme';
   };
 
   syncToggleLabel();
