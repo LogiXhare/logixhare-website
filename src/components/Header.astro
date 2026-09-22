@@ -169,13 +169,23 @@ const isActive = (href: string) =>
         serviceCategories.map((cat) => (
           <li class="m-group">
             <button type="button" class="m-group-toggle" aria-expanded="false">
-              {cat.label}
+              <span class="m-group-label">
+                <span class="m-group-icon">
+                  <Icon name={cat.icon} />
+                </span>
+                {cat.label}
+              </span>
               <Icon name="chevron-down" class="m-chevron" />
             </button>
             <ul class="m-sub">
               {cat.items.map((item) => (
                 <li>
-                  <a href={url(item.href)}>{item.label}</a>
+                  <a href={url(item.href)}>
+                    <span class="m-sub-icon">
+                      <Icon name={item.icon} />
+                    </span>
+                    {item.label}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -325,13 +335,16 @@ const isActive = (href: string) =>
     border-radius: 2px;
   }
 
-  .mega-chevron {
+  /* Same :global() requirement as .m-chevron below — the scoped form never
+     matched, this one only looked right because the flex row constrained it. */
+  .mega-trigger :global(.mega-chevron) {
     width: 14px;
     height: 14px;
+    flex-shrink: 0;
     transition: transform 0.2s ease;
   }
 
-  .mega-trigger[aria-expanded='true'] .mega-chevron {
+  .mega-trigger[aria-expanded='true'] :global(.mega-chevron) {
     transform: rotate(180deg);
   }
 
@@ -605,22 +618,51 @@ const isActive = (href: string) =>
     cursor: pointer;
   }
 
-  .m-chevron {
+  /* :global() is required: Icon.astro renders the <svg> in its own component,
+     so it never carries this file's scope hash. Without it these rules do not
+     apply at all and the chevrons render at their intrinsic ~220px. */
+  .m-group-toggle :global(.m-chevron) {
     width: 16px;
     height: 16px;
+    flex-shrink: 0;
     color: var(--teal);
     transition: transform 0.2s ease;
   }
 
-  .m-group-toggle[aria-expanded='true'] .m-chevron {
+  .m-group-toggle[aria-expanded='true'] :global(.m-chevron) {
     transform: rotate(180deg);
+  }
+
+  .m-group-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .m-group-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--teal-wash);
+    border: 1px solid rgba(45, 199, 201, 0.2);
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .m-group-icon :global(svg) {
+    width: 17px;
+    height: 17px;
   }
 
   .m-sub {
     display: none;
     padding: 0.4rem 0 0.7rem 0.9rem;
     border-left: 2px solid var(--line);
-    margin: 0.5rem 0 0.5rem 0.25rem;
+    margin: 0.5rem 0 0.5rem 1.25rem;
   }
 
   .m-group-toggle[aria-expanded='true'] + .m-sub {
@@ -628,10 +670,29 @@ const isActive = (href: string) =>
   }
 
   .m-sub a {
-    display: block;
-    padding: 0.45rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.5rem 0;
     font-size: var(--text-sm);
     color: var(--text-muted);
+  }
+
+  .m-sub-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--surface-2);
+    color: var(--teal);
+    flex-shrink: 0;
+  }
+
+  .m-sub-icon :global(svg) {
+    width: 14px;
+    height: 14px;
   }
 
   .m-sub a:hover {
