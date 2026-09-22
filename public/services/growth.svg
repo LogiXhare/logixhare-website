@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="An isometric chart of rising three-dimensional bars with a trend line, beside a screen showing the top search result">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0d2136"/><stop offset=".55" stop-color="#0e2740"/><stop offset="1" stop-color="#071320"/>
+    </linearGradient>
+    <linearGradient id="fTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d5675"/><stop offset="1" stop-color="#22455f"/>
+    </linearGradient>
+    <linearGradient id="fLeft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d3f5a"/><stop offset="1" stop-color="#142e46"/>
+    </linearGradient>
+    <linearGradient id="fRight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#112436"/><stop offset="1" stop-color="#0a1a29"/>
+    </linearGradient>
+    <linearGradient id="barL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2dc7c9"/><stop offset="1" stop-color="#1b7f86"/>
+    </linearGradient>
+    <linearGradient id="barR" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f97a0"/><stop offset="1" stop-color="#12606a"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123048"/><stop offset="1" stop-color="#0b2034"/>
+    </linearGradient>
+    <radialGradient id="pool" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#2dc7c9" stop-opacity=".2"/><stop offset="1" stop-color="#2dc7c9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shadow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#04101b" stop-opacity=".7"/><stop offset="1" stop-color="#04101b" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="resScreen"><polygon points="0,-12 -104,-72 -104,-142 0,-82"/></clipPath>
+  </defs>
+
+  <rect width="640" height="400" fill="url(#bg)"/>
+
+  <polygon points="320,120 630,300 320,480 10,300" fill="#0a1b2b" opacity=".5"/>
+  <g stroke="#2dc7c9" stroke-opacity=".1" stroke-width="1">
+    <path d="M165 210L475 390M245 164L555 344"/><path d="M475 210L165 390"/>
+  </g>
+  <ellipse cx="360" cy="286" rx="240" ry="115" fill="url(#pool)"/>
+
+  <!-- ===== bars, back to front so they overlap correctly ===== -->
+  <g>
+    <!-- tallest, furthest back -->
+    <g transform="translate(486 214)">
+      <ellipse cx="0" cy="34" rx="46" ry="20" fill="url(#shadow)"/>
+      <polygon points="0,-132 32,-114 0,-96 -32,-114" fill="#7ee8e9"/>
+      <polygon points="-32,-114 0,-96 0,16 -32,-2" fill="url(#barL)"/>
+      <polygon points="0,-96 32,-114 32,-2 0,16" fill="url(#barR)"/>
+    </g>
+    <g transform="translate(432 246)">
+      <ellipse cx="0" cy="34" rx="46" ry="20" fill="url(#shadow)"/>
+      <polygon points="0,-104 32,-86 0,-68 -32,-86" fill="#5fd9db"/>
+      <polygon points="-32,-86 0,-68 0,16 -32,-2" fill="url(#barL)"/>
+      <polygon points="0,-68 32,-86 32,-2 0,16" fill="url(#barR)"/>
+    </g>
+    <g transform="translate(378 278)">
+      <ellipse cx="0" cy="34" rx="46" ry="20" fill="url(#shadow)"/>
+      <polygon points="0,-74 32,-56 0,-38 -32,-56" fill="#4fd0d2"/>
+      <polygon points="-32,-56 0,-38 0,16 -32,-2" fill="url(#barL)"/>
+      <polygon points="0,-38 32,-56 32,-2 0,16" fill="url(#barR)"/>
+    </g>
+    <g transform="translate(324 310)">
+      <ellipse cx="0" cy="34" rx="46" ry="20" fill="url(#shadow)"/>
+      <polygon points="0,-50 32,-32 0,-14 -32,-32" fill="#43c3c5"/>
+      <polygon points="-32,-32 0,-14 0,16 -32,-2" fill="url(#barL)"/>
+      <polygon points="0,-14 32,-32 32,-2 0,16" fill="url(#barR)"/>
+    </g>
+  </g>
+
+  <!-- trend line over the bar tops -->
+  <g fill="none" stroke="#7ee8e9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity=".85">
+    <path d="M324 296L378 264 432 234 486 82"/>
+  </g>
+  <g fill="#7ee8e9">
+    <circle cx="324" cy="296" r="4.5" opacity=".75"/>
+    <circle cx="378" cy="264" r="4.5" opacity=".8"/>
+    <circle cx="432" cy="234" r="4.5" opacity=".85"/>
+    <circle cx="486" cy="82" r="6.5" class="b"/>
+  </g>
+
+  <!-- ===== search result screen ===== -->
+  <g transform="translate(196 300)">
+    <ellipse cx="-52" cy="-4" rx="94" ry="34" fill="url(#shadow)"/>
+    <g>
+      <polygon points="-44,-22 -26,-11 -44,0 -62,-11" fill="url(#fTop)"/>
+      <polygon points="-62,-11 -44,0 -44,10 -62,-1" fill="url(#fLeft)"/>
+      <polygon points="-44,0 -26,-11 -26,-1 -44,10" fill="url(#fRight)"/>
+      <polygon points="-49,-40 -39,-34 -39,-15 -49,-21" fill="#1a3750"/>
+    </g>
+    <polygon points="0,-82 -104,-142 -92,-135 12,-75" fill="url(#fTop)"/>
+    <polygon points="0,-12 12,-5 12,-75 0,-82" fill="url(#fRight)"/>
+    <polygon points="0,-12 -104,-72 -104,-142 0,-82" fill="#16344c"/>
+    <polygon points="0,-18 -97,-74 -97,-136 0,-80" fill="url(#screen)"/>
+    <g clip-path="url(#resScreen)">
+      <!-- the top result, highlighted -->
+      <polygon points="-6,-78 -94,-129 -94,-107 -6,-56" fill="#2dc7c9" fill-opacity=".25"/>
+      <polygon points="-90,-127 -94,-129 -94,-107 -90,-105" fill="#2dc7c9"/>
+      <g fill="#8fb7cf" fill-opacity=".4">
+        <polygon points="-16,-72 -72,-105 -72,-111 -16,-78"/>
+        <polygon points="-16,-62 -86,-103 -86,-108 -16,-67"/>
+      </g>
+      <g fill="#8fb7cf" fill-opacity=".2">
+        <polygon points="-10,-44 -92,-92 -92,-98 -10,-50"/>
+        <polygon points="-10,-32 -74,-69 -74,-75 -10,-38"/>
+      </g>
+    </g>
+    <polyline points="0,-82 -104,-142" fill="none" stroke="#2dc7c9" stroke-opacity=".3" stroke-width="1.2"/>
+  </g>
+
+  <!-- magnifier over the peak -->
+  <g transform="translate(486 82)">
+    <circle r="34" fill="#0e2740" fill-opacity=".55" stroke="#7ee8e9" stroke-width="3" stroke-opacity=".9"/>
+    <line x1="24" y1="24" x2="44" y2="44" stroke="#7ee8e9" stroke-width="3.4" stroke-linecap="round" stroke-opacity=".9"/>
+  </g>
+
+  <style>
+    .b { animation: blink 3.2s ease-in-out infinite }
+    @keyframes blink { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+    @media (prefers-reduced-motion: reduce) { .b { animation: none } }
+  </style>
+</svg>

@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import CtaBand from '../components/CtaBand.astro';
-import NodeLattice from '../components/NodeLattice.astro';
 import Icon from '../components/Icon.astro';
 import { serviceCategories } from '../data/nav';
 import { url } from '../lib/url';
@@ -11,27 +10,35 @@ import { url } from '../lib/url';
 // services data changes.
 const serviceCount = serviceCategories.reduce((n, cat) => n + cat.items.length, 0);
 
+// Each homepage card reuses its category's artwork, so replacing the file in
+// nav.ts updates both this grid and the services page.
+const artFor = new Map(serviceCategories.map((cat) => [cat.id, cat]));
+
 // --- hero rotator ---
 // Each slide leads with a different capability, the way a company with more
 // than one line of work introduces itself. Copy is deliberately concrete.
 const slides = [
   {
     eyebrow: 'Managed web hosting',
+    art: 'hosting',
     heading: 'Hosting you never have to chase support about',
     body: 'Websites, mail and databases on infrastructure we own and run ourselves — with published pricing and a portal you can actually self-serve from.',
   },
   {
     eyebrow: 'Web design & development',
+    art: 'web',
     heading: 'Websites built around how your business really works',
     body: 'Custom sites and web applications, designed and written to fit your process instead of bending your process around a template.',
   },
   {
     eyebrow: 'Software & ERP',
+    art: 'software',
     heading: 'Business software modelled on your process, not a template',
     body: 'ERP, HRM, CRM, POS and industry platforms — including RMG ERP and ISP billing — built to match how your organisation already runs.',
   },
   {
     eyebrow: 'Networks & infrastructure',
+    art: 'network',
     heading: 'Network and server work, done the way operators do it',
     body: 'Design, automation, hardening and monitoring — the same discipline used on carrier networks, applied at the size your business needs.',
   },
@@ -55,6 +62,7 @@ const services = [
     description:
       'NVMe-backed hosting, business email, domains and DNS, server setup and backups — provisioned from our own portal.',
     href: '/services/#web-hosting',
+    cat: 'hosting',
   },
   {
     icon: 'code' as const,
@@ -62,6 +70,7 @@ const services = [
     description:
       'Corporate websites, online stores and web applications, designed and built around how your business operates.',
     href: '/services/#web-development',
+    cat: 'web',
   },
   {
     icon: 'database' as const,
@@ -69,6 +78,7 @@ const services = [
     description:
       'ERP, HRM, CRM, POS and industry platforms — including RMG ERP and ISP billing, built to fit your process.',
     href: '/services/#erp',
+    cat: 'software',
   },
   {
     icon: 'network' as const,
@@ -76,6 +86,7 @@ const services = [
     description:
       'Network design and cabling, firewalls, VPN and SD-WAN, Wi-Fi, CCTV and IP telephony — plus the automation to keep it consistent.',
     href: '/services/#network-consulting',
+    cat: 'network',
   },
   {
     icon: 'cloud' as const,
@@ -83,6 +94,7 @@ const services = [
     description:
       'Virtualisation, SAN/NAS storage, cloud migration, colocation and data centre design, with disaster recovery you have rehearsed.',
     href: '/services/#virtualisation',
+    cat: 'datacenter',
   },
   {
     icon: 'shield' as const,
@@ -90,6 +102,7 @@ const services = [
     description:
       'Penetration testing, hardening, endpoint and ransomware protection, and audits mapped to ISO 27001, PCI-DSS or GDPR.',
     href: '/services/#security',
+    cat: 'security',
   },
   {
     icon: 'search' as const,
@@ -97,6 +110,7 @@ const services = [
     description:
       'SEO, social and paid campaigns, analytics, branding and graphic design, and video and motion graphics production.',
     href: '/services/#seo',
+    cat: 'growth',
   },
   {
     icon: 'compass' as const,
@@ -104,6 +118,7 @@ const services = [
     description:
       'IT planning and gap analysis, SLA-based managed support, remote helpdesk, and training that leaves your team able to run it.',
     href: '/services/#managed-support',
+    cat: 'consulting',
   },
 ];
 
@@ -279,7 +294,21 @@ const faqs = [
 
       <div class="hero-art" aria-hidden="true">
         <div class="hero-art-panel">
-          <NodeLattice />
+          {
+            slides.map((slide, i) => (
+              <img
+                class="hero-art-img"
+                data-art={i}
+                data-active={i === 0 ? 'true' : 'false'}
+                src={url(artFor.get(slide.art)?.image ?? '')}
+                alt=""
+                width="640"
+                height="400"
+                loading="eager"
+                decoding="async"
+              />
+            ))
+          }
         </div>
       </div>
     </div>
@@ -327,7 +356,16 @@ const faqs = [
       </div>
 
       <div class="services-grid">
-        {services.map((service) => <ServiceCard {...service} />)}
+        {
+          services.map(({ cat, ...service }, i) => (
+            <ServiceCard
+              {...service}
+              image={artFor.get(cat)?.image}
+              imageAlt={artFor.get(cat)?.imageAlt}
+              eager={i < 3}
+            />
+          ))
+        }
 
         <a class="services-all card" href={url('/services/')}>
           <span class="services-all-count">{serviceCount}</span>
@@ -336,6 +374,9 @@ const faqs = [
             Every service across all eight areas, with what each one actually involves — and what it
             does not.
           </p>
+          <span class="services-all-icons" aria-hidden="true">
+            {serviceCategories.map((c) => <Icon name={c.icon} />)}
+          </span>
           <span class="services-all-link">
             See all services <Icon name="arrow-right" class="btn-icon" />
           </span>
@@ -603,14 +644,43 @@ const faqs = [
   }
 
   .hero-art-panel {
+    position: relative;
     width: 100%;
-    max-width: 430px;
-    aspect-ratio: 1 / 0.95;
+    max-width: 460px;
+    aspect-ratio: 16 / 10;
     border-radius: var(--radius-lg);
     border: 1px solid var(--line);
     background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
-    padding: 2.25rem;
+    overflow: hidden;
     box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  }
+
+  /* All four stack in the same box and cross-fade, so the artwork changes with
+     the slide instead of one static image sitting under rotating copy. */
+  /* Scaled past the frame: the artwork's subject sits mid-canvas with margin
+     around it, which reads as too small in a panel this size. */
+  .hero-art-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.28);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .hero-art-img[data-active='true'] {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-art-img,
+    .hero-art-img[data-active='true'] {
+      transition: opacity 0.2s ease;
+      transform: scale(1.2);
+    }
   }
 
   /* --- standards strip --- */
@@ -750,11 +820,27 @@ const faqs = [
     line-height: 1.7;
   }
 
+  /* One mark per category — the eight areas the count adds up to. */
+  .services-all-icons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.9rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    color: var(--teal);
+    opacity: 0.5;
+  }
+
+  .services-all-icons :global(svg) {
+    width: 22px;
+    height: 22px;
+  }
+
   .services-all-link {
     display: inline-flex;
     align-items: center;
     gap: 0.45em;
-    margin-top: auto;
+    margin-top: 1.4rem;
     padding-top: 0.75rem;
     font-family: var(--font-mono);
     font-size: var(--text-xs);
@@ -1079,6 +1165,7 @@ const faqs = [
   // still work as manual controls in that case.
   const slides = Array.from(document.querySelectorAll<HTMLElement>('.hero-slide'));
   const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('.hero-dot'));
+  const art = Array.from(document.querySelectorAll<HTMLImageElement>('.hero-art-img'));
 
   if (slides.length > 1) {
     let index = 0;
@@ -1091,6 +1178,7 @@ const faqs = [
       index = (next + slides.length) % slides.length;
       slides.forEach((s, i) => s.setAttribute('aria-hidden', String(i !== index)));
       dots.forEach((d, i) => d.setAttribute('aria-selected', String(i === index)));
+      art.forEach((a, i) => a.setAttribute('data-active', String(i === index)));
     };
 
     const start = () => {
