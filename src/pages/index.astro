@@ -788,9 +788,12 @@ const faqs = [
   }
 
   /* The ninth tile: eight categories plus this one fill a 3x3 grid exactly. */
+  /* Shares the grid with the service cards, so it is centred the same way. */
   .services-all {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 0.6rem;
     padding: 1.9rem;
     height: 100%;
@@ -821,12 +824,14 @@ const faqs = [
     color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.7;
+    text-wrap: pretty;
   }
 
   /* One mark per category — the eight areas the count adds up to. */
   .services-all-icons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
     gap: 0.9rem;
     margin-top: auto;
     padding-top: 1.5rem;
@@ -872,6 +877,8 @@ const faqs = [
   .industry-card {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 0.85rem;
     padding: 1.6rem;
     height: 100%;
@@ -879,12 +886,14 @@ const faqs = [
 
   .industry-card h3 {
     font-size: var(--text-base);
+    text-wrap: balance;
   }
 
   .industry-card p {
     color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.65;
+    text-wrap: pretty;
   }
 
   /* ===================== PLATFORM ===================== */
@@ -895,10 +904,13 @@ const faqs = [
     gap: 2rem 2.5rem;
   }
 
+  /* A row, not a card: the copy keeps its left edge so the three columns stay
+     scannable, and the chip is centred against the block it belongs to rather
+     than pinned to the first line. */
   .platform-item {
     display: flex;
     gap: 1rem;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .platform-icon {

@@ -301,18 +301,25 @@ const reasons = [
   .reason-card {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 0.75rem;
     padding: 1.75rem;
   }
 
   .reason-card h3 {
     font-size: var(--text-base);
+    text-wrap: balance;
   }
 
   .reason-card p {
     color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.7;
+    text-wrap: pretty;
+    /* The first card spans two columns; without a cap its centred copy would
+       run to a much longer measure than the other four. */
+    max-width: 56ch;
   }
 
   @media (max-width: 900px) {

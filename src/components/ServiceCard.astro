@@ -52,12 +52,21 @@ const { icon, title, description, href, image, imageAlt = '', eager = false } = 
     transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   }
 
+  /* Icon, heading, copy and link all sit on the card's centre line. Centring
+     the icon alone would leave it floating over a left-aligned block, so the
+     whole body is centred and the row of cards reads as one composed object. */
   .service-body {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 0.95rem;
     padding: 1.9rem;
     flex: 1;
+  }
+
+  .service-body h3 {
+    text-wrap: balance;
   }
 
   /* Always dark in both themes, so one artwork works on either ground and a
@@ -121,6 +130,9 @@ const { icon, title, description, href, image, imageAlt = '', eager = false } = 
     color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.7;
+    /* Centred copy strands a last short word on its own line; pretty pulls
+       one back up. Ignored by browsers that don't support it. */
+    text-wrap: pretty;
   }
 
   .service-link {
