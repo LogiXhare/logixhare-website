@@ -1,25 +1,51 @@
 ---
-// Renders one icon from the shared set in src/data/icons.ts.
-// set:html is safe here: the markup is static and author-controlled,
-// never derived from user input.
+/**
+ * Renders one icon. Names that depict a real object have an isometric,
+ * multi-tone version in iso-icons.ts and that is used by preference, so a
+ * single switch here upgrades every call site. Names that are pure interface
+ * — arrows, chevrons, the menu and theme glyphs, the tick — have no iso
+ * version and fall through to the stroke set in icons.ts.
+ *
+ * The iso art carries fixed colours because three faces need three tones,
+ * which is why every container that hosts one is an always-dark chip. Pass
+ * `line` to force the stroke version where an icon sits on the page itself
+ * rather than on a chip.
+ *
+ * set:html is safe here: the markup is static and author-controlled,
+ * never derived from user input.
+ */
 import { iconPaths, type IconName } from '../data/icons';
+import { isoIconPaths, isoIconTransforms } from '../data/iso-icons';
 
 interface Props {
   name: IconName;
   class?: string;
+  line?: boolean;
 }
 
-const { name, class: className } = Astro.props;
+const { name, class: className, line = false } = Astro.props;
+const iso = line ? undefined : (isoIconPaths as Record<string, string>)[name];
+// Measured centring, so every icon sits optically centred in its chip at a
+// consistent size rather than wherever its own drawing happened to land.
+const isoTransform = isoIconTransforms[name];
 ---
 
-<svg
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  stroke-width="1.6"
-  stroke-linecap="round"
-  stroke-linejoin="round"
-  class={className}
-  aria-hidden="true"
-  set:html={iconPaths[name]}
-/>
+{
+  iso ? (
+    <svg viewBox="0 0 32 32" class={className} aria-hidden="true">
+      <g transform={isoTransform} set:html={iso} />
+    </svg>
+  ) : (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class={className}
+      aria-hidden="true"
+      set:html={iconPaths[name]}
+    />
+  )
+}

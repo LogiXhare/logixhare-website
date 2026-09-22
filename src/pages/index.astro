@@ -375,7 +375,8 @@ const faqs = [
             does not.
           </p>
           <span class="services-all-icons" aria-hidden="true">
-            {serviceCategories.map((c) => <Icon name={c.icon} />)}
+            {/* line: these sit bare on the tile, without a chip each. */}
+            {serviceCategories.map((c) => <Icon name={c.icon} line />)}
           </span>
           <span class="services-all-link">
             See all services <Icon name="arrow-right" class="btn-icon" />
@@ -709,17 +710,19 @@ const faqs = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 9px;
-    background: var(--teal-wash);
-    color: var(--teal);
+    background: var(--chip-bg);
+    box-shadow: var(--chip-inset);
+    border: 1px solid var(--chip-line);
+    color: var(--chip-ink);
     flex-shrink: 0;
   }
 
   .standard-icon :global(svg) {
-    width: 19px;
-    height: 19px;
+    width: 26px;
+    height: 26px;
   }
 
   .standard strong {
@@ -785,9 +788,12 @@ const faqs = [
   }
 
   /* The ninth tile: eight categories plus this one fill a 3x3 grid exactly. */
+  /* Shares the grid with the service cards, so it is centred the same way. */
   .services-all {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 0.6rem;
     padding: 1.9rem;
     height: 100%;
@@ -818,12 +824,14 @@ const faqs = [
     color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.7;
+    text-wrap: pretty;
   }
 
   /* One mark per category — the eight areas the count adds up to. */
   .services-all-icons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
     gap: 0.9rem;
     margin-top: auto;
     padding-top: 1.5rem;
@@ -869,6 +877,8 @@ const faqs = [
   .industry-card {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 0.85rem;
     padding: 1.6rem;
     height: 100%;
@@ -876,12 +886,14 @@ const faqs = [
 
   .industry-card h3 {
     font-size: var(--text-base);
+    text-wrap: balance;
   }
 
   .industry-card p {
     color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.65;
+    text-wrap: pretty;
   }
 
   /* ===================== PLATFORM ===================== */
@@ -892,28 +904,32 @@ const faqs = [
     gap: 2rem 2.5rem;
   }
 
+  /* A row, not a card: the copy keeps its left edge so the three columns stay
+     scannable, and the chip is centred against the block it belongs to rather
+     than pinned to the first line. */
   .platform-item {
     display: flex;
     gap: 1rem;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .platform-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border-radius: 10px;
-    background: var(--teal-wash);
-    border: 1px solid rgba(45, 199, 201, 0.2);
-    color: var(--teal);
+    background: var(--chip-bg);
+    box-shadow: var(--chip-inset);
+    border: 1px solid var(--chip-line);
+    color: var(--chip-ink);
     flex-shrink: 0;
   }
 
   .platform-icon :global(svg) {
-    width: 21px;
-    height: 21px;
+    width: 30px;
+    height: 30px;
   }
 
   .platform-item h3 {
