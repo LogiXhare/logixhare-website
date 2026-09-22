@@ -11,14 +11,22 @@ const contactMethods = [
   },
   {
     icon: 'phone' as const,
-    label: 'Phone',
+    label: 'Sales',
+    note: 'Business enquiries',
+    value: '+880 1714‑682259',
+    href: 'tel:+8801714682259',
+  },
+  {
+    icon: 'phone' as const,
+    label: 'Support',
+    note: 'Customer care / help desk',
     value: '+880 1915‑749496',
     href: 'tel:+8801915749496',
   },
   {
     icon: 'pin' as const,
     label: 'Address',
-    value: '101, Gulshan Avenue, Gulshan, Dhaka – 1212',
+    value: 'H: 25, R: 12, DIT Project, South Baridhara R/A, Merul Badda, Badda, Dhaka – 1212',
     href: null,
   },
 ];
@@ -38,7 +46,7 @@ const serviceOptions = [
 
 <BaseLayout
   title="Contact"
-  description="Get in touch with LogixHare Technologies — email info@logixhare.com, call +8801915749496, or visit us in Gulshan, Dhaka."
+  description="Get in touch with LogixHare Technologies — email info@logixhare.com, call sales on +8801714682259 or support on +8801915749496, or visit us in Merul Badda, Dhaka."
 >
   <section class="page-intro">
     <div class="container">
@@ -63,6 +71,7 @@ const serviceOptions = [
                   ) : (
                     <span class="contact-value">{method.value}</span>
                   )}
+                  {method.note && <span class="contact-note">{method.note}</span>}
                 </div>
               </li>
             ))
@@ -175,6 +184,13 @@ const serviceOptions = [
 
   .contact-value-link:hover {
     color: var(--teal);
+  }
+
+  .contact-note {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
   }
 
   .contact-billing-note {

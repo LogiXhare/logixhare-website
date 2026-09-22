@@ -11,11 +11,19 @@ const contactCards = [
   {
     icon: 'pin' as const,
     label: 'Head office',
-    lines: ['101, Gulshan Avenue', 'Gulshan, Dhaka 1212, Bangladesh'],
+    lines: ['H: 25, R: 12, DIT Project', 'South Baridhara R/A', 'Merul Badda, Badda', 'Dhaka 1212, Bangladesh'],
   },
   {
     icon: 'phone' as const,
-    label: 'Sales & support',
+    label: 'Sales',
+    note: 'Business enquiries',
+    lines: ['+880 1714-682259'],
+    href: 'tel:+8801714682259',
+  },
+  {
+    icon: 'phone' as const,
+    label: 'Support',
+    note: 'Customer care / help desk',
     lines: ['+880 1915-749496'],
     href: 'tel:+8801915749496',
   },
@@ -65,6 +73,7 @@ const clientLinks = [
             ) : (
               card.lines.map((line) => <p class="contact-value">{line}</p>)
             )}
+            {card.note && <p class="contact-note">{card.note}</p>}
           </div>
         </div>
       ))
@@ -146,7 +155,8 @@ const clientLinks = [
 
   .contact-strip {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* Address gets the extra width: it wraps to two long lines, the phones don't. */
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
     gap: 1.1rem;
     padding-bottom: clamp(2.5rem, 2rem + 2vw, 3.5rem);
   }
@@ -177,8 +187,19 @@ const clientLinks = [
     transition: color 0.15s ease;
   }
 
+  /* A phone number split at its hyphen reads as two numbers. */
+  a.contact-value {
+    white-space: nowrap;
+  }
+
   a.contact-value:hover {
     color: var(--teal);
+  }
+
+  .contact-note {
+    margin-top: 0.2rem;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
   }
 
   /* --- link grid --- */
@@ -267,6 +288,16 @@ const clientLinks = [
   .footer-reg {
     font-family: var(--font-mono);
     letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 1100px) {
+    .contact-strip {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .contact-strip > :first-child {
+      grid-column: 1 / -1;
+    }
   }
 
   @media (max-width: 900px) {
