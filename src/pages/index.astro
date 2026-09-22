@@ -4,7 +4,12 @@ import ServiceCard from '../components/ServiceCard.astro';
 import CtaBand from '../components/CtaBand.astro';
 import NodeLattice from '../components/NodeLattice.astro';
 import Icon from '../components/Icon.astro';
+import { serviceCategories } from '../data/nav';
 import { url } from '../lib/url';
+
+// Counted rather than written down, so the figure can't go stale when the
+// services data changes.
+const serviceCount = serviceCategories.reduce((n, cat) => n + cat.items.length, 0);
 
 // --- hero rotator ---
 // Each slide leads with a different capability, the way a company with more
@@ -19,6 +24,11 @@ const slides = [
     eyebrow: 'Web design & development',
     heading: 'Websites built around how your business really works',
     body: 'Custom sites and web applications, designed and written to fit your process instead of bending your process around a template.',
+  },
+  {
+    eyebrow: 'Software & ERP',
+    heading: 'Business software modelled on your process, not a template',
+    body: 'ERP, HRM, CRM, POS and industry platforms — including RMG ERP and ISP billing — built to match how your organisation already runs.',
   },
   {
     eyebrow: 'Networks & infrastructure',
@@ -36,76 +46,109 @@ const standards = [
 
 const stack = ['Ubuntu LTS', 'Nginx', 'HestiaCP', 'MariaDB', "Let's Encrypt", 'Cloudflare'];
 
+// One card per service category. The ninth tile in this 3x3 grid is the
+// "everything else" link, rendered separately below.
 const services = [
   {
     icon: 'server' as const,
-    title: 'Web Hosting',
+    title: 'Hosting & Infrastructure',
     description:
-      'Shared, NVMe-backed hosting across four tiers — sized for a first website or a growing application, provisioned from our own portal.',
+      'NVMe-backed hosting, business email, domains and DNS, server setup and backups — provisioned from our own portal.',
     href: '/services/#web-hosting',
   },
   {
     icon: 'code' as const,
-    title: 'Web Design & Development',
+    title: 'Web & eCommerce',
     description:
-      'Custom websites and web applications, designed and built around how your business actually operates.',
+      'Corporate websites, online stores and web applications, designed and built around how your business operates.',
     href: '/services/#web-development',
   },
   {
-    icon: 'network' as const,
-    title: 'Networks & Automation',
+    icon: 'database' as const,
+    title: 'Software Development',
     description:
-      'Network design, setup and automation — repeatable, reviewed changes instead of undocumented manual work.',
+      'ERP, HRM, CRM, POS and industry platforms — including RMG ERP and ISP billing, built to fit your process.',
+    href: '/services/#erp',
+  },
+  {
+    icon: 'network' as const,
+    title: 'IT & Networking',
+    description:
+      'Network design and cabling, firewalls, VPN and SD-WAN, Wi-Fi, CCTV and IP telephony — plus the automation to keep it consistent.',
     href: '/services/#network-consulting',
   },
   {
     icon: 'cloud' as const,
-    title: 'Server Management',
+    title: 'Cloud & Data Center',
     description:
-      'Day-to-day administration of your VPS or dedicated server: updates, configuration, backups and troubleshooting.',
-    href: '/services/#server-management',
+      'Virtualisation, SAN/NAS storage, cloud migration, colocation and data centre design, with disaster recovery you have rehearsed.',
+    href: '/services/#virtualisation',
   },
   {
     icon: 'shield' as const,
-    title: 'Security & Monitoring',
+    title: 'Cyber Security',
     description:
-      'Baseline hardening for servers and network gear, plus monitoring so problems surface before your customers find them.',
+      'Penetration testing, hardening, endpoint and ransomware protection, and audits mapped to ISO 27001, PCI-DSS or GDPR.',
     href: '/services/#security',
   },
   {
     icon: 'search' as const,
-    title: 'SEO & Digital Marketing',
+    title: 'Digital & Media',
     description:
-      'Technical SEO and practical campaign support, so the site you paid for gets found by people already searching.',
+      'SEO, social and paid campaigns, analytics, branding and graphic design, and video and motion graphics production.',
     href: '/services/#seo',
+  },
+  {
+    icon: 'compass' as const,
+    title: 'Consultancy & Managed IT',
+    description:
+      'IT planning and gap analysis, SLA-based managed support, remote helpdesk, and training that leaves your team able to run it.',
+    href: '/services/#managed-support',
   },
 ];
 
-// Who the work is actually for — positioning, not invented case studies.
-const audiences = [
+// The sectors this work lands in. Named because the systems genuinely differ
+// between them — not a claim about who we have already invoiced.
+const industries = [
   {
-    icon: 'globe' as const,
-    title: 'Small & growing businesses',
-    body: 'A proper website, business email on your own domain, and hosting that stays out of your way.',
-    points: ['Website + hosting together', 'Business email', 'One point of contact'],
+    icon: 'building' as const,
+    title: 'Government & public sector',
+    body: 'Procurement-ready documentation, auditable systems and infrastructure that stays in the country.',
+  },
+  {
+    icon: 'lock' as const,
+    title: 'Banking & financial',
+    body: 'Hardened infrastructure, encryption and compliance evidence for regulated environments.',
+  },
+  {
+    icon: 'heart' as const,
+    title: 'Healthcare & hospitals',
+    body: 'Hospital management systems, patient record handling and the uptime a clinical service needs.',
+  },
+  {
+    icon: 'book' as const,
+    title: 'Education & eLearning',
+    body: 'Campus administration, school management systems, and networks that survive a full lab of students.',
+  },
+  {
+    icon: 'cart' as const,
+    title: 'Retail & eCommerce',
+    body: 'Storefronts, POS and inventory tied together, on hosting sized for a sale day rather than an average one.',
+  },
+  {
+    icon: 'box' as const,
+    title: 'Manufacturing & RMG',
+    body: 'RMG ERP, production and store flows, and the factory-floor networks underneath them.',
+  },
+  {
+    icon: 'pin' as const,
+    title: 'Real estate & construction',
+    body: 'Property and project management systems, plus site connectivity and surveillance.',
   },
   {
     icon: 'network' as const,
-    title: 'ISPs & network operators',
-    body: 'Infrastructure work at operator scale: automation, monitoring and change discipline on live networks.',
-    points: ['Network automation', 'Monitoring & alerting', 'Change review and rollback'],
-  },
-  {
-    icon: 'code' as const,
-    title: 'Agencies & developers',
-    body: 'Somewhere reliable to put client sites, with the server-side handled so you can stay on the build.',
-    points: ['Multi-site hosting', 'Deploy access', 'Server administration'],
-  },
-  {
-    icon: 'layers' as const,
-    title: 'Schools & organisations',
-    body: 'Straightforward systems — a site, mail, and the infrastructure under them — supported without jargon.',
-    points: ['Site and mail setup', 'Backups', 'Plain-language support'],
+    title: 'ISPs & telecom',
+    body: 'Subscriber billing, network automation and monitoring — operator-scale change discipline.',
   },
 ];
 
@@ -189,7 +232,7 @@ const faqs = [
 
 <BaseLayout
   title="Home"
-  description="LogixHare Technologies — managed web hosting, custom web development, network automation and IT infrastructure services, built and supported from Dhaka, Bangladesh."
+  description="LogixHare Technologies — managed web hosting, custom software and ERP, web development, IT and networking, cloud and data centre, and cyber security services, built and supported from Dhaka, Bangladesh."
 >
   <!-- ===================== HERO ===================== -->
   <section class="hero">
@@ -278,13 +321,25 @@ const faqs = [
         <p class="eyebrow">Services</p>
         <h2>Services we offer</h2>
         <p class="lede">
-          From the server your site runs on to the search results it shows up in — a focused set of
-          services we actually staff, rather than a checklist we sub out.
+          From the server your site runs on to the software your staff use all day — eight areas of
+          work, staffed by engineers who do the job themselves rather than sub it out.
         </p>
       </div>
 
       <div class="services-grid">
         {services.map((service) => <ServiceCard {...service} />)}
+
+        <a class="services-all card" href={url('/services/')}>
+          <span class="services-all-count">{serviceCount}</span>
+          <h3>services in full</h3>
+          <p>
+            Every service across all eight areas, with what each one actually involves — and what it
+            does not.
+          </p>
+          <span class="services-all-link">
+            See all services <Icon name="arrow-right" class="btn-icon" />
+          </span>
+        </a>
       </div>
     </div>
   </section>
@@ -293,30 +348,23 @@ const faqs = [
   <section class="section band">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">Solutions</p>
-        <h2>Who we build for</h2>
+        <p class="eyebrow">Industries</p>
+        <h2>Industries we serve</h2>
         <p class="lede">
-          The same infrastructure discipline, scoped to what each kind of client actually needs.
+          The same infrastructure discipline, scoped to what each sector actually needs — because a
+          hospital, a factory and an ISP do not run the same systems.
         </p>
       </div>
 
-      <div class="audience-grid">
+      <div class="industry-grid">
         {
-          audiences.map((a) => (
-            <article class="audience-card card">
+          industries.map((item) => (
+            <article class="industry-card card">
               <span class="icon-tile">
-                <Icon name={a.icon} />
+                <Icon name={item.icon} />
               </span>
-              <h3>{a.title}</h3>
-              <p>{a.body}</p>
-              <ul class="audience-points">
-                {a.points.map((p) => (
-                  <li>
-                    <Icon name="check" class="tick" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
             </article>
           ))
         }
@@ -666,52 +714,88 @@ const faqs = [
     gap: 1.25rem;
   }
 
-  /* ===================== AUDIENCES ===================== */
-
-  .audience-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-
-  .audience-card {
+  /* The ninth tile: eight categories plus this one fill a 3x3 grid exactly. */
+  .services-all {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
-    padding: 1.75rem;
+    gap: 0.6rem;
+    padding: 1.9rem;
     height: 100%;
+    background: var(--teal-wash);
+    border-color: rgba(45, 199, 201, 0.3);
+    transition: transform 0.2s ease, border-color 0.2s ease;
   }
 
-  .audience-card p {
+  .services-all:hover {
+    transform: translateY(-4px);
+    border-color: rgba(45, 199, 201, 0.55);
+  }
+
+  .services-all-count {
+    font-family: var(--font-mono);
+    font-size: 2.6rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--teal);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .services-all h3 {
+    font-size: var(--text-lg);
+  }
+
+  .services-all p {
     color: var(--text-muted);
     font-size: var(--text-sm);
     line-height: 1.7;
   }
 
-  .audience-points {
+  .services-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+
+  .services-all-link :global(.btn-icon) {
+    transition: transform 0.2s ease;
+  }
+
+  .services-all:hover .services-all-link :global(.btn-icon) {
+    transform: translateX(4px);
+  }
+
+  /* ===================== INDUSTRIES ===================== */
+
+  .industry-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .industry-card {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-top: auto;
-    padding-top: 0.9rem;
-    border-top: 1px solid var(--line);
+    gap: 0.85rem;
+    padding: 1.6rem;
+    height: 100%;
   }
 
-  .audience-points li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.84rem;
-    color: var(--text-soft);
+  .industry-card h3 {
+    font-size: var(--text-base);
   }
 
-  /* Icon.astro renders a child <svg>, which never carries this page's
-     Astro scope hash — :global() is required for these to match. */
-  .audience-points :global(.tick) {
-    width: 14px;
-    height: 14px;
-    color: var(--teal);
-    flex-shrink: 0;
+  .industry-card p {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    line-height: 1.65;
   }
 
   /* ===================== PLATFORM ===================== */
@@ -948,7 +1032,7 @@ const faqs = [
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .audience-grid {
+    .industry-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -976,7 +1060,7 @@ const faqs = [
 
   @media (max-width: 640px) {
     .services-grid,
-    .audience-grid,
+    .industry-grid,
     .platform-grid,
     .process-grid,
     .standards {
