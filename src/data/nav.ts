@@ -25,6 +25,20 @@ export interface ServiceCategory {
   label: string;
   icon: IconName;
   summary: string;
+  /**
+   * Artwork for this category, as a path under public/. To swap in a real
+   * photograph later, drop the file into public/services/ and point this at
+   * it — nothing else needs to change, and the extension does not have to
+   * stay .svg. Anything placed here must be committed: the production deploy
+   * runs `mirror --delete`, so a file only uploaded to the server is removed
+   * on the next release.
+   *
+   * It renders inside an always-dark panel, so artwork should read on a dark
+   * ground (a photo will be fine; light-background artwork will not).
+   */
+  image: string;
+  /** Alt text for that artwork. Replace it when the image is replaced. */
+  imageAlt: string;
   items: ServiceItem[];
 }
 
@@ -34,6 +48,9 @@ export const serviceCategories: ServiceCategory[] = [
     label: 'Hosting & Infrastructure',
     icon: 'server',
     summary: 'Where your site, mail and data actually live — run on our own managed infrastructure.',
+    image: '/services/hosting.svg',
+    imageAlt:
+      'Three stacked server units with drive bays and status lights, linked out to a globe',
     items: [
       {
         label: 'Web Hosting',
@@ -98,6 +115,9 @@ export const serviceCategories: ServiceCategory[] = [
     label: 'Web & eCommerce',
     icon: 'code',
     summary: 'Corporate sites, online stores and the web platforms behind them.',
+    image: '/services/web.svg',
+    imageAlt:
+      'A browser window with a product grid and checkout, beside a phone showing the same layout',
     items: [
       {
         label: 'Website Design & Development',
@@ -147,6 +167,9 @@ export const serviceCategories: ServiceCategory[] = [
     icon: 'database',
     summary:
       'Business systems built around your process — ERP, CRM, billing and industry-specific platforms.',
+    image: '/services/software.svg',
+    imageAlt:
+      'Business modules feeding a central database, with a reporting panel drawn from it',
     items: [
       {
         label: 'ERP Systems',
@@ -243,6 +266,9 @@ export const serviceCategories: ServiceCategory[] = [
     label: 'IT & Networking',
     icon: 'network',
     summary: 'The infrastructure work we do day to day for ISPs, offices and campuses.',
+    image: '/services/network.svg',
+    imageAlt:
+      'A network topology: an edge router feeding two switches, which fan out to endpoints and an access point',
     items: [
       {
         label: 'Network Design & Setup',
@@ -324,6 +350,9 @@ export const serviceCategories: ServiceCategory[] = [
     icon: 'cloud',
     summary:
       'Virtualisation, storage, colocation and the operational discipline that keeps them running.',
+    image: '/services/datacenter.svg',
+    imageAlt:
+      'Two equipment racks with cold-aisle airflow between them, linked upward to cloud capacity',
     items: [
       {
         label: 'Server Virtualisation',
@@ -396,6 +425,9 @@ export const serviceCategories: ServiceCategory[] = [
     label: 'Cyber Security',
     icon: 'shield',
     summary: 'Finding what is exposed, hardening what is weak, and being able to prove it.',
+    image: '/services/security.svg',
+    imageAlt:
+      'A shield over a scanning sweep, with traffic passing on one side and being dropped on the other',
     items: [
       {
         label: 'Penetration Testing (VAPT)',
@@ -452,6 +484,9 @@ export const serviceCategories: ServiceCategory[] = [
     label: 'Digital & Media',
     icon: 'search',
     summary: 'Getting found by the right people — and looking right when they arrive.',
+    image: '/services/growth.svg',
+    imageAlt:
+      'A rising traffic chart under a magnifier, with a search result list and social reach nodes',
     items: [
       {
         label: 'Search Engine Optimisation',
@@ -508,6 +543,9 @@ export const serviceCategories: ServiceCategory[] = [
     label: 'IT Consultancy & Managed Services',
     icon: 'compass',
     summary: 'For teams that need capacity and direction rather than a single project.',
+    image: '/services/consulting.svg',
+    imageAlt:
+      'A staged roadmap with milestone markers, a compass, and an SLA response-time panel',
     items: [
       {
         label: 'IT Planning & Gap Analysis',

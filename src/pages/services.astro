@@ -52,12 +52,24 @@ const hostingTiers = [
       <section class={`section cat-section ${ci % 2 === 1 ? 'band' : ''}`} id={cat.id}>
         <div class="container">
           <div class="cat-head">
-            <span class="icon-tile">
-              <Icon name={cat.icon} />
-            </span>
-            <div>
-              <h2>{cat.label}</h2>
-              <p class="lede">{cat.summary}</p>
+            <div class="cat-head-copy">
+              <span class="icon-tile">
+                <Icon name={cat.icon} />
+              </span>
+              <div>
+                <h2>{cat.label}</h2>
+                <p class="lede">{cat.summary}</p>
+              </div>
+            </div>
+            <div class="cat-art">
+              <img
+                src={url(cat.image)}
+                alt={cat.imageAlt}
+                width="640"
+                height="400"
+                loading={ci === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
             </div>
           </div>
 
@@ -179,15 +191,40 @@ const hostingTiers = [
   }
 
   .cat-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    margin-bottom: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+  }
+
+  .cat-head-copy {
     display: flex;
     align-items: flex-start;
     gap: 1.15rem;
-    margin-bottom: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
   }
 
   .cat-head .lede {
     margin-top: 0.6rem;
     font-size: var(--text-base);
+  }
+
+  /* Always dark, in both themes: one artwork then works on either ground, and
+     a photograph dropped in later sits correctly without a second variant —
+     the same reason the logo needs two files and this does not. */
+  .cat-art {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--line);
+    background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
+    overflow: hidden;
+  }
+
+  .cat-art img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
   }
 
   .item-grid {
@@ -296,13 +333,22 @@ const hostingTiers = [
       grid-template-columns: 1fr;
     }
 
+    .cat-head {
+      grid-template-columns: 1fr;
+    }
+
+    .cat-art {
+      order: -1;
+      max-width: 420px;
+    }
+
     .tier-list {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 560px) {
-    .cat-head {
+    .cat-head-copy {
       flex-direction: column;
       gap: 0.9rem;
     }

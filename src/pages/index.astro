@@ -11,6 +11,10 @@ import { url } from '../lib/url';
 // services data changes.
 const serviceCount = serviceCategories.reduce((n, cat) => n + cat.items.length, 0);
 
+// Each homepage card reuses its category's artwork, so replacing the file in
+// nav.ts updates both this grid and the services page.
+const artFor = new Map(serviceCategories.map((cat) => [cat.id, cat]));
+
 // --- hero rotator ---
 // Each slide leads with a different capability, the way a company with more
 // than one line of work introduces itself. Copy is deliberately concrete.
@@ -55,6 +59,7 @@ const services = [
     description:
       'NVMe-backed hosting, business email, domains and DNS, server setup and backups — provisioned from our own portal.',
     href: '/services/#web-hosting',
+    cat: 'hosting',
   },
   {
     icon: 'code' as const,
@@ -62,6 +67,7 @@ const services = [
     description:
       'Corporate websites, online stores and web applications, designed and built around how your business operates.',
     href: '/services/#web-development',
+    cat: 'web',
   },
   {
     icon: 'database' as const,
@@ -69,6 +75,7 @@ const services = [
     description:
       'ERP, HRM, CRM, POS and industry platforms — including RMG ERP and ISP billing, built to fit your process.',
     href: '/services/#erp',
+    cat: 'software',
   },
   {
     icon: 'network' as const,
@@ -76,6 +83,7 @@ const services = [
     description:
       'Network design and cabling, firewalls, VPN and SD-WAN, Wi-Fi, CCTV and IP telephony — plus the automation to keep it consistent.',
     href: '/services/#network-consulting',
+    cat: 'network',
   },
   {
     icon: 'cloud' as const,
@@ -83,6 +91,7 @@ const services = [
     description:
       'Virtualisation, SAN/NAS storage, cloud migration, colocation and data centre design, with disaster recovery you have rehearsed.',
     href: '/services/#virtualisation',
+    cat: 'datacenter',
   },
   {
     icon: 'shield' as const,
@@ -90,6 +99,7 @@ const services = [
     description:
       'Penetration testing, hardening, endpoint and ransomware protection, and audits mapped to ISO 27001, PCI-DSS or GDPR.',
     href: '/services/#security',
+    cat: 'security',
   },
   {
     icon: 'search' as const,
@@ -97,6 +107,7 @@ const services = [
     description:
       'SEO, social and paid campaigns, analytics, branding and graphic design, and video and motion graphics production.',
     href: '/services/#seo',
+    cat: 'growth',
   },
   {
     icon: 'compass' as const,
@@ -104,6 +115,7 @@ const services = [
     description:
       'IT planning and gap analysis, SLA-based managed support, remote helpdesk, and training that leaves your team able to run it.',
     href: '/services/#managed-support',
+    cat: 'consulting',
   },
 ];
 
@@ -327,7 +339,16 @@ const faqs = [
       </div>
 
       <div class="services-grid">
-        {services.map((service) => <ServiceCard {...service} />)}
+        {
+          services.map(({ cat, ...service }, i) => (
+            <ServiceCard
+              {...service}
+              image={artFor.get(cat)?.image}
+              imageAlt={artFor.get(cat)?.imageAlt}
+              eager={i < 3}
+            />
+          ))
+        }
 
         <a class="services-all card" href={url('/services/')}>
           <span class="services-all-count">{serviceCount}</span>
@@ -336,6 +357,9 @@ const faqs = [
             Every service across all eight areas, with what each one actually involves — and what it
             does not.
           </p>
+          <span class="services-all-icons" aria-hidden="true">
+            {serviceCategories.map((c) => <Icon name={c.icon} />)}
+          </span>
           <span class="services-all-link">
             See all services <Icon name="arrow-right" class="btn-icon" />
           </span>
@@ -750,11 +774,27 @@ const faqs = [
     line-height: 1.7;
   }
 
+  /* One mark per category — the eight areas the count adds up to. */
+  .services-all-icons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.9rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    color: var(--teal);
+    opacity: 0.5;
+  }
+
+  .services-all-icons :global(svg) {
+    width: 22px;
+    height: 22px;
+  }
+
   .services-all-link {
     display: inline-flex;
     align-items: center;
     gap: 0.45em;
-    margin-top: auto;
+    margin-top: 1.4rem;
     padding-top: 0.75rem;
     font-family: var(--font-mono);
     font-size: var(--text-xs);

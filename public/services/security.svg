@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="A shield over a scanning sweep, with traffic passing on one side and being dropped on the other">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b1c31"/><stop offset=".6" stop-color="#0e2740"/><stop offset="1" stop-color="#081524"/>
+    </linearGradient>
+    <linearGradient id="ln" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2dc7c9"/><stop offset="1" stop-color="#8fb7cf"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity=".035" stroke-width="1"/>
+    </pattern>
+    <clipPath id="shieldClip">
+      <path d="M320 74l86 31v68c0 52-36 87-86 111-50-24-86-59-86-111v-68l86-31Z"/>
+    </clipPath>
+  </defs>
+
+  <rect width="640" height="400" fill="url(#bg)"/>
+  <rect width="640" height="400" fill="url(#grid)"/>
+
+  <!-- inbound traffic, left: accepted -->
+  <g stroke="#2dc7c9" stroke-opacity=".55" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <path d="M40 132h132"/><path d="M40 200h132"/><path d="M40 268h132"/>
+  </g>
+  <g fill="#2dc7c9">
+    <circle cx="96" cy="132" r="4" class="flow"/>
+    <circle cx="70" cy="200" r="4" class="flow f2"/>
+    <circle cx="122" cy="268" r="4" class="flow f3"/>
+  </g>
+
+  <!-- outbound, right: two pass, one dropped -->
+  <g stroke="#2dc7c9" stroke-opacity=".55" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <path d="M468 132h132"/><path d="M468 268h132"/>
+  </g>
+  <g fill="#2dc7c9">
+    <circle cx="540" cy="132" r="4" class="flow f2"/>
+    <circle cx="566" cy="268" r="4" class="flow"/>
+  </g>
+  <g stroke="#8fb7cf" stroke-opacity=".3" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="4 7">
+    <path d="M468 200h58"/>
+  </g>
+  <g transform="translate(548 200)" stroke="#e2607a" stroke-opacity=".8" stroke-width="2" stroke-linecap="round">
+    <line x1="-9" y1="-9" x2="9" y2="9"/><line x1="9" y1="-9" x2="-9" y2="9"/>
+  </g>
+
+  <!-- shield -->
+  <path d="M320 74l86 31v68c0 52-36 87-86 111-50-24-86-59-86-111v-68l86-31Z"
+        fill="#0b1c31" fill-opacity=".85" stroke="url(#ln)" stroke-width="2"/>
+
+  <!-- scanning sweep, clipped to the shield -->
+  <g clip-path="url(#shieldClip)">
+    <rect x="234" y="70" width="172" height="26" fill="#2dc7c9" fill-opacity=".22" class="sweep"/>
+    <g stroke="#2dc7c9" stroke-opacity=".16" stroke-width="1">
+      <line x1="234" y1="120" x2="406" y2="120"/><line x1="234" y1="152" x2="406" y2="152"/>
+      <line x1="234" y1="184" x2="406" y2="184"/><line x1="234" y1="216" x2="406" y2="216"/>
+      <line x1="234" y1="248" x2="406" y2="248"/>
+    </g>
+  </g>
+
+  <!-- lock -->
+  <g transform="translate(320 182)" fill="none" stroke="#2dc7c9" stroke-width="2.2" stroke-linecap="round">
+    <rect x="-26" y="-6" width="52" height="42" rx="7" fill="#0b1c31"/>
+    <path d="M-15 -6v-13a15 15 0 0 1 30 0v13"/>
+    <circle cx="0" cy="14" r="4.5" fill="#2dc7c9" stroke="none"/>
+  </g>
+
+  <!-- verified check -->
+  <g transform="translate(320 258)" stroke="#2dc7c9" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".85">
+    <polyline points="-14,2 -4,12 16,-10"/>
+  </g>
+
+  <style>
+    .flow { animation: lx 3.2s ease-in-out infinite; }
+    .f2 { animation-delay: 1s } .f3 { animation-delay: 2s }
+    .sweep { animation: sweep 4.2s cubic-bezier(.45,0,.55,1) infinite; }
+    @keyframes lx { 0%,100% { opacity:.35 } 50% { opacity:1 } }
+    @keyframes sweep { 0%,100% { transform: translateY(0) } 50% { transform: translateY(196px) } }
+    @media (prefers-reduced-motion: reduce) { .flow, .sweep { animation: none } }
+  </style>
+</svg>

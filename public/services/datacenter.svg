@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="Two equipment racks with cold-aisle airflow between them, linked upward to cloud capacity">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b1c31"/><stop offset=".6" stop-color="#0e2740"/><stop offset="1" stop-color="#081524"/>
+    </linearGradient>
+    <linearGradient id="ln" x1="0" y1="0" x2="640" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2dc7c9"/><stop offset="1" stop-color="#8fb7cf"/>
+    </linearGradient>
+    <linearGradient id="air" x1="0" y1="400" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2dc7c9" stop-opacity=".28"/><stop offset="1" stop-color="#2dc7c9" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity=".035" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="640" height="400" fill="url(#bg)"/>
+  <rect width="640" height="400" fill="url(#grid)"/>
+
+  <!-- cold aisle between the racks -->
+  <rect x="272" y="120" width="96" height="232" fill="url(#air)"/>
+  <g stroke="#2dc7c9" stroke-opacity=".5" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <path d="M300 320v-52m0 0-7 8m7-8 7 8" class="rise"/>
+    <path d="M320 336v-52m0 0-7 8m7-8 7 8" class="rise r2"/>
+    <path d="M340 320v-52m0 0-7 8m7-8 7 8" class="rise r3"/>
+  </g>
+
+  <!-- left rack -->
+  <g transform="translate(160 236)">
+    <rect x="-88" y="-116" width="176" height="232" rx="9" fill="#0b1c31" stroke="url(#ln)" stroke-width="1.8"/>
+    <g fill="none" stroke="#8fb7cf" stroke-opacity=".38" stroke-width="1.2">
+      <rect x="-72" y="-100" width="144" height="30" rx="4"/>
+      <rect x="-72" y="-62" width="144" height="30" rx="4"/>
+      <rect x="-72" y="-24" width="144" height="30" rx="4"/>
+      <rect x="-72" y="14" width="144" height="30" rx="4"/>
+      <rect x="-72" y="52" width="144" height="46" rx="4"/>
+    </g>
+    <g fill="#2dc7c9">
+      <circle cx="-58" cy="-85" r="3.5" class="blink"/>
+      <circle cx="-58" cy="-47" r="3.5" class="blink b2"/>
+      <circle cx="-58" cy="-9" r="3.5" class="blink b3"/>
+      <circle cx="-58" cy="29" r="3.5" fill-opacity=".5"/>
+    </g>
+    <g stroke="#8fb7cf" stroke-opacity=".35" stroke-width="1.2">
+      <line x1="-20" y1="-92" x2="52" y2="-92"/><line x1="-20" y1="-54" x2="52" y2="-54"/>
+      <line x1="-20" y1="-16" x2="52" y2="-16"/><line x1="-20" y1="22" x2="52" y2="22"/>
+    </g>
+    <!-- PSU / power section -->
+    <g stroke="#2dc7c9" stroke-opacity=".65" stroke-width="1.5" fill="none">
+      <path d="M-14 62l-14 20h12l-8 16" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g fill="#8fb7cf" fill-opacity=".3">
+      <rect x="10" y="64" width="48" height="6" rx="3"/><rect x="10" y="78" width="34" height="6" rx="3"/>
+    </g>
+  </g>
+
+  <!-- right rack -->
+  <g transform="translate(480 236)">
+    <rect x="-88" y="-116" width="176" height="232" rx="9" fill="#0b1c31" stroke="url(#ln)" stroke-width="1.8"/>
+    <g fill="none" stroke="#8fb7cf" stroke-opacity=".38" stroke-width="1.2">
+      <rect x="-72" y="-100" width="144" height="30" rx="4"/>
+      <rect x="-72" y="-62" width="144" height="30" rx="4"/>
+      <rect x="-72" y="-24" width="144" height="46" rx="4"/>
+      <rect x="-72" y="30" width="144" height="30" rx="4"/>
+      <rect x="-72" y="68" width="144" height="30" rx="4"/>
+    </g>
+    <g fill="#2dc7c9">
+      <circle cx="-58" cy="-85" r="3.5" class="blink b3"/>
+      <circle cx="-58" cy="-47" r="3.5" class="blink"/>
+      <circle cx="-58" cy="45" r="3.5" class="blink b2"/>
+      <circle cx="-58" cy="83" r="3.5" fill-opacity=".5"/>
+    </g>
+    <!-- storage array -->
+    <g stroke="#2dc7c9" stroke-opacity=".7" stroke-width="1.4" fill="none">
+      <ellipse cx="-30" cy="-12" rx="16" ry="6"/>
+      <path d="M-46 -12v16c0 3.3 7.2 6 16 6s16-2.7 16-6v-16"/>
+    </g>
+    <g stroke="#8fb7cf" stroke-opacity=".35" stroke-width="1.2">
+      <line x1="4" y1="-92" x2="60" y2="-92"/><line x1="4" y1="-54" x2="60" y2="-54"/>
+      <line x1="4" y1="38" x2="60" y2="38"/><line x1="4" y1="76" x2="60" y2="76"/>
+    </g>
+  </g>
+
+  <!-- cloud capacity above -->
+  <path d="M286 92h62a24 24 0 0 0 0-48 34 34 0 0 0-64-12 24 24 0 0 0 2 60Z"
+        fill="#0b1c31" stroke="url(#ln)" stroke-width="1.7" stroke-opacity=".9"/>
+  <g fill="none" stroke="url(#ln)" stroke-width="1.4" stroke-opacity=".5" stroke-dasharray="5 6">
+    <path d="M288 74H160v46"/>
+    <path d="M352 74h128v46"/>
+  </g>
+
+  <style>
+    .blink { animation: lx 3.6s ease-in-out infinite; }
+    .b2 { animation-delay: 1.2s } .b3 { animation-delay: 2.4s }
+    .rise { animation: up 3.4s ease-in-out infinite; }
+    .r2 { animation-delay: .7s } .r3 { animation-delay: 1.4s }
+    @keyframes lx { 0%,100% { opacity:.4 } 50% { opacity:1 } }
+    @keyframes up { 0%,100% { opacity:.25 } 50% { opacity:.85 } }
+    @media (prefers-reduced-motion: reduce) { .blink, .rise { animation: none } }
+  </style>
+</svg>

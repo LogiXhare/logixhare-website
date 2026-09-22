@@ -8,17 +8,37 @@ interface Props {
   title: string;
   description: string;
   href: string;
+  image?: string;
+  imageAlt?: string;
+  /** Set on cards near the fold so their artwork does not pop in on scroll. */
+  eager?: boolean;
 }
 
-const { icon, title, description, href } = Astro.props;
+const { icon, title, description, href, image, imageAlt = '', eager = false } = Astro.props;
 ---
 
 <a class="service-card card" href={url(href)}>
-  <span class="icon-tile"><Icon name={icon} /></span>
-  <h3>{title}</h3>
-  <p>{description}</p>
-  <span class="service-link">
-    Explore more <Icon name="arrow-right" class="service-link-icon" />
+  {
+    image && (
+      <span class="service-art">
+        <img
+          src={url(image)}
+          alt={imageAlt}
+          width="640"
+          height="400"
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+      </span>
+    )
+  }
+  <span class="service-body">
+    <span class="icon-tile"><Icon name={icon} /></span>
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <span class="service-link">
+      Explore more <Icon name="arrow-right" class="service-link-icon" />
+    </span>
   </span>
 </a>
 
@@ -27,11 +47,49 @@ const { icon, title, description, href } = Astro.props;
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 0.95rem;
-    padding: 1.9rem;
     height: 100%;
     overflow: hidden;
     transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .service-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.95rem;
+    padding: 1.9rem;
+    flex: 1;
+  }
+
+  /* Always dark in both themes, so one artwork works on either ground and a
+     photograph can replace it later without a second variant. */
+  .service-art {
+    display: block;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
+    overflow: hidden;
+  }
+
+  .service-art img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+
+  .service-card:hover .service-art img {
+    transform: scale(1.045);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-art img {
+      transition: none;
+    }
+
+    .service-card:hover .service-art img {
+      transform: none;
+    }
   }
 
   /* Accent wash that only shows on hover — keeps the resting grid calm. */
