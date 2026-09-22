@@ -37,7 +37,9 @@ const hostingTiers = [
           serviceCategories.map((cat) => (
             <li>
               <a href={`#${cat.id}`}>
-                <Icon name={cat.icon} class="jump-icon" />
+                {/* line: this pill has no dark chip behind it, which the
+                    isometric art needs in order to read. */}
+                <Icon name={cat.icon} class="jump-icon" line />
                 {cat.label}
               </a>
             </li>
@@ -254,18 +256,19 @@ const hostingTiers = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 9px;
-    background: var(--teal-wash);
-    border: 1px solid rgba(45, 199, 201, 0.2);
-    color: var(--teal);
+    background: var(--chip-bg);
+    box-shadow: var(--chip-inset);
+    border: 1px solid var(--chip-line);
+    color: var(--chip-ink);
     flex-shrink: 0;
   }
 
   .item-icon :global(svg) {
-    width: 20px;
-    height: 20px;
+    width: 27px;
+    height: 27px;
   }
 
   .item-head h3 {

@@ -55,6 +55,15 @@
   --shadow-card: 0 1px 2px rgba(15, 32, 56, 0.06), 0 16px 34px -22px rgba(15, 32, 56, 0.3);
   --shadow-lift: 0 10px 26px -12px rgba(23, 149, 154, 0.45);
 
+  /* Icon chips. Deliberately NOT redefined for dark: the isometric icons carry
+     fixed face tones, so their ground has to stay the same in both themes or
+     the art would need two variants. Declared here so every chip — menus,
+     cards, tiles — is changed from one place. */
+  --chip-bg: linear-gradient(158deg, #122c45, #07131f);
+  --chip-line: rgba(45, 199, 201, 0.26);
+  --chip-ink: #2dc7c9;
+  --chip-inset: inset 0 1px 0 rgba(125, 232, 233, 0.18);
+
   /* --- type --- */
   --font-display: 'Manrope', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-body: 'Manrope', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -369,6 +378,11 @@ button {
 
 /* --- icon tile --- */
 
+/* Every chip that hosts an icon is dark in both themes. The isometric icons
+   carry fixed colours — three faces need three tones — so a chip that changed
+   ground with the theme would need two sets of art, exactly the problem the
+   logo has. Keeping the chip dark also gives the icon a raised, physical
+   reading rather than a flat tint. */
 .icon-tile {
   display: inline-flex;
   align-items: center;
@@ -376,16 +390,16 @@ button {
   width: 52px;
   height: 52px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(155deg, rgba(45, 199, 201, 0.2), rgba(45, 199, 201, 0.04));
-  border: 1px solid rgba(45, 199, 201, 0.22);
-  color: var(--teal);
+  background: var(--chip-bg);
+  border: 1px solid var(--chip-line);
+  box-shadow: var(--chip-inset), 0 6px 14px -8px rgba(4, 16, 27, 0.9);
+  color: var(--chip-ink);
   flex-shrink: 0;
 }
 
 .icon-tile svg {
-  width: 26px;
-  height: 26px;
-  stroke: currentColor;
+  width: 34px;
+  height: 34px;
 }
 
 /* --- visually hidden (for skip link / a11y text) --- */
