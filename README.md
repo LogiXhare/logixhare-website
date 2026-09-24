@@ -1,4 +1,4 @@
-# LogixHare Technologies — Company Website
+# LogiXhare Technologies — Company Website
 
 Static site (Astro), auto-deployed via GitHub Actions to `earth.wetechi.com` (HestiaCP) over FTPS.
 
