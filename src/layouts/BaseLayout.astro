@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const pageTitle = `${title} — LogixHare Technologies`;
+const pageTitle = `${title} — LogiXhare Technologies`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -48,7 +48,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonicalURL} />
 
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="LogixHare Technologies" />
+    <meta property="og:site_name" content="LogiXhare Technologies" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL('/logo.jpg', Astro.site)} />
