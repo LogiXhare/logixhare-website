@@ -53,6 +53,19 @@ const clientLinks = [
   { label: 'Hosting plans & pricing', href: 'https://billing.logixhare.com/', external: true },
   { label: 'Request support', href: url('/contact/') },
 ];
+
+// Social profiles. These carry each network's own brand mark rather than going
+// through Icon.astro: that set is stroked interface art and isometric objects,
+// and a brand logo is neither — it has to be the official filled glyph or it
+// stops being recognisable. Add a network by adding a row here; the markup and
+// styling below need no change. Only accounts that actually exist go in.
+const socials = [
+  {
+    label: 'Facebook',
+    href: 'https://www.facebook.com/logixhare',
+    path: 'M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z',
+  },
+];
 ---
 
 <footer class="site-footer">
@@ -106,6 +119,27 @@ const clientLinks = [
       <a href="https://billing.logixhare.com/" class="btn btn-ghost footer-portal" target="_blank" rel="noopener noreferrer">
         Client portal <Icon name="arrow-right" class="btn-icon" />
       </a>
+
+      <ul class="footer-social">
+        {
+          socials.map((s) => (
+            <li>
+              <a
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`LogiXhare Technologies on ${s.label}`}
+              >
+                {/* Brand marks are single filled paths, unlike the stroked
+                    set Icon.astro renders. */}
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d={s.path} />
+                </svg>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
 
     <nav class="footer-col" aria-label="Company">
@@ -239,6 +273,46 @@ const clientLinks = [
   .footer-portal {
     margin-top: 1.4rem;
     padding: 0.7em 1.3em;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+  }
+
+  .footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text-muted);
+    transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .footer-social a:hover {
+    color: var(--teal);
+    border-color: rgba(45, 199, 201, 0.45);
+    background: var(--surface-2);
+    transform: translateY(-2px);
+  }
+
+  .footer-social svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-social a,
+    .footer-social a:hover {
+      transition: none;
+      transform: none;
+    }
   }
 
   .footer-heading {
