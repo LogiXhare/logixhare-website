@@ -149,7 +149,15 @@ const socials = [
         {/* Same heading style as the Company / Services / Clients columns, so
             the row reads as a labelled part of the footer rather than four
             loose icons under the button. */}
-        <span class="footer-heading">Follow Us</span>
+        <div class="footer-social-head">
+          {/* The isometric art carries fixed tones across three faces, so it
+              needs a chip that stays dark in both themes — same reason every
+              other icon on the site sits on one. */}
+          <span class="social-head-chip">
+            <Icon name="users" />
+          </span>
+          <span class="footer-heading">Follow Us</span>
+        </div>
         <ul class="footer-social">
           {
             socials.map((s) => (
@@ -319,9 +327,41 @@ const socials = [
     margin-top: 2.6rem;
   }
 
+  .footer-social-head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  /* The heading carries its own bottom margin from .footer-heading; zero it
+     here so the chip and the text stay on one baseline. */
+  .footer-social-head .footer-heading {
+    margin-bottom: 0;
+  }
+
+  .social-head-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-line);
+    box-shadow: var(--chip-inset);
+    color: var(--chip-ink);
+    flex-shrink: 0;
+  }
+
+  .social-head-chip :global(svg) {
+    width: 20px;
+    height: 20px;
+  }
+
   .footer-social {
     display: flex;
     gap: 0.6rem;
+    margin-top: 1rem;
   }
 
   .footer-social a {
