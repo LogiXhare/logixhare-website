@@ -145,32 +145,38 @@ const socials = [
         Client portal <Icon name="arrow-right" class="btn-icon" />
       </a>
 
-      <ul class="footer-social">
-        {
-          socials.map((s) => (
-            <li>
-              <a
-                href={s.href}
-                {/* A pending row points at our own home page, so it must not
-                    open a new tab, and it must not claim to be the profile. */}
-                target={s.pending ? undefined : '_blank'}
-                rel={s.pending ? undefined : 'noopener noreferrer'}
-                aria-label={
-                  s.pending
-                    ? `${s.label} — profile coming soon`
-                    : `LogiXhare Technologies on ${s.label}`
-                }
-              >
-                {/* Brand marks are single filled paths, unlike the stroked
-                    set Icon.astro renders. */}
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d={s.path} />
-                </svg>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      <div class="footer-social-block">
+        {/* Same heading style as the Company / Services / Clients columns, so
+            the row reads as a labelled part of the footer rather than four
+            loose icons under the button. */}
+        <span class="footer-heading">Follow Us</span>
+        <ul class="footer-social">
+          {
+            socials.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  {/* A pending row points at our own home page, so it must not
+                      open a new tab, and it must not claim to be the profile. */}
+                  target={s.pending ? undefined : '_blank'}
+                  rel={s.pending ? undefined : 'noopener noreferrer'}
+                  aria-label={
+                    s.pending
+                      ? `${s.label} — profile coming soon`
+                      : `LogiXhare Technologies on ${s.label}`
+                  }
+                >
+                  {/* Brand marks are single filled paths, unlike the stroked
+                      set Icon.astro renders. */}
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d={s.path} />
+                  </svg>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
 
     <nav class="footer-col" aria-label="Company">
@@ -306,10 +312,16 @@ const socials = [
     padding: 0.7em 1.3em;
   }
 
+  /* Sits lower than the button above it: the extra space separates the row
+     from the client-portal CTA so the heading reads as starting a new block,
+     rather than looking like a caption hanging off the button. */
+  .footer-social-block {
+    margin-top: 2.6rem;
+  }
+
   .footer-social {
     display: flex;
     gap: 0.6rem;
-    margin-top: 1.4rem;
   }
 
   .footer-social a {
