@@ -17,7 +17,7 @@ interface Props {
 const { icon, title, description, href, image, imageAlt = '', eager = false } = Astro.props;
 ---
 
-<a class="service-card card" href={url(href)}>
+<a class="service-card card tilt" href={url(href)}>
   {
     image && (
       <span class="service-art">
@@ -43,13 +43,14 @@ const { icon, title, description, href, image, imageAlt = '', eager = false } = 
 </a>
 
 <style>
+  /* The lift, the tilt and their transitions come from .tilt in global.css —
+     a transform here would simply overwrite the one tracking the pointer. */
   .service-card {
     position: relative;
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   }
 
   /* Icon, heading, copy and link all sit on the card's centre line. Centring
@@ -78,6 +79,8 @@ const { icon, title, description, href, image, imageAlt = '', eager = false } = 
     overflow: hidden;
   }
 
+  /* The hover transform lives in global.css beside the tilt, so the artwork
+     and the card it sits in are driven from one place. */
   .service-art img {
     display: block;
     width: 100%;
@@ -87,17 +90,9 @@ const { icon, title, description, href, image, imageAlt = '', eager = false } = 
     transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
   }
 
-  .service-card:hover .service-art img {
-    transform: scale(1.045);
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .service-art img {
       transition: none;
-    }
-
-    .service-card:hover .service-art img {
-      transform: none;
     }
   }
 
@@ -113,7 +108,6 @@ const { icon, title, description, href, image, imageAlt = '', eager = false } = 
   }
 
   .service-card:hover {
-    transform: translateY(-4px);
     border-color: rgba(45, 199, 201, 0.4);
     background: var(--surface-2);
   }

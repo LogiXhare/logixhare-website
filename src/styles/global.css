@@ -415,3 +415,64 @@ button {
   white-space: nowrap;
   border: 0;
 }
+
+/* ===================================================================
+   Depth: tilt on pointer
+   ===================================================================
+   Elements marked .tilt rotate very slightly toward the pointer, so a
+   card reads as a solid panel catching light rather than a flat
+   rectangle. The rotation is deliberately small — past about 6deg the
+   text on the card starts to look distorted and the effect turns into
+   a gimmick.
+
+   The JS in Motion.astro only sets the three custom properties below;
+   all the actual styling lives here, so a card with no script still
+   renders correctly. It also never touches a device without a real
+   hovering pointer, which is why there is no touch fallback. */
+.tilt {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --tilt-lift: 0px;
+  --tilt-glow: 0;
+  transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y))
+    translateY(var(--tilt-lift));
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.45s ease,
+    border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* While the pointer is actually over the card the transform has to track it
+   closely; the slow easing above is for settling back on the way out. */
+.tilt.is-tilting {
+  transition: transform 0.1s linear, box-shadow 0.45s ease, border-color 0.2s ease,
+    background-color 0.2s ease;
+  --tilt-lift: -6px;
+  box-shadow:
+    0 2px 4px rgba(15, 32, 56, 0.07),
+    0 28px 55px -26px rgba(15, 32, 56, 0.45);
+}
+
+:root[data-theme='dark'] .tilt.is-tilting {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.45),
+    0 30px 60px -26px rgba(0, 0, 0, 0.95);
+}
+
+/* Artwork inside a tilting card drifts against the tilt. Two planes moving by
+   different amounts is what actually sells the depth — the rotation alone
+   reads as the whole card being a sticker. */
+.tilt .service-art img {
+  transform: scale(1.06) translate3d(var(--art-shift-x, 0px), var(--art-shift-y, 0px), 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt,
+  .tilt.is-tilting {
+    transform: none;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .tilt .service-art img {
+    transform: none;
+  }
+}
