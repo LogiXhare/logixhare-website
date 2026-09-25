@@ -319,12 +319,14 @@ const faqs = [
               <span class="hero-art-sheen"></span>
             </div>
 
-            {/* Pushed in front of the panel. The gap in translateZ is what
-                produces the parallax as the scene turns — level with it, these
-                would read as stickers on the frame. */}
-            <span class="hero-chip hero-chip-a"><Icon name="server" /></span>
-            <span class="hero-chip hero-chip-b"><Icon name="shield" /></span>
-            <span class="hero-chip hero-chip-c"><Icon name="cloud" /></span>
+            {/* Two, not three, and each straddling an edge of the panel rather
+                than floating clear of it — a chip out in open space reads as a
+                stray interface element, not part of the scene. Neither repeats
+                what the artwork behind them already shows. The gap in
+                translateZ is what produces the parallax as the scene turns;
+                level with the panel they would be stickers on the frame. */}
+            <span class="hero-chip hero-chip-a"><Icon name="shield" /></span>
+            <span class="hero-chip hero-chip-b"><Icon name="cloud" /></span>
           </div>
         </div>
       </div>
@@ -686,10 +688,10 @@ const faqs = [
      to stay at the edge of notice rather than pulling the eye off the copy. */
   @keyframes hero-drift {
     from {
-      transform: rotateY(-5deg) rotateX(1.5deg);
+      transform: rotateY(-2deg) rotateX(0.8deg);
     }
     to {
-      transform: rotateY(5deg) rotateX(-1.5deg);
+      transform: rotateY(2deg) rotateX(-0.8deg);
     }
   }
 
@@ -733,25 +735,20 @@ const faqs = [
     height: 34px;
   }
 
+  /* Each sits half on the panel and half off it. Offsets are about half a chip
+     width, so the panel edge runs through the chip and reads as holding it. */
   .hero-chip-a {
-    top: -26px;
-    left: -24px;
-    transform: translateZ(75px);
+    top: 22%;
+    left: -27px;
+    transform: translateZ(45px);
     animation: hero-bob-a 6.5s ease-in-out infinite alternate;
   }
 
   .hero-chip-b {
-    bottom: -22px;
-    right: -20px;
-    transform: translateZ(115px);
+    bottom: -24px;
+    right: 44px;
+    transform: translateZ(80px);
     animation: hero-bob-b 8s ease-in-out infinite alternate;
-  }
-
-  .hero-chip-c {
-    top: 44%;
-    right: -34px;
-    transform: translateZ(45px);
-    animation: hero-bob-c 7.2s ease-in-out infinite alternate;
   }
 
   /* Each keyframe restates its own translateZ: a transform replaces the whole
@@ -759,28 +756,19 @@ const faqs = [
      and kill the parallax. */
   @keyframes hero-bob-a {
     from {
-      transform: translateZ(75px) translateY(0);
+      transform: translateZ(45px) translateY(0);
     }
     to {
-      transform: translateZ(75px) translateY(-11px);
+      transform: translateZ(45px) translateY(-8px);
     }
   }
 
   @keyframes hero-bob-b {
     from {
-      transform: translateZ(115px) translateY(0);
+      transform: translateZ(80px) translateY(0);
     }
     to {
-      transform: translateZ(115px) translateY(-14px);
-    }
-  }
-
-  @keyframes hero-bob-c {
-    from {
-      transform: translateZ(45px) translateY(0);
-    }
-    to {
-      transform: translateZ(45px) translateY(-8px);
+      transform: translateZ(80px) translateY(-10px);
     }
   }
 
@@ -792,8 +780,7 @@ const faqs = [
 
     .hero-drift,
     .hero-chip-a,
-    .hero-chip-b,
-    .hero-chip-c {
+    .hero-chip-b {
       animation: none;
     }
   }
@@ -1317,14 +1304,13 @@ const faqs = [
   /* Below this the panel is small enough that chips hanging off its corners
      crowd the artwork instead of framing it. */
   @media (max-width: 420px) {
-    .hero-chip-a,
-    .hero-chip-c {
+    .hero-chip-a {
       display: none;
     }
 
     .hero-chip-b {
-      right: -10px;
-      bottom: -14px;
+      right: 24px;
+      bottom: -16px;
     }
   }
 

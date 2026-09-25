@@ -21,7 +21,12 @@
   // inside it counter-shifts. Small on purpose — see the note in global.css.
   const CARD_TILT = 5;
   const ART_SHIFT = 12;
-  const HERO_TILT = 7;
+  // The hero adds this to the drift already running underneath it, so the two
+  // together have to stay inside the same ceiling the cards obey. At 7 — and
+  // doubled on Y, and with the panel sitting off-centre so the pointer can be
+  // most of a screen away from it — the pair reached 15deg and the panel just
+  // looked crooked rather than dimensional.
+  const HERO_TILT = 2.5;
 
   let card: HTMLElement | null = null;
   let cardBox: DOMRect | null = null;
@@ -60,7 +65,7 @@
       // cursor happens to cross it makes it feel inert.
       const px = (point.x - (heroBox.left + heroBox.width / 2)) / window.innerWidth;
       const py = (point.y - (heroBox.top + heroBox.height / 2)) / window.innerHeight;
-      hero.style.setProperty('--hero-y', (px * HERO_TILT * 2).toFixed(2) + 'deg');
+      hero.style.setProperty('--hero-y', (px * HERO_TILT).toFixed(2) + 'deg');
       hero.style.setProperty('--hero-x', (-py * HERO_TILT).toFixed(2) + 'deg');
     }
   }
