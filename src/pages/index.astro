@@ -254,6 +254,31 @@ const faqs = [
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="hero-grid-lines" aria-hidden="true"></div>
 
+    {/* Full-bleed behind everything in the hero. object-position pins the
+        artwork's subject to the right, where the copy is not, so the scene
+        stays whole as the viewport narrows instead of centre-cropping into
+        the middle of a server rack. */}
+    <div class="hero-art" id="hero-art" aria-hidden="true">
+      {
+        slides.map((slide, i) => (
+          <img
+            class="hero-art-img"
+            data-art={i}
+            data-active={i === 0 ? 'true' : 'false'}
+            src={url(`/hero/${slide.art}.svg`)}
+            alt=""
+            width="1600"
+            height="800"
+            loading="eager"
+            decoding="async"
+          />
+        ))
+      }
+    </div>
+    {/* Carries the copy's legibility. Without it the headline sits straight on
+        the artwork and the grid lines read through the text. */}
+    <div class="hero-scrim" aria-hidden="true"></div>
+
     <div class="container hero-inner">
       <div class="hero-copy">
         <div class="hero-slides" id="hero-slides">
@@ -292,44 +317,6 @@ const faqs = [
         </div>
       </div>
 
-      <div class="hero-art" aria-hidden="true">
-        {/* Three nested layers, each with one job: the stage takes the pointer,
-            the drifter turns slowly on its own so the scene is alive before
-            anyone moves a mouse, and the panel and chips sit at different
-            depths inside them. Putting the pointer tilt and the drift on one
-            element would mean one transform overwriting the other. */}
-        <div class="hero-stage" id="hero-stage">
-          <div class="hero-drift">
-            <div class="hero-art-panel">
-              {
-                slides.map((slide, i) => (
-                  <img
-                    class="hero-art-img"
-                    data-art={i}
-                    data-active={i === 0 ? 'true' : 'false'}
-                    src={url(artFor.get(slide.art)?.image ?? '')}
-                    alt=""
-                    width="640"
-                    height="400"
-                    loading="eager"
-                    decoding="async"
-                  />
-                ))
-              }
-              <span class="hero-art-sheen"></span>
-            </div>
-
-            {/* Two, not three, and each straddling an edge of the panel rather
-                than floating clear of it — a chip out in open space reads as a
-                stray interface element, not part of the scene. Neither repeats
-                what the artwork behind them already shows. The gap in
-                translateZ is what produces the parallax as the scene turns;
-                level with the panel they would be stickers on the frame. */}
-            <span class="hero-chip hero-chip-a"><Icon name="shield" /></span>
-            <span class="hero-chip hero-chip-b"><Icon name="cloud" /></span>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- What every plan includes — the honest version of a stats bar. -->
@@ -566,10 +553,27 @@ const faqs = [
 <style>
   /* ===================== HERO ===================== */
 
+  /* Dark in both themes, like the closing CTA band. The artwork behind the
+     copy is a dark scene, so the hero re-points the colour tokens locally
+     instead of inheriting the light theme's dark-on-light text, which would
+     otherwise land on top of it and vanish. Any always-dark section on this
+     site does the same. */
   .hero {
+    --text: #eaf3f8;
+    --text-muted: #a9c1d4;
+    --text-soft: #7e9ab2;
+    --line: #22395a;
+    --surface: rgba(14, 33, 54, 0.6);
+    --teal: #2dc7c9;
+    --teal-bright: #5ce6e8;
+    --on-accent: #04101d;
+    --grid-line: rgba(120, 180, 210, 0.07);
+
     position: relative;
-    padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(2.5rem, 2rem + 2vw, 4rem);
+    padding-block: clamp(3.5rem, 2.5rem + 5vw, 7.5rem) clamp(2.5rem, 2rem + 2vw, 4rem);
     overflow: hidden;
+    background: linear-gradient(150deg, #0a1c30 0%, #0d2740 55%, #071523 100%);
+    border-bottom: 1px solid var(--line);
   }
 
   .hero-bg {
@@ -593,12 +597,15 @@ const faqs = [
     pointer-events: none;
   }
 
+  /* One column now. The copy sits over the artwork rather than beside it, so
+     it is capped short of the scene's subject instead of sharing a grid with
+     it. */
   .hero-inner {
     position: relative;
-    display: grid;
-    grid-template-columns: 1.12fr 0.88fr;
-    align-items: center;
-    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .hero-copy {
+    max-width: 44rem;
   }
 
   /* Slides stack in the same grid cell so the hero never jumps height. */
@@ -658,158 +665,65 @@ const faqs = [
     width: 52px;
   }
 
-  /* The perspective lives on the container, not the thing being rotated, so
-     every layer inside shares one vanishing point and the scene holds together
-     as a single object rather than each piece having its own camera. */
+  /* Full-bleed: the artwork is the hero's ground, not an object sitting in it.
+     Every scene is drawn 1600x800 with its subject weighted right, so
+     object-position keeps that subject in frame while the copy sits over the
+     quiet left side. */
   .hero-art {
-    display: flex;
-    justify-content: center;
-    perspective: 1100px;
-  }
-
-  .hero-stage {
-    --hero-x: 0deg;
-    --hero-y: 0deg;
-    position: relative;
-    width: 100%;
-    max-width: 460px;
-    transform-style: preserve-3d;
-    transform: rotateX(var(--hero-x)) rotateY(var(--hero-y));
-    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.3, 1);
-  }
-
-  .hero-drift {
-    position: relative;
-    transform-style: preserve-3d;
-    animation: hero-drift 18s ease-in-out infinite alternate;
-  }
-
-  /* Slow and shallow: this runs forever on the page people land on, so it has
-     to stay at the edge of notice rather than pulling the eye off the copy. */
-  @keyframes hero-drift {
-    from {
-      transform: rotateY(-2deg) rotateX(0.8deg);
-    }
-    to {
-      transform: rotateY(2deg) rotateX(-0.8deg);
-    }
-  }
-
-  .hero-art-panel {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--line);
-    background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
-    overflow: hidden;
-    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
-    transform: translateZ(0);
-  }
-
-  /* A fixed highlight across the glass. Because it does not move with the
-     panel's own rotation, the panel reads as catching light from the room. */
-  .hero-art-sheen {
+    --hero-shift-x: 0px;
+    --hero-shift-y: 0px;
     position: absolute;
     inset: 0;
-    background: linear-gradient(115deg, rgba(255, 255, 255, 0.14) 0%, transparent 38%);
     pointer-events: none;
   }
 
-  .hero-chip {
-    position: absolute;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 54px;
-    height: 54px;
-    border-radius: 13px;
-    background: var(--chip-bg);
-    border: 1px solid var(--chip-line);
-    box-shadow: var(--chip-inset), 0 22px 34px -16px rgba(0, 0, 0, 0.9);
-    color: var(--chip-ink);
-  }
-
-  .hero-chip :global(svg) {
-    width: 34px;
-    height: 34px;
-  }
-
-  /* Each sits half on the panel and half off it. Offsets are about half a chip
-     width, so the panel edge runs through the chip and reads as holding it. */
-  .hero-chip-a {
-    top: 22%;
-    left: -27px;
-    transform: translateZ(45px);
-    animation: hero-bob-a 6.5s ease-in-out infinite alternate;
-  }
-
-  .hero-chip-b {
-    bottom: -24px;
-    right: 44px;
-    transform: translateZ(80px);
-    animation: hero-bob-b 8s ease-in-out infinite alternate;
-  }
-
-  /* Each keyframe restates its own translateZ: a transform replaces the whole
-     value, so animating translateY alone would flatten the chip onto the panel
-     and kill the parallax. */
-  @keyframes hero-bob-a {
-    from {
-      transform: translateZ(45px) translateY(0);
-    }
-    to {
-      transform: translateZ(45px) translateY(-8px);
-    }
-  }
-
-  @keyframes hero-bob-b {
-    from {
-      transform: translateZ(80px) translateY(0);
-    }
-    to {
-      transform: translateZ(80px) translateY(-10px);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero-stage {
-      transform: none;
-      transition: none;
-    }
-
-    .hero-drift,
-    .hero-chip-a,
-    .hero-chip-b {
-      animation: none;
-    }
-  }
-
-  /* All four stack in the same box and cross-fade, so the artwork changes with
-     the slide instead of one static image sitting under rotating copy. */
-  /* Scaled past the frame: the artwork's subject sits mid-canvas with margin
-     around it, which reads as too small in a panel this size. */
+  /* All four stack and cross-fade, so the artwork changes with the slide
+     rather than one static image sitting under rotating copy. The slow scale
+     keeps the scene from feeling like a frozen backdrop; it is small enough
+     that the crop never shifts enough to clip the subject. */
   .hero-art-img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: 78% center;
     opacity: 0;
-    transform: scale(1.28);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: scale(1.06) translate3d(var(--hero-shift-x), var(--hero-shift-y), 0);
+    transition: opacity 0.9s ease, transform 1.2s ease;
   }
 
+  /* The active frame still carries the pointer shift; only the settle-in
+     scale differs, so moving the mouse never snaps it back to centre. */
   .hero-art-img[data-active='true'] {
     opacity: 1;
-    transform: scale(1.2);
+    transform: scale(1.02) translate3d(var(--hero-shift-x), var(--hero-shift-y), 0);
+  }
+
+  /* Legibility, and nothing else. Opaque where the headline sits, clearing to
+     nothing across the artwork so the scene is not dimmed for the sake of text
+     that is nowhere near it. */
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        100deg,
+        rgba(6, 17, 30, 0.97) 0%,
+        rgba(6, 17, 30, 0.92) 30%,
+        rgba(6, 17, 30, 0.55) 55%,
+        rgba(6, 17, 30, 0.12) 78%,
+        rgba(6, 17, 30, 0) 100%
+      ),
+      linear-gradient(to top, rgba(6, 17, 30, 0.75), transparent 45%);
   }
 
   @media (prefers-reduced-motion: reduce) {
     .hero-art-img,
     .hero-art-img[data-active='true'] {
       transition: opacity 0.2s ease;
-      transform: scale(1.2);
+      transform: none;
     }
   }
 
@@ -1278,39 +1192,15 @@ const faqs = [
       grid-template-columns: 1fr;
     }
 
-    .hero-art {
-      order: -1;
+    /* Narrow enough that the scene can no longer sit beside the copy, so it
+       moves behind it: the crop pulls further right onto the subject and the
+       scrim goes bottom-up rather than left-to-right. */
+    .hero-art-img {
+      object-position: 84% center;
     }
 
-    /* max-width moved to the stage, which is now the sized element — the panel
-       fills it. Setting it on the panel again would shrink it inside the
-       stage and leave the chips floating away from its corners. */
-    .hero-stage {
-      max-width: 320px;
-    }
-
-    .hero-chip {
-      width: 44px;
-      height: 44px;
-      border-radius: 11px;
-    }
-
-    .hero-chip :global(svg) {
-      width: 28px;
-      height: 28px;
-    }
-  }
-
-  /* Below this the panel is small enough that chips hanging off its corners
-     crowd the artwork instead of framing it. */
-  @media (max-width: 420px) {
-    .hero-chip-a {
-      display: none;
-    }
-
-    .hero-chip-b {
-      right: 24px;
-      bottom: -16px;
+    .hero-scrim {
+      background: linear-gradient(to top, rgba(6, 17, 30, 0.96) 38%, rgba(6, 17, 30, 0.62) 72%, rgba(6, 17, 30, 0.35));
     }
   }
 
