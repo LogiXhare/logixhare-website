@@ -21,12 +21,10 @@
   // inside it counter-shifts. Small on purpose — see the note in global.css.
   const CARD_TILT = 5;
   const ART_SHIFT = 12;
-  // The hero adds this to the drift already running underneath it, so the two
-  // together have to stay inside the same ceiling the cards obey. At 7 — and
-  // doubled on Y, and with the panel sitting off-centre so the pointer can be
-  // most of a screen away from it — the pair reached 15deg and the panel just
-  // looked crooked rather than dimensional.
-  const HERO_TILT = 2.5;
+  // Pixels the full-bleed artwork counter-shifts at the edge of the viewport.
+  // The image is already scaled slightly past its frame, so a shift this size
+  // never exposes an edge.
+  const HERO_SHIFT = 26;
 
   let card: HTMLElement | null = null;
   let cardBox: DOMRect | null = null;
@@ -34,7 +32,11 @@
   let queued = false;
   let point = { x: 0, y: 0 };
 
-  const hero = document.getElementById('hero-stage');
+  // The hero artwork is now a full-bleed background rather than a panel that
+  // tilts, so the pointer shifts it a few pixels instead of rotating it. At
+  // this size a rotation would swing the whole scene; a small counter-shift
+  // reads as the camera moving rather than the picture being bent.
+  const hero = document.getElementById('hero-art');
 
   function clearCard() {
     if (!card) return;
@@ -65,8 +67,8 @@
       // cursor happens to cross it makes it feel inert.
       const px = (point.x - (heroBox.left + heroBox.width / 2)) / window.innerWidth;
       const py = (point.y - (heroBox.top + heroBox.height / 2)) / window.innerHeight;
-      hero.style.setProperty('--hero-y', (px * HERO_TILT).toFixed(2) + 'deg');
-      hero.style.setProperty('--hero-x', (-py * HERO_TILT).toFixed(2) + 'deg');
+      hero.style.setProperty('--hero-shift-x', (-px * HERO_SHIFT).toFixed(1) + 'px');
+      hero.style.setProperty('--hero-shift-y', (-py * HERO_SHIFT * 0.5).toFixed(1) + 'px');
     }
   }
 
@@ -114,8 +116,8 @@
   still.addEventListener('change', () => {
     if (still.matches) {
       clearCard();
-      hero?.style.removeProperty('--hero-x');
-      hero?.style.removeProperty('--hero-y');
+      hero?.style.removeProperty('--hero-shift-x');
+      hero?.style.removeProperty('--hero-shift-y');
     }
   });
 </script>
