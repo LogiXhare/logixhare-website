@@ -293,22 +293,39 @@ const faqs = [
       </div>
 
       <div class="hero-art" aria-hidden="true">
-        <div class="hero-art-panel">
-          {
-            slides.map((slide, i) => (
-              <img
-                class="hero-art-img"
-                data-art={i}
-                data-active={i === 0 ? 'true' : 'false'}
-                src={url(artFor.get(slide.art)?.image ?? '')}
-                alt=""
-                width="640"
-                height="400"
-                loading="eager"
-                decoding="async"
-              />
-            ))
-          }
+        {/* Three nested layers, each with one job: the stage takes the pointer,
+            the drifter turns slowly on its own so the scene is alive before
+            anyone moves a mouse, and the panel and chips sit at different
+            depths inside them. Putting the pointer tilt and the drift on one
+            element would mean one transform overwriting the other. */}
+        <div class="hero-stage" id="hero-stage">
+          <div class="hero-drift">
+            <div class="hero-art-panel">
+              {
+                slides.map((slide, i) => (
+                  <img
+                    class="hero-art-img"
+                    data-art={i}
+                    data-active={i === 0 ? 'true' : 'false'}
+                    src={url(artFor.get(slide.art)?.image ?? '')}
+                    alt=""
+                    width="640"
+                    height="400"
+                    loading="eager"
+                    decoding="async"
+                  />
+                ))
+              }
+              <span class="hero-art-sheen"></span>
+            </div>
+
+            {/* Pushed in front of the panel. The gap in translateZ is what
+                produces the parallax as the scene turns — level with it, these
+                would read as stickers on the frame. */}
+            <span class="hero-chip hero-chip-a"><Icon name="server" /></span>
+            <span class="hero-chip hero-chip-b"><Icon name="shield" /></span>
+            <span class="hero-chip hero-chip-c"><Icon name="cloud" /></span>
+          </div>
         </div>
       </div>
     </div>
@@ -367,7 +384,7 @@ const faqs = [
           ))
         }
 
-        <a class="services-all card" href={url('/services/')}>
+        <a class="services-all card tilt" href={url("/services/")}>
           <span class="services-all-count">{serviceCount}</span>
           <h3>services in full</h3>
           <p>
@@ -401,7 +418,7 @@ const faqs = [
       <div class="industry-grid">
         {
           industries.map((item) => (
-            <article class="industry-card card">
+            <article class="industry-card card tilt">
               <span class="icon-tile">
                 <Icon name={item.icon} />
               </span>
@@ -639,21 +656,146 @@ const faqs = [
     width: 52px;
   }
 
+  /* The perspective lives on the container, not the thing being rotated, so
+     every layer inside shares one vanishing point and the scene holds together
+     as a single object rather than each piece having its own camera. */
   .hero-art {
     display: flex;
     justify-content: center;
+    perspective: 1100px;
+  }
+
+  .hero-stage {
+    --hero-x: 0deg;
+    --hero-y: 0deg;
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--hero-x)) rotateY(var(--hero-y));
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+
+  .hero-drift {
+    position: relative;
+    transform-style: preserve-3d;
+    animation: hero-drift 18s ease-in-out infinite alternate;
+  }
+
+  /* Slow and shallow: this runs forever on the page people land on, so it has
+     to stay at the edge of notice rather than pulling the eye off the copy. */
+  @keyframes hero-drift {
+    from {
+      transform: rotateY(-5deg) rotateX(1.5deg);
+    }
+    to {
+      transform: rotateY(5deg) rotateX(-1.5deg);
+    }
   }
 
   .hero-art-panel {
     position: relative;
     width: 100%;
-    max-width: 460px;
     aspect-ratio: 16 / 10;
     border-radius: var(--radius-lg);
     border: 1px solid var(--line);
     background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
     overflow: hidden;
     box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+    transform: translateZ(0);
+  }
+
+  /* A fixed highlight across the glass. Because it does not move with the
+     panel's own rotation, the panel reads as catching light from the room. */
+  .hero-art-sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, rgba(255, 255, 255, 0.14) 0%, transparent 38%);
+    pointer-events: none;
+  }
+
+  .hero-chip {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 13px;
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-line);
+    box-shadow: var(--chip-inset), 0 22px 34px -16px rgba(0, 0, 0, 0.9);
+    color: var(--chip-ink);
+  }
+
+  .hero-chip :global(svg) {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hero-chip-a {
+    top: -26px;
+    left: -24px;
+    transform: translateZ(75px);
+    animation: hero-bob-a 6.5s ease-in-out infinite alternate;
+  }
+
+  .hero-chip-b {
+    bottom: -22px;
+    right: -20px;
+    transform: translateZ(115px);
+    animation: hero-bob-b 8s ease-in-out infinite alternate;
+  }
+
+  .hero-chip-c {
+    top: 44%;
+    right: -34px;
+    transform: translateZ(45px);
+    animation: hero-bob-c 7.2s ease-in-out infinite alternate;
+  }
+
+  /* Each keyframe restates its own translateZ: a transform replaces the whole
+     value, so animating translateY alone would flatten the chip onto the panel
+     and kill the parallax. */
+  @keyframes hero-bob-a {
+    from {
+      transform: translateZ(75px) translateY(0);
+    }
+    to {
+      transform: translateZ(75px) translateY(-11px);
+    }
+  }
+
+  @keyframes hero-bob-b {
+    from {
+      transform: translateZ(115px) translateY(0);
+    }
+    to {
+      transform: translateZ(115px) translateY(-14px);
+    }
+  }
+
+  @keyframes hero-bob-c {
+    from {
+      transform: translateZ(45px) translateY(0);
+    }
+    to {
+      transform: translateZ(45px) translateY(-8px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-stage {
+      transform: none;
+      transition: none;
+    }
+
+    .hero-drift,
+    .hero-chip-a,
+    .hero-chip-b,
+    .hero-chip-c {
+      animation: none;
+    }
   }
 
   /* All four stack in the same box and cross-fade, so the artwork changes with
@@ -799,11 +941,10 @@ const faqs = [
     height: 100%;
     background: var(--teal-wash);
     border-color: rgba(45, 199, 201, 0.3);
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    /* No transform here — .tilt in global.css owns it. */
   }
 
   .services-all:hover {
-    transform: translateY(-4px);
     border-color: rgba(45, 199, 201, 0.55);
   }
 
@@ -1154,9 +1295,36 @@ const faqs = [
       order: -1;
     }
 
-    .hero-art-panel {
+    /* max-width moved to the stage, which is now the sized element — the panel
+       fills it. Setting it on the panel again would shrink it inside the
+       stage and leave the chips floating away from its corners. */
+    .hero-stage {
       max-width: 320px;
-      padding: 1.5rem;
+    }
+
+    .hero-chip {
+      width: 44px;
+      height: 44px;
+      border-radius: 11px;
+    }
+
+    .hero-chip :global(svg) {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  /* Below this the panel is small enough that chips hanging off its corners
+     crowd the artwork instead of framing it. */
+  @media (max-width: 420px) {
+    .hero-chip-a,
+    .hero-chip-c {
+      display: none;
+    }
+
+    .hero-chip-b {
+      right: -10px;
+      bottom: -14px;
     }
   }
 

@@ -1,0 +1,116 @@
+---
+/**
+ * Pointer-driven depth, for `.tilt` cards and the hero stage.
+ *
+ * This only ever writes custom properties. Every rule that uses them lives in
+ * global.css or the hero's own styles, so the page renders correctly with this
+ * script absent, blocked or still loading — the effect is an enhancement, never
+ * the thing that makes the layout work.
+ *
+ * Included once from BaseLayout, so it covers every page. One delegated
+ * listener handles all cards: the services page alone has 56, and per-element
+ * listeners there would be wasteful for something only one card uses at a time.
+ */
+---
+
+<script>
+  const fine = matchMedia('(hover: hover) and (pointer: fine)');
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Rotation in degrees at the very corner of a card, and how far the artwork
+  // inside it counter-shifts. Small on purpose — see the note in global.css.
+  const CARD_TILT = 5;
+  const ART_SHIFT = 12;
+  const HERO_TILT = 7;
+
+  let card: HTMLElement | null = null;
+  let cardBox: DOMRect | null = null;
+  let heroBox: DOMRect | null = null;
+  let queued = false;
+  let point = { x: 0, y: 0 };
+
+  const hero = document.getElementById('hero-stage');
+
+  function clearCard() {
+    if (!card) return;
+    card.classList.remove('is-tilting');
+    card.style.removeProperty('--tilt-x');
+    card.style.removeProperty('--tilt-y');
+    card.style.removeProperty('--art-shift-x');
+    card.style.removeProperty('--art-shift-y');
+    card = null;
+    cardBox = null;
+  }
+
+  function apply() {
+    queued = false;
+
+    if (card && cardBox) {
+      const px = (point.x - cardBox.left) / cardBox.width - 0.5;
+      const py = (point.y - cardBox.top) / cardBox.height - 0.5;
+      card.style.setProperty('--tilt-y', (px * CARD_TILT).toFixed(2) + 'deg');
+      card.style.setProperty('--tilt-x', (-py * CARD_TILT).toFixed(2) + 'deg');
+      card.style.setProperty('--art-shift-x', (-px * ART_SHIFT).toFixed(1) + 'px');
+      card.style.setProperty('--art-shift-y', (-py * ART_SHIFT).toFixed(1) + 'px');
+    }
+
+    if (hero && heroBox) {
+      // The hero tracks the pointer anywhere in the viewport, not just over
+      // itself: it is the page's focal object, and only reacting when the
+      // cursor happens to cross it makes it feel inert.
+      const px = (point.x - (heroBox.left + heroBox.width / 2)) / window.innerWidth;
+      const py = (point.y - (heroBox.top + heroBox.height / 2)) / window.innerHeight;
+      hero.style.setProperty('--hero-y', (px * HERO_TILT * 2).toFixed(2) + 'deg');
+      hero.style.setProperty('--hero-x', (-py * HERO_TILT).toFixed(2) + 'deg');
+    }
+  }
+
+  function onMove(e: PointerEvent) {
+    if (!fine.matches || still.matches) return;
+
+    const target = e.target as Element | null;
+    const found = target?.closest?.('.tilt') as HTMLElement | null;
+
+    if (found !== card) {
+      clearCard();
+      if (found) {
+        card = found;
+        // Measured once on entry rather than per move: reading a rect forces
+        // layout, and doing that on every pointermove is the usual way this
+        // kind of effect becomes a jank source.
+        cardBox = found.getBoundingClientRect();
+        found.classList.add('is-tilting');
+      }
+    }
+
+    point = { x: e.clientX, y: e.clientY };
+    if (!queued) {
+      queued = true;
+      requestAnimationFrame(apply);
+    }
+  }
+
+  function measureHero() {
+    heroBox = hero ? hero.getBoundingClientRect() : null;
+  }
+
+  if (hero) {
+    measureHero();
+    addEventListener('scroll', measureHero, { passive: true });
+    addEventListener('resize', measureHero);
+  }
+
+  document.addEventListener('pointermove', onMove, { passive: true });
+  // A card scrolled out from under a stationary pointer keeps a stale rect.
+  addEventListener('scroll', clearCard, { passive: true });
+  document.addEventListener('pointerleave', clearCard);
+
+  // Honouring a mid-session change of the OS setting, not just its value at load.
+  still.addEventListener('change', () => {
+    if (still.matches) {
+      clearCard();
+      hero?.style.removeProperty('--hero-x');
+      hero?.style.removeProperty('--hero-y');
+    }
+  });
+</script>
