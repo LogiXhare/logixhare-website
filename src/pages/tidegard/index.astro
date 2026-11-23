@@ -9,7 +9,7 @@ import { url } from '../../lib/url';
 // when real, permitted ones exist, they belong in a section of their own.
 
 const facts = [
-  { value: 'IPFIX', label: 'flow collection, IPv4 and IPv6' },
+  { value: 'IPFIX + sFlow', label: 'flow collection, IPv4 and IPv6' },
   { value: '200k', label: 'flow records a second, no loss, under half a core' },
   { value: '5', label: 'alert channels: Telegram, Slack, Teams, email, webhook' },
   { value: 'RTBH + FlowSpec', label: 'BGP mitigation, with approval' },
@@ -60,7 +60,7 @@ const features = [
 
 const steps = [
   {
-    title: 'Routers export IPFIX',
+    title: 'Routers export IPFIX or sFlow',
     body: 'Your edge routers send sampled flow records to Tidegard. It never sits in the traffic path.',
   },
   {
@@ -145,7 +145,7 @@ const faqs = [
   },
   {
     q: 'Which routers does it work with?',
-    a: 'Any router that exports IPFIX (NetFlow v10). The docs have examples for MikroTik RouterOS 7, Cisco IOS XR and IOS XE, and Juniper MX. NetFlow v5/v9 and sFlow are not supported yet.',
+    a: 'Any router or switch that exports IPFIX (NetFlow v10) or sFlow version 5. The docs have IPFIX examples for MikroTik RouterOS 7, Cisco IOS XR and IOS XE, and Juniper MX, and sFlow examples for Cisco NX-OS, Arista EOS and Juniper EX and QFX. NetFlow v5/v9 are not supported yet.',
   },
   {
     q: 'Where does our data live?',
@@ -156,7 +156,7 @@ const faqs = [
 
 <BaseLayout
   title="Tidegard — DDoS detection and traffic monitoring"
-  description="Tidegard detects DDoS attacks from your routers' IPFIX flows, alerts your NOC, and mitigates with approved BGP blackhole and FlowSpec. Runs on your own server."
+  description="Tidegard detects DDoS attacks from your routers' IPFIX or sFlow data, alerts your NOC, and mitigates with approved BGP blackhole and FlowSpec. Runs on your own server."
 >
   <!-- ===================== HERO ===================== -->
   <section class="tg-hero">
@@ -182,7 +182,7 @@ const faqs = [
       <figure class="tg-diagram">
         <svg viewBox="0 0 460 380" role="img" aria-labelledby="tg-diagram-title">
           <title id="tg-diagram-title">
-            Routers export IPFIX to Tidegard, which detects attacks, alerts the NOC, and announces
+            Routers export IPFIX or sFlow to Tidegard, which detects attacks, alerts the NOC, and announces
             approved BGP mitigations back to the edge routers.
           </title>
           <defs>
@@ -211,9 +211,10 @@ const faqs = [
             <g class="d-step d-step-hot"><rect x="232" y="186" width="196" height="30" rx="8" /><text x="330" y="206">Incident + attack sample</text></g>
           </g>
 
-          <!-- IPFIX arrow -->
+          <!-- IPFIX / sFlow arrow -->
           <path d="M140 62 H206" class="d-line" marker-end="url(#tg-arrow)" />
-          <text x="173" y="54" class="d-label">IPFIX</text>
+          <text x="173" y="40" class="d-label">IPFIX</text>
+          <text x="173" y="54" class="d-label">sFlow</text>
 
           <!-- outputs -->
           <g class="d-box">

@@ -21,10 +21,11 @@ visibility and detection until it is back.
 
 ## Which routers work with it?
 
-Any router that exports **IPFIX**. [Router setup](../router-setup/) has
-examples for MikroTik RouterOS 7, Cisco IOS XR and IOS XE, and Juniper MX;
-most other current carrier and enterprise platforms can export IPFIX too.
-NetFlow v5 and v9 and sFlow are not supported yet.
+Any router or switch that exports **IPFIX** or **sFlow version 5**.
+[Router setup](../router-setup/) has IPFIX examples for MikroTik RouterOS 7,
+Cisco IOS XR and IOS XE, and Juniper MX, and sFlow examples for Cisco
+NX-OS, Arista EOS and Juniper EX and QFX. NetFlow v5 and v9 are not
+supported yet.
 
 ## How fast does it detect an attack?
 

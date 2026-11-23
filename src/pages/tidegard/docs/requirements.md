@@ -33,14 +33,15 @@ production deployment, not one shared with other workloads.
 | Port | Direction | For |
 |---|---|---|
 | UDP 2055 | From your routers to Tidegard | IPFIX. Allow only your exporters |
+| UDP 6343 | From your switches or routers to Tidegard | sFlow, when turned on. Allow only your agents |
 | TCP 8443 | From your NOC to Tidegard | The NOC web UI and the REST API, over HTTPS |
 | TCP 3000 | From your NOC to Grafana | Dashboards, if Grafana runs on the same host |
 | TCP 179 | Between `gobgpd` and your edge routers | iBGP, only when mitigation is turned on |
 | TCP 9090 to 9094 | Local only | Each service's Prometheus metrics and health checks |
 
 Keep the UI, the API and Grafana reachable only from your management
-network. IPFIX is unauthenticated UDP, so firewall port 2055 to your
-exporters' addresses as well as setting the allowlist in Tidegard.
+network. IPFIX and sFlow are unauthenticated UDP, so firewall ports 2055
+and 6343 to your exporters' addresses as well as setting the allowlist in Tidegard.
 
 ## Sizing
 

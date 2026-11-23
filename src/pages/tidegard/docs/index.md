@@ -6,7 +6,7 @@ description: Install Tidegard, point your routers at it, write detection policie
 
 Tidegard is a DDoS detection and network traffic monitoring platform for
 ISPs, hosting providers, data centres and enterprise networks. It reads
-IPFIX flow records from your routers, works out how much traffic every host
+IPFIX or sFlow from your routers and switches, works out how much traffic every host
 and network on your side is sending and receiving, and opens an incident
 when a threshold you set is crossed. From there your NOC acknowledges it,
 gets the alert on Telegram, Slack, Teams, email or a webhook, and, if it
@@ -31,7 +31,7 @@ approves.
 
 | Area | What you get |
 |---|---|
-| Flow collection | IPFIX (NetFlow v10) over UDP, IPv4 and IPv6, with sampling correction and an allowlist of exporters |
+| Flow collection | IPFIX (NetFlow v10) and sFlow version 5 over UDP, IPv4 and IPv6, with sampling correction and an allowlist of exporters |
 | Traffic analytics | Totals per host, network, hostgroup, ASN, exporter and interface, kept in ClickHouse |
 | Detection | Threshold policies in bits, packets and flows per second, per host, network, /24 or hostgroup, each way |
 | Attack samples | The first seconds of each attack: protocol mix, top sources and their ASNs, top ports, sample flow records |
