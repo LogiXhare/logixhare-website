@@ -15,11 +15,13 @@ There are two ways to install Tidegard. Both run the same five services.
 
 ## Get the release
 
-LogiXhare provides the release bundle for your version: the Compose stack,
-the installation packages for x86_64 and aarch64, and their checksums. The
-container images are published at `ghcr.io/logixhare/tidegard-<service>`
-for `collector`, `incident-manager`, `api`, `notifier` and `mitigator`,
-for amd64 and arm64.
+Tidegard is licensed software: you need a subscription agreement with
+LogiXhare before installing it. LogiXhare then provides the release bundle
+for your version: the Compose stack, the installation packages for x86_64
+and aarch64, and their checksums. It also issues registry credentials for
+the container images, `ghcr.io/logixhare/tidegard-<service>`, for
+`collector`, `incident-manager`, `api`, `notifier` and `mitigator`, for
+amd64 and arm64. Sign in with them (`docker login ghcr.io`) before pulling.
 
 ### Verify what you install
 
