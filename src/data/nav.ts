@@ -593,6 +593,7 @@ export interface NavLink {
 export const navItems: NavLink[] = [
   { href: '/', label: 'Home' },
   { href: '/services/', label: 'Services', mega: true },
+  { href: '/tidegard/', label: 'Tidegard' },
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'Contact' },
 ];
