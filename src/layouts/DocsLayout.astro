@@ -1,0 +1,613 @@
+---
+/**
+ * Layout for every Markdown page under src/pages/tidegard/docs/. Astro hands a
+ * Markdown page's layout its `frontmatter` and `headings`, so the "on this
+ * page" list is built from the document itself and can never drift from it.
+ *
+ * Links inside the Markdown are written relative ("../rtbh/"), never
+ * root-relative: Astro does not rewrite links in Markdown, and a "/tidegard/…"
+ * link would 404 on the /staging/ preview. Links generated here go through
+ * url() for the same reason.
+ */
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { docGroups, docOrder, docPath } from '../data/tidegard-docs';
+import { url } from '../lib/url';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  frontmatter: { title: string; description: string };
+  headings?: Heading[];
+}
+
+const { frontmatter, headings = [] } = Astro.props;
+
+// The page's slug, worked out from its URL with the base path removed, so it
+// matches on staging too.
+const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+const path = Astro.url.pathname.slice(base.length).replace(/\/+$/, '');
+const slug = path.replace(/^\/tidegard\/docs\/?/, '');
+
+const index = docOrder.findIndex((p) => p.slug === slug);
+const prev = index > 0 ? docOrder[index - 1] : undefined;
+const next = index >= 0 && index < docOrder.length - 1 ? docOrder[index + 1] : undefined;
+const group = docGroups.find((g) => g.pages.some((p) => p.slug === slug));
+
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout title={`${frontmatter.title} · Tidegard docs`} description={frontmatter.description}>
+  <div class="docs-top">
+    <div class="container docs-top-inner">
+      <a href={url('/tidegard/')} class="docs-product">
+        <span class="docs-product-mark" aria-hidden="true"><Icon name="shield" line /></span>
+        Tidegard
+      </a>
+      <span class="docs-top-sep" aria-hidden="true">/</span>
+      <a href={url('/tidegard/docs/')} class="docs-top-link">Documentation</a>
+      <a href={url('/contact/')} class="btn btn-primary docs-top-cta">Request a demo</a>
+    </div>
+  </div>
+
+  <div class="container docs-grid">
+    <aside class="docs-nav" aria-label="Documentation">
+      {/* A <details> so the menu folds away on a phone and stays open on a
+          desktop, where the script below keeps it open. */}
+      <details class="docs-nav-fold" id="docs-nav-fold" open>
+        <summary>
+          <span>Documentation menu</span>
+          <Icon name="chevron-down" class="docs-nav-chevron" />
+        </summary>
+        <nav>
+          {
+            docGroups.map((g) => (
+              <div class="docs-nav-group">
+                <p class="docs-nav-label">{g.label}</p>
+                <ul>
+                  {g.pages.map((p) => (
+                    <li>
+                      <a
+                        href={url(docPath(p.slug))}
+                        aria-current={p.slug === slug ? 'page' : undefined}
+                      >
+                        {p.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </nav>
+      </details>
+    </aside>
+
+    <article class="docs-article">
+      <header class="docs-head">
+        {group && <p class="eyebrow">{group.label}</p>}
+        <h1>{frontmatter.title}</h1>
+        <p class="docs-lede">{frontmatter.description}</p>
+      </header>
+
+      <div class="doc-prose">
+        <slot />
+      </div>
+
+      <nav class="docs-pager" aria-label="Previous and next page">
+        {
+          prev ? (
+            <a href={url(docPath(prev.slug))} class="pager-link pager-prev">
+              <small>Previous</small>
+              <span>{prev.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next && (
+            <a href={url(docPath(next.slug))} class="pager-link pager-next">
+              <small>Next</small>
+              <span>{next.title}</span>
+            </a>
+          )
+        }
+      </nav>
+
+      <aside class="docs-help card">
+        <div>
+          <h2>Need a hand with a deployment?</h2>
+          <p>
+            LogiXhare engineers install Tidegard, tune it on your traffic and train your NOC. Tell
+            us about your network.
+          </p>
+        </div>
+        <a href={url('/contact/')} class="btn btn-primary">Talk to us <Icon name="arrow-right" class="btn-icon" /></a>
+      </aside>
+    </article>
+
+    {
+      toc.length > 1 && (
+        <aside class="docs-toc" aria-label="On this page">
+          <p class="docs-nav-label">On this page</p>
+          <ul>
+            {toc.map((h) => (
+              <li class={h.depth === 3 ? 'toc-sub' : undefined}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  // Fold the menu on narrow screens only. Done once at load: a reader who
+  // opens it on a phone and then rotates the device keeps what they chose.
+  const fold = document.getElementById('docs-nav-fold') as HTMLDetailsElement | null;
+  if (fold && window.matchMedia('(max-width: 900px)').matches) fold.open = false;
+</script>
+
+<style>
+  .docs-top {
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-alt);
+  }
+
+  .docs-top-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-block: 0.7rem;
+    font-size: var(--text-sm);
+  }
+
+  .docs-product {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .docs-product-mark {
+    display: inline-flex;
+    color: var(--teal);
+  }
+
+  .docs-product-mark :global(svg) {
+    width: 20px;
+    height: 20px;
+  }
+
+  .docs-top-sep {
+    color: var(--text-soft);
+  }
+
+  .docs-top-link {
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .docs-top-link:hover,
+  .docs-product:hover {
+    color: var(--teal);
+  }
+
+  .docs-top-cta {
+    margin-left: auto;
+    padding: 0.55em 1.2em;
+  }
+
+  .docs-grid {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr) 200px;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding-block: 2.5rem 4.5rem;
+    align-items: start;
+  }
+
+  /* --- sidebar --- */
+
+  .docs-nav {
+    position: sticky;
+    top: 92px;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    padding-right: 0.25rem;
+  }
+
+  .docs-nav-fold summary {
+    display: none;
+  }
+
+  .docs-nav-group + .docs-nav-group {
+    margin-top: 1.4rem;
+  }
+
+  .docs-nav-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 0.45rem;
+  }
+
+  .docs-nav ul a {
+    display: block;
+    padding: 0.32rem 0.7rem;
+    margin-left: -0.7rem;
+    border-radius: 8px;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .docs-nav ul a:hover {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+
+  .docs-nav ul a[aria-current='page'] {
+    color: var(--teal);
+    background: var(--teal-wash);
+    font-weight: 700;
+  }
+
+  /* --- article --- */
+
+  .docs-article {
+    min-width: 0;
+  }
+
+  .docs-head {
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .docs-head h1 {
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 2.8rem);
+    margin-top: 0.6rem;
+  }
+
+  .docs-lede {
+    margin-top: 0.9rem;
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+
+  .docs-pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 3.5rem;
+  }
+
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    transition: border-color 0.18s ease;
+  }
+
+  .pager-link:hover {
+    border-color: var(--teal);
+  }
+
+  .pager-link small {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .pager-link span {
+    font-weight: 700;
+    color: var(--teal);
+  }
+
+  .pager-next {
+    text-align: right;
+    grid-column: 2;
+  }
+
+  .docs-help {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 1.5rem 1.6rem;
+  }
+
+  .docs-help h2 {
+    font-size: var(--text-lg);
+  }
+
+  .docs-help p {
+    margin-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    max-width: 52ch;
+  }
+
+  /* --- on this page --- */
+
+  .docs-toc {
+    position: sticky;
+    top: 92px;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+  }
+
+  .docs-toc a {
+    display: block;
+    padding: 0.22rem 0;
+    font-size: 0.86rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  .docs-toc a:hover {
+    color: var(--teal);
+  }
+
+  .docs-toc .toc-sub a {
+    padding-left: 0.85rem;
+    font-size: 0.82rem;
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1200px) {
+    .docs-grid {
+      grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .docs-toc {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .docs-grid {
+      grid-template-columns: minmax(0, 1fr);
+      padding-top: 1.25rem;
+    }
+
+    .docs-nav {
+      position: static;
+      max-height: none;
+      overflow: visible;
+      padding: 0;
+    }
+
+    .docs-nav-fold {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+    }
+
+    .docs-nav-fold summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .docs-nav-fold summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .docs-nav-fold :global(.docs-nav-chevron) {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .docs-nav-fold[open] :global(.docs-nav-chevron) {
+      transform: rotate(180deg);
+    }
+
+    .docs-nav-fold nav {
+      padding: 0 1rem 1rem 1.7rem;
+    }
+
+    .docs-help {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .docs-top-cta {
+      display: none;
+    }
+
+    .docs-pager {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pager-next {
+      grid-column: 1;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Prose for the Markdown body. Global because Astro's scoped styles never
+     reach rendered Markdown; every rule is anchored on .doc-prose so nothing
+     leaks into the rest of the site. */
+  .doc-prose {
+    color: var(--text-muted);
+    max-width: 76ch;
+  }
+
+  .doc-prose > * + * {
+    margin-top: 1.05rem;
+  }
+
+  .doc-prose h2 {
+    font-size: clamp(1.4rem, 1.25rem + 0.6vw, 1.75rem);
+    margin-top: 2.6rem;
+    padding-top: 0.4rem;
+    scroll-margin-top: 100px;
+  }
+
+  .doc-prose h3 {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    scroll-margin-top: 100px;
+  }
+
+  .doc-prose h4 {
+    font-size: 1.02rem;
+    margin-top: 1.5rem;
+  }
+
+  .doc-prose h2 + *,
+  .doc-prose h3 + *,
+  .doc-prose h4 + * {
+    margin-top: 0.7rem;
+  }
+
+  .doc-prose strong {
+    color: var(--text);
+  }
+
+  .doc-prose a {
+    color: var(--teal);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .doc-prose a:hover {
+    color: var(--teal-bright);
+  }
+
+  .doc-prose ul,
+  .doc-prose ol {
+    padding-left: 1.4rem;
+  }
+
+  .doc-prose ul {
+    list-style: disc;
+  }
+
+  .doc-prose ol {
+    list-style: decimal;
+  }
+
+  .doc-prose li + li {
+    margin-top: 0.4rem;
+  }
+
+  .doc-prose li::marker {
+    color: var(--teal);
+  }
+
+  .doc-prose li > ul,
+  .doc-prose li > ol {
+    margin-top: 0.4rem;
+  }
+
+  .doc-prose :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    padding: 0.12em 0.4em;
+    border-radius: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+
+  .doc-prose pre {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    padding: 1rem 1.15rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    overflow-x: auto;
+  }
+
+  .doc-prose blockquote {
+    margin-inline: 0;
+    padding: 0.9rem 1.15rem;
+    border-left: 3px solid var(--teal);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background: var(--teal-wash);
+    color: var(--text);
+  }
+
+  .doc-prose blockquote > * + * {
+    margin-top: 0.6rem;
+  }
+
+  /* Tables scroll inside themselves rather than widening the page. */
+  .doc-prose table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+
+  .doc-prose th,
+  .doc-prose td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .doc-prose th {
+    color: var(--text);
+    font-weight: 700;
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+
+  /* In a table a code span never breaks mid-word; the table scrolls instead. */
+  .doc-prose td code {
+    overflow-wrap: normal;
+    white-space: nowrap;
+  }
+
+  /* Prose columns keep a readable width on a phone; the table scrolls. */
+  .doc-prose td {
+    min-width: 6rem;
+  }
+
+  .doc-prose td:last-child {
+    min-width: 15rem;
+  }
+
+  .doc-prose hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin-block: 2.2rem;
+  }
+</style>

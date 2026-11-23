@@ -1,0 +1,964 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { url } from '../../lib/url';
+
+// Every claim on this page is backed by the product's own documentation or a
+// measurement written up there. No customer names, logos or testimonials:
+// when real, permitted ones exist, they belong in a section of their own.
+
+const facts = [
+  { value: 'IPFIX', label: 'flow collection, IPv4 and IPv6' },
+  { value: '200k', label: 'flow records a second, no loss, under half a core' },
+  { value: '5', label: 'alert channels: Telegram, Slack, Teams, email, webhook' },
+  { value: 'RTBH + FlowSpec', label: 'BGP mitigation, with approval' },
+];
+
+const features = [
+  {
+    icon: 'chart' as const,
+    title: 'Traffic analytics',
+    body: 'Inbound and outbound traffic per host, network, hostgroup, ASN, router and interface, kept in ClickHouse and shown in 19 Grafana dashboards.',
+  },
+  {
+    icon: 'zap' as const,
+    title: 'DDoS detection',
+    body: 'Thresholds in bits, packets and flows per second for each host, network, /24 or hostgroup, each way. The most specific policy wins.',
+  },
+  {
+    icon: 'search' as const,
+    title: 'Attack samples',
+    body: 'Every attack comes with its first seconds on record: protocol mix, top sources and their ASNs, top ports, and sample flows.',
+  },
+  {
+    icon: 'clipboard' as const,
+    title: 'Incident management',
+    body: 'One incident per attack, not a page of alerts. Seven states, notes, assignment, suppression, a timeline and a full audit trail.',
+  },
+  {
+    icon: 'chat' as const,
+    title: 'Alerts where your NOC is',
+    body: 'Telegram, Slack, Microsoft Teams, email and signed webhooks, routed by customer, event and severity, with storm protection.',
+  },
+  {
+    icon: 'shield' as const,
+    title: 'BGP mitigation',
+    body: 'Blackhole one address or a block, or drop and rate-limit only the attack with FlowSpec, through GoBGP to your edge routers.',
+  },
+  {
+    icon: 'monitor' as const,
+    title: 'NOC web UI',
+    body: 'Incidents, mitigations, the kill switch and live traffic in the browser, with four roles from read-only to NOC lead.',
+  },
+  {
+    icon: 'code' as const,
+    title: 'API and command line',
+    body: 'A REST API with an OpenAPI contract and the tidegardctl CLI, for ticketing, customer portals and your own automation.',
+  },
+];
+
+const steps = [
+  {
+    title: 'Routers export IPFIX',
+    body: 'Your edge routers send sampled flow records to Tidegard. It never sits in the traffic path.',
+  },
+  {
+    title: 'Tidegard measures and detects',
+    body: 'Flows are corrected for sampling, classified by direction, aggregated, and checked against your policies.',
+  },
+  {
+    title: 'The NOC is alerted',
+    body: 'An incident opens with the attack sample attached, and the people on call get it on their channel.',
+  },
+  {
+    title: 'The attack is mitigated',
+    body: 'A NOC lead approves a blackhole or FlowSpec rule, announced over iBGP, withdrawn when it expires.',
+  },
+];
+
+const guards = [
+  {
+    title: 'Four eyes',
+    body: 'One person requests a mitigation; a NOC lead approves it. Nobody approves their own request.',
+  },
+  {
+    title: 'Allowlist and floors',
+    body: 'Only your listed prefixes, each bound to one customer. Nothing wider than /24 by default, never wider than /16.',
+  },
+  {
+    title: 'Everything expires',
+    body: 'Every mitigation has an end time. Expiry withdraws the route; nothing is left announced by accident.',
+  },
+  {
+    title: 'Kill switch',
+    body: 'Any NOC lead can withdraw every live mitigation at once and block new ones until it is released.',
+  },
+  {
+    title: 'Dry-run first',
+    body: 'Installed with BGP off and in dry-run, then turned on in stages you can test in a maintenance window.',
+  },
+  {
+    title: 'Automatic, if you choose',
+    body: 'Blackhole attacks at night without waiting for anyone, on the prefixes you mark, capped per hour.',
+  },
+];
+
+const audiences = [
+  {
+    icon: 'network' as const,
+    title: 'ISPs and carriers',
+    body: 'Protect customer pools, CGNAT and upstream links with per-hostgroup thresholds and RTBH at your edge.',
+  },
+  {
+    icon: 'server' as const,
+    title: 'Hosting and data centres',
+    body: 'Spot the one server under attack in a rack of thousands, and drop only the attack with FlowSpec.',
+  },
+  {
+    icon: 'building' as const,
+    title: 'Enterprise networks',
+    body: 'See who your traffic talks to and catch floods on your public ranges before your upstream calls you.',
+  },
+  {
+    icon: 'users' as const,
+    title: 'Managed service providers',
+    body: 'Run one deployment for many customers, each a tenant with its own prefixes, people, alerts and allowlist.',
+  },
+];
+
+const service = [
+  { title: 'Pilot', body: 'Tidegard runs beside your current tooling on your real traffic, and we compare the results.' },
+  { title: 'Install', body: 'On your own server or VM, with TLS throughout and your routers connected.' },
+  { title: 'Tune', body: 'Thresholds and hostgroups set from your traffic, not a template, until false alarms stop.' },
+  { title: 'Train and support', body: 'Your NOC learns the workflow, and our engineers stay on call for it.' },
+];
+
+const faqs = [
+  {
+    q: 'Does Tidegard block attacks by itself?',
+    a: 'Only if you decide it should. Out of the box it detects and alerts, with BGP off. Mitigation is approved by a NOC lead, and automatic blackholing can be turned on per prefix, with limits.',
+  },
+  {
+    q: 'Does it sit in the traffic path?',
+    a: 'No. It reads flow records your routers export and mitigates through BGP announcements to your own routers. If the Tidegard host fails, your network keeps forwarding.',
+  },
+  {
+    q: 'Which routers does it work with?',
+    a: 'Any router that exports IPFIX (NetFlow v10). The docs have examples for MikroTik RouterOS 7, Cisco IOS XR and IOS XE, and Juniper MX. NetFlow v5/v9 and sFlow are not supported yet.',
+  },
+  {
+    q: 'Where does our data live?',
+    a: 'On your own server or virtual machine. Flow data, traffic history and incidents stay on it; nothing is sent to LogiXhare.',
+  },
+];
+---
+
+<BaseLayout
+  title="Tidegard — DDoS detection and traffic monitoring"
+  description="Tidegard detects DDoS attacks from your routers' IPFIX flows, alerts your NOC, and mitigates with approved BGP blackhole and FlowSpec. Runs on your own server."
+>
+  <!-- ===================== HERO ===================== -->
+  <section class="tg-hero">
+    <div class="tg-hero-grid" aria-hidden="true"></div>
+    <div class="container tg-hero-inner">
+      <div class="tg-hero-copy">
+        <p class="eyebrow">A LogiXhare product</p>
+        <h1>
+          <span class="tg-name">Tidegard</span>
+          <span class="tg-tagline">See every flow. Defend every network.</span>
+        </h1>
+        <p class="tg-hero-body">
+          DDoS detection and network traffic monitoring for ISPs, hosting providers, data centres
+          and enterprise networks. Tidegard reads your routers' flows, catches the attack, alerts your
+          NOC, and blackholes or filters it over BGP, with a person in control.
+        </p>
+        <div class="tg-hero-actions">
+          <a href={url('/contact/')} class="btn btn-primary">Request a demo <Icon name="arrow-right" class="btn-icon" /></a>
+          <a href={url('/tidegard/docs/')} class="btn btn-ghost tg-ghost">Read the documentation</a>
+        </div>
+      </div>
+
+      <figure class="tg-diagram">
+        <svg viewBox="0 0 460 380" role="img" aria-labelledby="tg-diagram-title">
+          <title id="tg-diagram-title">
+            Routers export IPFIX to Tidegard, which detects attacks, alerts the NOC, and announces
+            approved BGP mitigations back to the edge routers.
+          </title>
+          <defs>
+            <marker id="tg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 10 5 0 10z" fill="#2dc7c9" />
+            </marker>
+            <marker id="tg-arrow-warm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 10 5 0 10z" fill="#f0a35e" />
+            </marker>
+          </defs>
+
+          <!-- edge routers -->
+          <g class="d-box">
+            <rect x="12" y="40" width="128" height="58" rx="12" />
+            <text x="76" y="66" class="d-title">Edge routers</text>
+            <text x="76" y="84" class="d-sub">transit, peering, IX</text>
+          </g>
+
+          <!-- tidegard core -->
+          <g class="d-core">
+            <rect x="214" y="18" width="232" height="210" rx="16" />
+            <text x="330" y="46" class="d-title d-accent">Tidegard</text>
+            <g class="d-step"><rect x="232" y="60" width="196" height="34" rx="8" /><text x="330" y="82">Collect + correct sampling</text></g>
+            <g class="d-step"><rect x="232" y="102" width="196" height="34" rx="8" /><text x="330" y="124">Classify + aggregate</text></g>
+            <g class="d-step"><rect x="232" y="144" width="196" height="34" rx="8" /><text x="330" y="166">Detect against policies</text></g>
+            <g class="d-step d-step-hot"><rect x="232" y="186" width="196" height="30" rx="8" /><text x="330" y="206">Incident + attack sample</text></g>
+          </g>
+
+          <!-- IPFIX arrow -->
+          <path d="M140 62 H206" class="d-line" marker-end="url(#tg-arrow)" />
+          <text x="173" y="54" class="d-label">IPFIX</text>
+
+          <!-- outputs -->
+          <g class="d-box">
+            <rect x="214" y="270" width="106" height="58" rx="12" />
+            <text x="267" y="294" class="d-title">NOC</text>
+            <text x="267" y="312" class="d-sub">UI, API, CLI</text>
+          </g>
+          <g class="d-box">
+            <rect x="340" y="270" width="106" height="58" rx="12" />
+            <text x="393" y="294" class="d-title">Alerts</text>
+            <text x="393" y="312" class="d-sub">Telegram, mail…</text>
+          </g>
+          <path d="M267 228 V264" class="d-line" marker-end="url(#tg-arrow)" />
+          <path d="M393 228 V264" class="d-line" marker-end="url(#tg-arrow)" />
+
+          <!-- approved BGP back to the edge -->
+          <path d="M214 299 H120 Q76 299 76 255 V104" class="d-line d-warm" marker-end="url(#tg-arrow-warm)" />
+          <text x="20" y="200" class="d-label d-warm-text d-left">BGP</text>
+          <text x="20" y="216" class="d-label d-warm-text d-left">RTBH /</text>
+          <text x="20" y="232" class="d-label d-warm-text d-left">FlowSpec</text>
+          <text x="152" y="354" class="d-sub d-warm-text">approved by a NOC lead</text>
+        </svg>
+      </figure>
+    </div>
+
+    <div class="container">
+      <ul class="tg-facts">
+        {
+          facts.map((f) => (
+            <li>
+              <strong>{f.value}</strong>
+              <span>{f.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURES ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">What it does</p>
+        <h2>From the first flow to the withdrawn route</h2>
+        <p class="lede">
+          Everything a NOC needs to see an attack, decide what to do, and do it, in one product that
+          runs on your own server.
+        </p>
+      </div>
+
+      <div class="tg-features">
+        {
+          features.map((f) => (
+            <article class="card tilt tg-feature">
+              <span class="icon-tile">
+                <Icon name={f.icon} />
+              </span>
+              <h3>{f.title}</h3>
+              <p>{f.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">How it works</p>
+        <h2>Out of band, by design</h2>
+        <p class="lede">
+          Tidegard never forwards your customers' traffic. It reads what your routers already know,
+          and acts only through BGP announcements your routers choose to accept.
+        </p>
+      </div>
+      <ol class="tg-steps">
+        {
+          steps.map((s, i) => (
+            <li>
+              <span class="tg-step-num">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="tg-more">
+        <a href={url('/tidegard/docs/how-it-works/')}>How Tidegard works, in detail <Icon name="arrow-right" class="btn-icon" /></a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== SAFETY ===================== -->
+  <section class="section">
+    <div class="container tg-split">
+      <div class="section-head tg-split-head">
+        <p class="eyebrow">Mitigation you stay in control of</p>
+        <h2>A blackhole in the wrong place is an outage you caused</h2>
+        <p class="lede">
+          Automated blackholing protects a network until the day it drops a whole customer pool over
+          legitimate traffic. Tidegard puts guard rails around every announcement, and lets you decide
+          where automation is safe.
+        </p>
+        <a href={url('/tidegard/docs/mitigation/')} class="btn btn-ghost">Read the mitigation guide</a>
+      </div>
+      <ul class="tg-guards">
+        {
+          guards.map((g) => (
+            <li>
+              <span class="tg-guard-check" aria-hidden="true"><Icon name="check" line /></span>
+              <div>
+                <h3>{g.title}</h3>
+                <p>{g.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== PROOF ===================== -->
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Measured, not promised</p>
+        <h2>Tested on live ISP traffic and in the lab</h2>
+        <p class="lede">
+          Numbers we can show you how we got, including where they stop.
+        </p>
+      </div>
+      <div class="tg-proof">
+        <article class="card tg-proof-card">
+          <p class="tg-proof-figure">24 of 24</p>
+          <h3>attacks caught on a week of live ISP traffic</h3>
+          <p>
+            A week of a Bangladeshi ISP's real traffic was replayed against the bans raised by its
+            existing DDoS product, with the same thresholds. With a 40-second window Tidegard missed
+            none, and detected within a minute of the existing product, often earlier.
+          </p>
+        </article>
+        <article class="card tg-proof-card">
+          <p class="tg-proof-figure">200,000</p>
+          <h3>flow records a second, with no loss</h3>
+          <p>
+            The full collector, with detection and ClickHouse export, on a 4-core cloud machine: 13 MiB
+            of memory and 0.41 cores. Synthetic traffic, so a floor, not a promise for your hardware.
+          </p>
+        </article>
+        <article class="card tg-proof-card">
+          <p class="tg-proof-figure">5 hours</p>
+          <h3>soak, 900 million records</h3>
+          <p>
+            Five hours at 50,000 records a second lost none, and memory grew by 3.5%. Every release is
+            also tested end to end, from flows to a withdrawn BGP route.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHO FOR ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Who it is for</p>
+        <h2>Built for the networks that get attacked</h2>
+      </div>
+      <div class="tg-audiences">
+        {
+          audiences.map((a) => (
+            <article class="card tilt tg-audience">
+              <span class="icon-tile">
+                <Icon name={a.icon} />
+              </span>
+              <h3>{a.title}</h3>
+              <p>{a.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICE ===================== -->
+  <section class="section band">
+    <div class="container tg-split">
+      <div class="section-head tg-split-head">
+        <p class="eyebrow">Deployed with you</p>
+        <h2>We do not hand you a download link</h2>
+        <p class="lede">
+          A DDoS detector is only as good as its thresholds, and those come from your traffic.
+          LogiXhare engineers run each deployment with your team, from pilot to support.
+        </p>
+        <a href={url('/tidegard/docs/limitations/')} class="tg-limits-link">
+          Read what the current release does not do <Icon name="arrow-right" class="btn-icon" />
+        </a>
+      </div>
+      <ol class="tg-service">
+        {
+          service.map((s, i) => (
+            <li>
+              <span class="tg-step-num">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="section">
+    <div class="container tg-faq">
+      <div class="section-head">
+        <p class="eyebrow">Questions</p>
+        <h2>Before you ask</h2>
+        <p class="lede">
+          More in the <a href={url('/tidegard/docs/faq/')}>full FAQ</a>.
+        </p>
+      </div>
+      <div class="tg-faq-list">
+        {
+          faqs.map((f, i) => (
+            <details class="tg-faq-item" open={i === 0}>
+              <summary>
+                {f.q}
+                <Icon name="chevron-down" class="tg-faq-chevron" />
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="See it on your own traffic"
+    body="Tell us about your network and routers. We will set up a pilot beside what you run today, and show you what Tidegard sees."
+    primaryLabel="Request a demo"
+    secondaryHref="/tidegard/docs/"
+    secondaryLabel="Read the docs"
+  />
+</BaseLayout>
+
+<style>
+  /* --- hero: always dark, like the CTA band, so its tokens are local --- */
+  .tg-hero {
+    --text: #e9f2f7;
+    --text-muted: #a9bdd1;
+    --line: #1d3050;
+    --teal: #2dc7c9;
+    --teal-bright: #5ce6e8;
+    --on-accent: #04101d;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(1100px 520px at 80% 0%, rgba(45, 199, 201, 0.16), transparent 60%),
+      linear-gradient(180deg, #071223, #0a1629);
+    color: var(--text);
+    padding-block: clamp(3rem, 2rem + 4vw, 5.5rem) clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  }
+
+  .tg-hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(147, 169, 192, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(147, 169, 192, 0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(180deg, black, transparent 85%);
+    pointer-events: none;
+  }
+
+  .tg-hero-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+  }
+
+  .tg-hero h1 {
+    margin-top: 1rem;
+    color: var(--text);
+  }
+
+  .tg-name {
+    display: block;
+    font-size: clamp(2.8rem, 2rem + 4vw, 4.6rem);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .tg-tagline {
+    display: block;
+    margin-top: 0.8rem;
+    font-size: clamp(1.3rem, 1.05rem + 1.1vw, 1.85rem);
+    font-weight: 700;
+    color: var(--teal);
+  }
+
+  .tg-hero-body {
+    margin-top: 1.4rem;
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+    max-width: 56ch;
+  }
+
+  .tg-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: 2rem;
+  }
+
+  .tg-ghost {
+    color: var(--text);
+    border-color: rgba(233, 242, 247, 0.26);
+  }
+
+  .tg-ghost:hover {
+    color: var(--teal);
+    border-color: var(--teal);
+  }
+
+  /* --- diagram --- */
+  .tg-diagram {
+    margin: 0;
+  }
+
+  .tg-diagram svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .tg-diagram text {
+    font-family: var(--font-body);
+    text-anchor: middle;
+    fill: #c9d8e6;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .tg-diagram .d-title {
+    fill: #e9f2f7;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .tg-diagram .d-accent {
+    fill: #2dc7c9;
+    font-size: 16px;
+  }
+
+  .tg-diagram .d-sub {
+    fill: #8fa6bd;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .tg-diagram .d-label {
+    fill: #2dc7c9;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .tg-diagram .d-warm-text {
+    fill: #f0a35e;
+  }
+
+  .tg-diagram .d-left {
+    text-anchor: start;
+  }
+
+  .d-box rect {
+    fill: #0f1f36;
+    stroke: #2a4366;
+  }
+
+  .d-core > rect {
+    fill: rgba(45, 199, 201, 0.06);
+    stroke: rgba(45, 199, 201, 0.55);
+    stroke-dasharray: 5 4;
+  }
+
+  .d-step rect {
+    fill: #11233d;
+    stroke: #23406a;
+  }
+
+  .d-step-hot rect {
+    fill: rgba(240, 163, 94, 0.12);
+    stroke: rgba(240, 163, 94, 0.6);
+  }
+
+  .d-line {
+    fill: none;
+    stroke: #2dc7c9;
+    stroke-width: 2;
+  }
+
+  .d-warm {
+    stroke: #f0a35e;
+    stroke-dasharray: 6 5;
+  }
+
+  /* --- facts strip --- */
+  .tg-facts {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--line);
+  }
+
+  .tg-facts li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.1rem 1.25rem;
+    background: rgba(10, 22, 41, 0.92);
+  }
+
+  .tg-facts strong {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--teal);
+    line-height: 1.2;
+  }
+
+  .tg-facts span {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  /* --- features --- */
+  .tg-features {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .tg-feature,
+  .tg-audience {
+    padding: 1.6rem 1.5rem;
+  }
+
+  .tg-feature h3,
+  .tg-audience h3 {
+    margin-top: 1.1rem;
+    font-size: 1.15rem;
+  }
+
+  .tg-feature p,
+  .tg-audience p {
+    margin-top: 0.55rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  /* --- steps --- */
+  .tg-steps,
+  .tg-service {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tg-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .tg-steps li {
+    padding-top: 1.2rem;
+    border-top: 2px solid var(--teal);
+  }
+
+  .tg-step-num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--teal);
+    letter-spacing: 0.1em;
+  }
+
+  .tg-steps h3,
+  .tg-service h3 {
+    margin-top: 0.5rem;
+    font-size: 1.15rem;
+  }
+
+  .tg-steps p,
+  .tg-service p {
+    margin-top: 0.45rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .tg-more {
+    margin-top: 2.25rem;
+  }
+
+  .tg-more a,
+  .tg-limits-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--teal);
+    font-weight: 700;
+  }
+
+  .tg-limits-link {
+    margin-top: 0.4rem;
+  }
+
+  /* --- split sections --- */
+  .tg-split {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .tg-split-head {
+    margin-bottom: 0;
+  }
+
+  .tg-split-head .btn {
+    margin-top: 1.6rem;
+  }
+
+  .tg-guards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1.75rem;
+  }
+
+  .tg-guards li {
+    display: flex;
+    gap: 0.85rem;
+  }
+
+  .tg-guard-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--teal-wash);
+    color: var(--teal);
+  }
+
+  .tg-guard-check :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .tg-guards h3 {
+    font-size: 1.05rem;
+  }
+
+  .tg-guards p {
+    margin-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  /* --- proof --- */
+  .tg-proof {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .tg-proof-card {
+    padding: 1.75rem 1.6rem;
+  }
+
+  .tg-proof-figure {
+    font-size: clamp(2rem, 1.6rem + 1.4vw, 2.6rem);
+    font-weight: 800;
+    color: var(--teal);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .tg-proof-card h3 {
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .tg-proof-card p:last-child {
+    margin-top: 0.75rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  /* --- audiences --- */
+  .tg-audiences {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* --- service --- */
+  .tg-service {
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .tg-service li {
+    display: flex;
+    gap: 1.1rem;
+    padding: 1.2rem 1.35rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
+
+  .tg-service .tg-step-num {
+    padding-top: 0.6rem;
+  }
+
+  .tg-service h3 {
+    margin-top: 0.25rem;
+  }
+
+  /* --- faq --- */
+  .tg-faq {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .tg-faq .section-head {
+    margin-bottom: 0;
+  }
+
+  .tg-faq .lede a {
+    color: var(--teal);
+    font-weight: 700;
+  }
+
+  .tg-faq-list {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .tg-faq-item {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    padding: 0 1.3rem;
+  }
+
+  .tg-faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .tg-faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .tg-faq-item :global(.tg-faq-chevron) {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .tg-faq-item[open] :global(.tg-faq-chevron) {
+    transform: rotate(180deg);
+  }
+
+  .tg-faq-item p {
+    padding-bottom: 1.15rem;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  /* --- responsive --- */
+  @media (max-width: 1080px) {
+    .tg-features,
+    .tg-audiences {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tg-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .tg-hero-inner,
+    .tg-split,
+    .tg-faq {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tg-diagram {
+      max-width: 520px;
+    }
+
+    .tg-facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tg-proof {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .tg-features,
+    .tg-audiences,
+    .tg-steps,
+    .tg-guards,
+    .tg-facts {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
