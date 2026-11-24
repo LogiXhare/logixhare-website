@@ -11,7 +11,16 @@
  */
 const BASE = import.meta.env.BASE_URL.replace(/\/+$/, '');
 
+/**
+ * The host serves public/ files with a ten-year max-age, and public/ names are
+ * not hashed, so a browser that saw the old logo keeps showing it. Images get
+ * this version appended; bump it whenever a file in public/ is replaced in place.
+ */
+export const ASSET_VERSION = '20261124';
+const VERSIONED = /\.(png|jpe?g|svg|webp|gif|ico)$/i;
+
 export function url(path: string): string {
   if (!path.startsWith('/')) return path;
-  return `${BASE}${path}` || '/';
+  const v = VERSIONED.test(path) ? `?v=${ASSET_VERSION}` : '';
+  return `${BASE}${path}${v}` || '/';
 }
