@@ -10,7 +10,7 @@ Tidegard is five small services and two databases, all on one host.
 
 | Service | What it does |
 |---|---|
-| `tidegard-collector` | Receives IPFIX from your routers, decodes it, classifies each flow by direction, aggregates traffic and runs detection |
+| `tidegard-collector` | Receives IPFIX or sFlow from your routers, decodes it, classifies each flow by direction, aggregates traffic and runs detection |
 | `tidegard-incident-manager` | Turns detections into incidents, runs their timers, and applies retention |
 | `tidegard-api` | The HTTPS REST API, and the server for the NOC web UI |
 | `tidegard-notifier` | Sends alerts to Telegram, Slack, Teams, email and webhooks |
@@ -26,8 +26,8 @@ unprivileged users.
 
 ## From a flow to an incident
 
-1. **Your router exports IPFIX** to the collector on UDP port 2055. Flows
-   from an address that is not on the exporter allowlist are refused and
+1. **Your router exports IPFIX** to the collector on UDP port 2055, or
+   sFlow on 6343. Flows from an address that is not on the exporter allowlist are refused and
    counted.
 2. **The collector decodes and corrects for sampling.** It learns each
    exporter's templates and sampling rate, and multiplies sampled counters

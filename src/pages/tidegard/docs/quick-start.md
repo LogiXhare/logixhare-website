@@ -6,7 +6,8 @@ description: From a fresh Docker Compose install to signing in, receiving your f
 
 This walks through the [Docker Compose installation](../installation/) on
 one host. You need the stack started, `docker compose ps` showing every
-service healthy, and a router that can export IPFIX to this host.
+service healthy, and a router or switch that can export IPFIX or sFlow to
+this host.
 
 ## 1. Create your first sign-in token
 
@@ -31,8 +32,9 @@ sign in. The UI opens on the Overview page.
 
 ## 3. Send flows
 
-Point your router's IPFIX exporter at this host, UDP port 2055. Make sure
-its source address is in `TIDEGARD_ALLOWED_EXPORTERS`.
+Point your router's IPFIX exporter at this host, UDP port 2055, or an sFlow
+agent at UDP 6343 after [turning sFlow on](../router-setup/#turn-it-on). Make
+sure its source address is in `TIDEGARD_ALLOWED_EXPORTERS`.
 [Router setup](../router-setup/) has examples for common platforms.
 
 Within a minute the counters move:

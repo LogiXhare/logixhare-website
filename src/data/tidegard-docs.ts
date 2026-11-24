@@ -33,7 +33,7 @@ export const docGroups: DocGroup[] = [
   {
     label: 'Collecting traffic',
     pages: [
-      { slug: 'router-setup', title: 'Router setup (IPFIX)' },
+      { slug: 'router-setup', title: 'Router setup (IPFIX, sFlow)' },
       { slug: 'prefixes-and-hostgroups', title: 'Prefixes and hostgroups' },
     ],
   },

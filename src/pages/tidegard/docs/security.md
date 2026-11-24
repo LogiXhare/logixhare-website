@@ -39,12 +39,12 @@ they forward traffic. It is built on that assumption.
 
 ## Facing the network
 
-- **Exporter allowlist.** The collector accepts IPFIX only from the routers
-  you list, and counts what it refuses.
+- **Exporter allowlist.** The collector accepts IPFIX and sFlow only from
+  the routers and switches you list, and counts what it refuses.
 - **Bounded memory.** Every table the collector keeps has a limit: exporters,
   templates, hosts, networks, ASNs and detection scopes. A flood of new
   addresses cannot exhaust it.
-- **Fuzzed decoder.** The IPFIX decoder is fuzz-tested, and every malformed
+- **Fuzzed decoders.** The IPFIX and sFlow decoders are fuzz-tested, and every malformed
   input found becomes a permanent test.
 - **Mitigation guard.** An allowlist per tenant, prefix floors that the
   configuration cannot override, time limits, four-eyes approval and a kill

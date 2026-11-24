@@ -9,9 +9,9 @@ these is a known critical or high security issue.
 
 ## By design in the current release
 
-- **IPFIX only.** The collector decodes IPFIX (NetFlow v10). NetFlow v5 and
-  v9 and sFlow are not supported yet. Most current carrier and enterprise
-  routers can export IPFIX.
+- **IPFIX and sFlow only.** The collector decodes IPFIX (NetFlow v10) and
+  sFlow version 5. NetFlow v5 and v9 are not supported yet. Most current
+  carrier and enterprise routers can export IPFIX, and most switches sFlow.
 - **One node.** Every service runs on one host, against one PostgreSQL and
   one ClickHouse. There is no clustering or automatic failover between
   hosts; a lost host is rebuilt from backups. Two mitigators can run as
@@ -28,8 +28,8 @@ these is a known critical or high security issue.
 - **FlowSpec redirect** (to a VRF or a scrubbing next hop) is not offered;
   discard and rate limit are.
 - **One sampling rate for routers that do not report theirs.** A router that
-  sends its rate in IPFIX options is corrected automatically; for the rest,
-  one global rate applies.
+  sends its rate in IPFIX options is corrected automatically, and every
+  sFlow sample carries its own rate; for the rest, one global rate applies.
 
 ## Multi-tenancy
 
