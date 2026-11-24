@@ -18,8 +18,8 @@
 const T = '#79b2d6'; // top
 const L = '#4783b0'; // left
 const R = '#28597a'; // right
-const A = '#2dc7c9'; // accent
-const A2 = '#8ff0f1'; // bright accent
+const A = '#61c0e0'; // accent
+const A2 = '#b5e3f4'; // bright accent
 
 export const isoIconPaths = {
   /* --- service categories --- */

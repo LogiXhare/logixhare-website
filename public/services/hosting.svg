@@ -13,8 +13,8 @@
       <stop offset="0" stop-color="#112436"/><stop offset="1" stop-color="#0a1a29"/>
     </linearGradient>
     <radialGradient id="pool" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#2dc7c9" stop-opacity=".2"/>
-      <stop offset="1" stop-color="#2dc7c9" stop-opacity="0"/>
+      <stop offset="0" stop-color="#61c0e0" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#61c0e0" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="shadow" cx=".5" cy=".5" r=".5">
       <stop offset="0" stop-color="#04101b" stop-opacity=".75"/>
@@ -32,7 +32,7 @@
 
   <!-- raised floor -->
   <polygon points="320,110 620,284 320,458 20,284" fill="#0a1b2b" opacity=".55"/>
-  <g stroke="#2dc7c9" stroke-opacity=".12" stroke-width="1">
+  <g stroke="#61c0e0" stroke-opacity=".12" stroke-width="1">
     <path d="M170 197L470 371M245 154L545 328"/>
     <path d="M470 197L170 371M545 154L245 328"/>
   </g>
@@ -63,7 +63,7 @@
           <rect x="-46" y="-47" width="32" height="3" rx="1.5"/>
           <rect x="-46" y="-25" width="32" height="3" rx="1.5"/>
         </g>
-        <g fill="#2dc7c9">
+        <g fill="#61c0e0">
           <circle cx="-62" cy="-108" r="3.4" class="b"/>
           <circle cx="-62" cy="-86" r="3.4" class="b b2"/>
           <circle cx="-62" cy="-64" r="3.4" opacity=".55"/>
@@ -88,8 +88,8 @@
       </g>
     </g>
 
-    <polyline points="0,-186 78,-141 78,-45" fill="none" stroke="#2dc7c9" stroke-opacity=".3" stroke-width="1.2"/>
-    <polyline points="0,-186 -78,-141 -78,-45" fill="none" stroke="#2dc7c9" stroke-opacity=".18" stroke-width="1.2"/>
+    <polyline points="0,-186 78,-141 78,-45" fill="none" stroke="#61c0e0" stroke-opacity=".3" stroke-width="1.2"/>
+    <polyline points="0,-186 -78,-141 -78,-45" fill="none" stroke="#61c0e0" stroke-opacity=".18" stroke-width="1.2"/>
   </g>
 
   <!-- ===== uplink switch ===== -->
@@ -99,18 +99,18 @@
     <polygon points="-52,24 0,54 0,84 -52,54" fill="url(#fLeft)"/>
     <polygon points="0,54 52,24 52,54 0,84" fill="url(#fRight)"/>
     <g clip-path="url(#swL)">
-      <g transform="skewY(-30)" fill="#2dc7c9">
+      <g transform="skewY(-30)" fill="#61c0e0">
         <rect x="-44" y="44" width="8" height="4" rx="2" class="b b2"/>
         <rect x="-31" y="44" width="8" height="4" rx="2" opacity=".6"/>
         <rect x="-18" y="44" width="8" height="4" rx="2" class="b"/>
         <rect x="-5" y="44" width="8" height="4" rx="2" opacity=".75"/>
       </g>
     </g>
-    <polyline points="0,-6 52,24 52,54" fill="none" stroke="#2dc7c9" stroke-opacity=".25" stroke-width="1.2"/>
+    <polyline points="0,-6 52,24 52,54" fill="none" stroke="#61c0e0" stroke-opacity=".25" stroke-width="1.2"/>
   </g>
 
   <!-- patch cables -->
-  <g fill="none" stroke="#2dc7c9" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round">
+  <g fill="none" stroke="#61c0e0" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round">
     <path d="M330 206q54 6 74 36"/>
     <path d="M330 220q58 10 76 38" stroke-opacity=".28"/>
   </g>

@@ -27,16 +27,16 @@
      contrast on a light ground. */
 
   /* ground & surfaces */
-  --bg: #f4f8fb;           /* page ground */
-  --bg-alt: #ffffff;       /* alternating bands, footer */
+  --bg: #ffffff;           /* page ground */
+  --bg-alt: #f6f8fc;       /* alternating bands, footer */
   --surface: #ffffff;      /* cards, panels */
   --surface-2: #eef4f9;    /* raised / hover state */
 
   /* accent */
-  --teal: #12878c;         /* darkened: the bright teal is unreadable on white */
-  --teal-bright: #0d6f74;  /* hover goes darker here, not lighter */
-  --teal-deep: #0a5c60;
-  --teal-wash: rgba(18, 135, 140, 0.09);
+  --teal: #3b4f9e;         /* logo indigo: the logo sky-blue is unreadable on white */
+  --teal-bright: #2f3f85;  /* hover goes darker here, not lighter */
+  --teal-deep: #26336d;
+  --teal-wash: rgba(59, 79, 158, 0.09);
   /* Text placed ON the teal accent. Theme-specific: this theme's accent is
      dark enough for white, the dark theme's is bright and takes dark text. */
   --on-accent: #ffffff;
@@ -50,19 +50,19 @@
   --line: #dbe5ee;
   --line-soft: rgba(15, 32, 56, 0.09);
   --grid-line: rgba(15, 32, 56, 0.045);       /* hero graph-paper overlay */
-  --header-bg: rgba(244, 248, 251, 0.88);     /* sticky header, over blur */
+  --header-bg: rgba(255, 255, 255, 0.9);     /* sticky header, over blur */
 
   --shadow-card: 0 1px 2px rgba(15, 32, 56, 0.06), 0 16px 34px -22px rgba(15, 32, 56, 0.3);
-  --shadow-lift: 0 10px 26px -12px rgba(23, 149, 154, 0.45);
+  --shadow-lift: 0 10px 26px -12px rgba(59, 79, 158, 0.45);
 
   /* Icon chips. Deliberately NOT redefined for dark: the isometric icons carry
      fixed face tones, so their ground has to stay the same in both themes or
      the art would need two variants. Declared here so every chip — menus,
      cards, tiles — is changed from one place. */
   --chip-bg: linear-gradient(158deg, #122c45, #07131f);
-  --chip-line: rgba(45, 199, 201, 0.26);
-  --chip-ink: #2dc7c9;
-  --chip-inset: inset 0 1px 0 rgba(125, 232, 233, 0.18);
+  --chip-line: rgba(97, 192, 224, 0.26);
+  --chip-ink: #61c0e0;
+  --chip-inset: inset 0 1px 0 rgba(163, 219, 240, 0.18);
 
   /* --- type --- */
   --font-display: 'Manrope', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -93,10 +93,10 @@
   --surface: #101d33;
   --surface-2: #16263f;
 
-  --teal: #2dc7c9;
-  --teal-bright: #5ce6e8;
-  --teal-deep: #1a9fa1;
-  --teal-wash: rgba(45, 199, 201, 0.1);
+  --teal: #61c0e0;
+  --teal-bright: #8fd3ee;
+  --teal-deep: #3d9cc4;
+  --teal-wash: rgba(97, 192, 224, 0.1);
   --on-accent: #04101d;    /* the dark-theme accent is bright, so dark text */
 
   --text: #e9f2f7;
@@ -109,7 +109,7 @@
   --header-bg: rgba(6, 13, 24, 0.86);
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 40px -24px rgba(0, 0, 0, 0.85);
-  --shadow-lift: 0 10px 30px -12px rgba(45, 199, 201, 0.45);
+  --shadow-lift: 0 10px 30px -12px rgba(97, 192, 224, 0.45);
 }
 
 *,
@@ -266,7 +266,7 @@ button {
   height: 7px;
   border-radius: 50%;
   background: var(--teal);
-  box-shadow: 0 0 0 4px rgba(45, 199, 201, 0.18);
+  box-shadow: 0 0 0 4px rgba(97, 192, 224, 0.18);
   flex-shrink: 0;
 }
 
