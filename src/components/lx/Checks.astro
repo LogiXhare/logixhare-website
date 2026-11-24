@@ -1,0 +1,9 @@
+---
+import Icon from '../Icon.astro';
+interface Props { items: string[]; }
+const { items } = Astro.props;
+---
+
+<ul class="lx-checks">
+  {items.map((t) => (<li><Icon name="check" line /> <span>{t}</span></li>))}
+</ul>

@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import PageIntro from '../../components/lx/PageIntro.astro';
+import VentureCard from '../../components/lx/VentureCard.astro';
+import { ventures } from '../../data/ventures';
+import '../../styles/pages.css';
+
+const order = ['Live', 'In pilot', 'On request', 'Coming soon'];
+const sorted = [...ventures].sort((a, b) => order.indexOf(a.status) - order.indexOf(b.status));
+---
+
+<BaseLayout
+  title="Our Ventures"
+  description="LogiXhare's own products: ISP Billing & NOC, Tidegard DDoS detection, Amar Voice Bangla AI calls, SyncGPT, LogiXhare POS, industry chatbots and the Onekle super app."
+>
+  <PageIntro
+    eyebrow="Our ventures"
+    title="Products we build, run and stand behind"
+    lede="Besides building for clients, LogiXhare builds its own products for Bangladesh — from ISP billing and network security to Bangla AI that talks on the phone. Each one is shown with its honest status."
+  />
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="lx-grid lx-grid-3">
+        {sorted.map((v) => <VentureCard venture={v} full />)}
+      </div>
+      <p class="lx-note">
+        <span class="lx-status" data-status="Live">Live</span> in use today ·
+        <span class="lx-status" data-status="In pilot">In pilot</span> with selected businesses ·
+        <span class="lx-status" data-status="On request">On request</span> set up for each client ·
+        <span class="lx-status" data-status="Coming soon">Coming soon</span> in development
+      </p>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Want one of these for your business?"
+    body="Book a demo, or tell us what you need and we will show you the product that fits — or build it."
+    primaryLabel="Book a demo"
+    secondaryHref="/industries/"
+    secondaryLabel="Browse by industry"
+  />
+</BaseLayout>

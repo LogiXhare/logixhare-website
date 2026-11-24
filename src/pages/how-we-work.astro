@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import PageIntro from '../components/lx/PageIntro.astro';
+import Steps from '../components/lx/Steps.astro';
+import Checks from '../components/lx/Checks.astro';
+import Faq from '../components/lx/Faq.astro';
+import { deliverySteps, engagementModels, promises, buildVsBuy } from '../data/company';
+import '../styles/pages.css';
+
+const faqs = [
+  { q: 'Do we own the source code?', a: 'For a custom build, yes — the code, data and credentials are handed over in writing. For our ready products you get a licence and your data stays yours.' },
+  { q: 'Can we start small?', a: 'Yes. Most clients start with one module or one product, and grow from there.' },
+  { q: 'Do you work outside Dhaka?', a: 'Yes. Most work is remote, and we travel for on-site network and installation work across Bangladesh.' },
+  { q: 'How do you price?', a: 'A fixed price for a defined project, a monthly fee for products and managed services, or a monthly rate for a dedicated team.' },
+];
+---
+
+<BaseLayout title="How We Work" description="How LogiXhare Technologies runs projects: understand, plan and quote, build in weekly steps, launch and support — with fixed-scope, product, dedicated-team and managed-service options.">
+  <PageIntro
+    eyebrow="How we work"
+    title="No surprises, from first call to go-live"
+    lede="We show working software every week, write down what we agreed, and hand over everything you paid for. Here is how a project with LogiXhare runs."
+  />
+
+  <section class="section" style="padding-top:0">
+    <div class="container"><Steps steps={deliverySteps} /></div>
+  </section>
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Engagement models</p>
+        <h2>Four ways to work with us</h2>
+      </div>
+      <div class="lx-grid lx-grid-4">
+        {engagementModels.map((m) => (<article class="lx-card card"><span class="lx-chip"><Icon name={m.icon} /></span><h3>{m.title}</h3><p>{m.body}</p></article>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container lx-split">
+      <div>
+        <p class="eyebrow">Our promises</p>
+        <h2 style="margin-top:.7rem">On every project</h2>
+        <div style="margin-top:1.5rem"><Checks items={promises} /></div>
+      </div>
+      <div>
+        <div class="lx-panel card"><h3>A ready product fits when…</h3><Checks items={buildVsBuy.ready} /></div>
+        <div class="lx-panel card"><h3>A custom build fits when…</h3><Checks items={buildVsBuy.custom} /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head"><p class="eyebrow">FAQ</p><h2>Common questions</h2></div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <CtaBand heading="Ready to talk?" body="A short call is enough for us to tell you how we would approach it and roughly what it costs." secondaryHref="/technologies/" secondaryLabel="Technologies we use" />
+</BaseLayout>

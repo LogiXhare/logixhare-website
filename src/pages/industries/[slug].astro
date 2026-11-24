@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import PageIntro from '../../components/lx/PageIntro.astro';
+import VentureCard from '../../components/lx/VentureCard.astro';
+import Steps from '../../components/lx/Steps.astro';
+import Faq from '../../components/lx/Faq.astro';
+import { industries, type Industry } from '../../data/industries';
+import { ventureBySlug } from '../../data/ventures';
+import { serviceCategories } from '../../data/nav';
+import { deliverySteps } from '../../data/company';
+import { url } from '../../lib/url';
+import '../../styles/pages.css';
+
+export function getStaticPaths() {
+  return industries.map((industry) => ({ params: { slug: industry.slug }, props: { industry } }));
+}
+
+const { industry } = Astro.props as { industry: Industry };
+
+// Fail the build, not the page, if the data points at something that is gone.
+const ventures = industry.ventures.map((s) => {
+  const v = ventureBySlug(s);
+  if (!v) throw new Error(`industries.ts: ${industry.slug} lists unknown venture "${s}"`);
+  return v;
+});
+const services = industry.services.map((id) => {
+  const c = serviceCategories.find((c) => c.id === id);
+  if (!c) throw new Error(`industries.ts: ${industry.slug} lists unknown service "${id}"`);
+  return c;
+});
+const others = industries.filter((i) => i.slug !== industry.slug);
+
+const faqs = [
+  ...industry.faqs,
+  { q: 'How long does a project take?', a: 'A ready product can be live in a few weeks. A custom system usually takes two to four months, delivered in steps you can use along the way.' },
+  { q: 'What does it cost?', a: 'It depends on scope. After a short call we send a written quote — a fixed price for a project, or a monthly fee for a product or managed service.' },
+  { q: 'Do you support it after launch?', a: 'Yes. Every system comes with support, and we can run it for you under a written SLA.' },
+];
+---
+
+<BaseLayout
+  title={`${industry.title} — Technology Solutions`}
+  description={`${industry.short} LogiXhare Technologies builds and runs technology for ${industry.title} in Bangladesh.`}
+>
+  <PageIntro
+    eyebrow="Industries"
+    icon={industry.icon}
+    title={`Technology for ${industry.title}`}
+    lede={industry.intro}
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }]}
+  >
+    <div class="lx-intro-actions">
+      <a href={url('/contact/')} class="btn btn-primary">Talk to us <Icon name="arrow-right" class="btn-icon" /></a>
+      <a href="#solutions" class="btn btn-ghost">See solutions</a>
+    </div>
+    <div class="lx-pills" aria-label="Who this is for">
+      {industry.segments.map((s) => <span class="lx-pill">{s}</span>)}
+    </div>
+  </PageIntro>
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">The problem</p>
+        <h2>What usually goes wrong</h2>
+      </div>
+      <div class="lx-problems">
+        {industry.challenges.map((c, i) => (<div class="lx-problem"><b>{String(i + 1).padStart(2, '0')}</b><span>{c}</span></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="solutions">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">How we help</p>
+        <h2>What we build for {industry.title}</h2>
+      </div>
+      <div class="lx-grid lx-grid-3">
+        {
+          industry.solutions.map((s) => (
+            <article class="lx-card card tilt">
+              <div class="lx-card-head">
+                <span class="lx-chip"><Icon name={s.icon} /></span>
+                <h3>{s.title}</h3>
+              </div>
+              <p>{s.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Our ventures</p>
+        <h2>Products already built for this</h2>
+        <p class="lede">LogiXhare products you can start with today, set up for your organisation.</p>
+      </div>
+      <div class="lx-grid lx-grid-3">
+        {ventures.map((v) => <VentureCard venture={v} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Services</p>
+        <h2>Services behind it</h2>
+      </div>
+      <div class="lx-pills">
+        {
+          services.map((c) => (
+            <a class="lx-pill" href={url(`/services/${c.id}/`)}>
+              <Icon name={c.icon} line /> {c.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">How we work</p>
+        <h2>From first call to go-live</h2>
+      </div>
+      <Steps steps={deliverySteps} />
+      <p class="lx-note"><a href={url('/how-we-work/')}>More about how we work →</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">FAQ</p>
+        <h2>Questions we hear from {industry.title}</h2>
+      </div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Other industries</p>
+        <h2>We also work with</h2>
+      </div>
+      <div class="lx-pills">
+        {others.map((o) => (<a class="lx-pill" href={url(`/industries/${o.slug}/`)}><Icon name={o.icon} line /> {o.title}</a>))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Tell us what slows your team down"
+    body={`We will come back with a plan for your ${industry.title} business and a written quote.`}
+    secondaryHref="/industries/"
+    secondaryLabel="All industries"
+  />
+</BaseLayout>

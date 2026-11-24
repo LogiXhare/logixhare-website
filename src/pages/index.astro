@@ -4,6 +4,11 @@ import ServiceCard from '../components/ServiceCard.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 import { serviceCategories } from '../data/nav';
+import { industries } from '../data/industries';
+import { ventures } from '../data/ventures';
+import IndustryCard from '../components/lx/IndustryCard.astro';
+import VentureCard from '../components/lx/VentureCard.astro';
+import '../styles/pages.css';
 import { url } from '../lib/url';
 
 // Counted rather than written down, so the figure can't go stale when the
@@ -19,6 +24,18 @@ const artFor = new Map(serviceCategories.map((cat) => [cat.id, cat]));
 // than one line of work introduces itself. Copy is deliberately concrete.
 const slides = [
   {
+    eyebrow: 'Modern tech solutions',
+    art: 'network',
+    heading: 'Technology for every industry in Bangladesh',
+    body: 'Software, AI, networks and hosting — built around how your industry really works, plus our own products for ISPs, retail, healthcare and more.',
+  },
+  {
+    eyebrow: 'AI & automation',
+    art: 'software',
+    heading: 'AI that speaks Bangla and does real work',
+    body: 'Chatbots on WhatsApp and Messenger, voice agents that make reminder calls, and a private AI workspace for your team.',
+  },
+  {
     eyebrow: 'Managed web hosting',
     art: 'hosting',
     heading: 'Hosting you never have to chase support about',
@@ -29,18 +46,6 @@ const slides = [
     art: 'web',
     heading: 'Websites built around how your business really works',
     body: 'Custom sites and web applications, designed and written to fit your process instead of bending your process around a template.',
-  },
-  {
-    eyebrow: 'Software & ERP',
-    art: 'software',
-    heading: 'Business software modelled on your process, not a template',
-    body: 'ERP, HRM, CRM, POS and industry platforms — including RMG ERP and ISP billing — built to match how your organisation already runs.',
-  },
-  {
-    eyebrow: 'Networks & infrastructure',
-    art: 'network',
-    heading: 'Network and server work, done the way operators do it',
-    body: 'Design, automation, hardening and monitoring — the same discipline used on carrier networks, applied at the size your business needs.',
   },
 ];
 
@@ -61,7 +66,7 @@ const services = [
     title: 'Hosting & Infrastructure',
     description:
       'NVMe-backed hosting, business email, domains and DNS, server setup and backups — provisioned from our own portal.',
-    href: '/services/#web-hosting',
+    href: '/services/hosting/',
     cat: 'hosting',
   },
   {
@@ -69,7 +74,7 @@ const services = [
     title: 'Web & eCommerce',
     description:
       'Corporate websites, online stores and web applications, designed and built around how your business operates.',
-    href: '/services/#web-development',
+    href: '/services/web/',
     cat: 'web',
   },
   {
@@ -77,15 +82,23 @@ const services = [
     title: 'Software Development',
     description:
       'ERP, HRM, CRM, POS and industry platforms — including RMG ERP and ISP billing, built to fit your process.',
-    href: '/services/#erp',
+    href: '/services/software/',
     cat: 'software',
+  },
+  {
+    icon: 'zap' as const,
+    title: 'AI & Automation',
+    description:
+      'Bangla and English chatbots, voice agents that make calls, private AI workspaces and AI added to the software you already run.',
+    href: '/services/ai/',
+    cat: 'ai',
   },
   {
     icon: 'network' as const,
     title: 'IT & Networking',
     description:
       'Network design and cabling, firewalls, VPN and SD-WAN, Wi-Fi, CCTV and IP telephony — plus the automation to keep it consistent.',
-    href: '/services/#network-consulting',
+    href: '/services/network/',
     cat: 'network',
   },
   {
@@ -93,7 +106,7 @@ const services = [
     title: 'Cloud & Data Center',
     description:
       'Virtualisation, SAN/NAS storage, cloud migration, colocation and data centre design, with disaster recovery you have rehearsed.',
-    href: '/services/#virtualisation',
+    href: '/services/datacenter/',
     cat: 'datacenter',
   },
   {
@@ -101,7 +114,7 @@ const services = [
     title: 'Cyber Security',
     description:
       'Penetration testing, hardening, endpoint and ransomware protection, and audits mapped to ISO 27001, PCI-DSS or GDPR.',
-    href: '/services/#security',
+    href: '/services/security/',
     cat: 'security',
   },
   {
@@ -109,7 +122,7 @@ const services = [
     title: 'Digital & Media',
     description:
       'SEO, social and paid campaigns, analytics, branding and graphic design, and video and motion graphics production.',
-    href: '/services/#seo',
+    href: '/services/growth/',
     cat: 'growth',
   },
   {
@@ -117,53 +130,8 @@ const services = [
     title: 'Consultancy & Managed IT',
     description:
       'IT planning and gap analysis, SLA-based managed support, remote helpdesk, and training that leaves your team able to run it.',
-    href: '/services/#managed-support',
+    href: '/services/consulting/',
     cat: 'consulting',
-  },
-];
-
-// The sectors this work lands in. Named because the systems genuinely differ
-// between them — not a claim about who we have already invoiced.
-const industries = [
-  {
-    icon: 'building' as const,
-    title: 'Government & public sector',
-    body: 'Procurement-ready documentation, auditable systems and infrastructure that stays in the country.',
-  },
-  {
-    icon: 'lock' as const,
-    title: 'Banking & financial',
-    body: 'Hardened infrastructure, encryption and compliance evidence for regulated environments.',
-  },
-  {
-    icon: 'heart' as const,
-    title: 'Healthcare & hospitals',
-    body: 'Hospital management systems, patient record handling and the uptime a clinical service needs.',
-  },
-  {
-    icon: 'book' as const,
-    title: 'Education & eLearning',
-    body: 'Campus administration, school management systems, and networks that survive a full lab of students.',
-  },
-  {
-    icon: 'cart' as const,
-    title: 'Retail & eCommerce',
-    body: 'Storefronts, POS and inventory tied together, on hosting sized for a sale day rather than an average one.',
-  },
-  {
-    icon: 'box' as const,
-    title: 'Manufacturing & RMG',
-    body: 'RMG ERP, production and store flows, and the factory-floor networks underneath them.',
-  },
-  {
-    icon: 'pin' as const,
-    title: 'Real estate & construction',
-    body: 'Property and project management systems, plus site connectivity and surveillance.',
-  },
-  {
-    icon: 'network' as const,
-    title: 'ISPs & telecom',
-    body: 'Subscriber billing, network automation and monitoring — operator-scale change discipline.',
   },
 ];
 
@@ -356,7 +324,7 @@ const faqs = [
         <p class="eyebrow">Services</p>
         <h2>Services we offer</h2>
         <p class="lede">
-          From the server your site runs on to the software your staff use all day — eight areas of
+          From the server your site runs on to the AI your customers talk to — nine areas of
           work, staffed by engineers who do the job themselves rather than sub it out.
         </p>
       </div>
@@ -373,11 +341,11 @@ const faqs = [
           ))
         }
 
-        <a class="services-all card tilt" href={url("/services/")}>
+        <a class="services-all card tilt" href={url("/services/")} style="grid-column: 1 / -1">
           <span class="services-all-count">{serviceCount}</span>
           <h3>services in full</h3>
           <p>
-            Every service across all eight areas, with what each one actually involves — and what it
+            Every service across all nine areas, with what each one actually involves — and what it
             does not.
           </p>
           <span class="services-all-icons" aria-hidden="true">
@@ -404,18 +372,13 @@ const faqs = [
         </p>
       </div>
 
-      <div class="industry-grid">
-        {
-          industries.map((item) => (
-            <article class="industry-card card tilt">
-              <span class="icon-tile">
-                <Icon name={item.icon} />
-              </span>
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </article>
-          ))
-        }
+      <div class="lx-grid lx-grid-4">
+        {industries.map((i) => <IndustryCard industry={i} />)}
+        <a class="lx-card card tilt" href={url('/industries/')}>
+          <h3>All industries</h3>
+          <p>Problems, solutions and products for each sector, in detail.</p>
+          <span class="lx-card-link">Browse industries <Icon name="arrow-right" /></span>
+        </a>
       </div>
     </div>
   </section>
@@ -450,30 +413,24 @@ const faqs = [
     </div>
   </section>
 
-  <!-- ===================== TIDEGARD ===================== -->
-  <section class="section tg-teaser-wrap">
+  <!-- ===================== OUR VENTURES ===================== -->
+  <section class="section band" id="ventures">
     <div class="container">
-      <div class="tg-teaser">
-        <div class="tg-teaser-copy">
-          <p class="eyebrow">Our product</p>
-          <h2>Tidegard: DDoS detection and traffic monitoring</h2>
-          <p>
-            Built by LogiXhare for ISPs, hosting providers and data centres. Tidegard reads your
-            routers' IPFIX or sFlow data, catches attacks, alerts your NOC on Telegram, Slack, Teams or email,
-            and blackholes or filters them over BGP, with a NOC lead's approval. It runs on your own
-            server, and we deploy and tune it with you.
-          </p>
-          <div class="tg-teaser-actions">
-            <a href={url('/tidegard/')} class="btn btn-primary">Explore Tidegard <Icon name="arrow-right" class="btn-icon" /></a>
-            <a href={url('/tidegard/docs/')} class="btn btn-ghost tg-teaser-ghost">Documentation</a>
-          </div>
-        </div>
-        <ul class="tg-teaser-points">
-          <li><Icon name="chart" line /> Traffic per host, network, ASN and interface</li>
-          <li><Icon name="zap" line /> Threshold detection, tuned on live ISP traffic</li>
-          <li><Icon name="chat" line /> Incidents with attack samples and alerts</li>
-          <li><Icon name="shield" line /> RTBH and FlowSpec through GoBGP</li>
-        </ul>
+      <div class="section-head">
+        <p class="eyebrow">Our ventures</p>
+        <h2>Products we build and run ourselves</h2>
+        <p class="lede">
+          Beyond client work, LogiXhare builds its own products for Bangladesh — from ISP billing and
+          DDoS protection to Bangla AI that talks on the phone. Each is shown with its honest status.
+        </p>
+      </div>
+      <div class="lx-grid lx-grid-4">
+        {ventures.map((v) => <VentureCard venture={v} />)}
+        <a class="lx-card card tilt" href={url('/ventures/')}>
+          <h3>All ventures</h3>
+          <p>Features, who each product is for, and how to get started.</p>
+          <span class="lx-card-link">See ventures <Icon name="arrow-right" /></span>
+        </a>
       </div>
     </div>
   </section>

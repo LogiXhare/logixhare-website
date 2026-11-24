@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import PageIntro from '../../components/lx/PageIntro.astro';
+import VentureCard from '../../components/lx/VentureCard.astro';
+import Steps from '../../components/lx/Steps.astro';
+import Faq from '../../components/lx/Faq.astro';
+import Checks from '../../components/lx/Checks.astro';
+import { ventures, type Venture } from '../../data/ventures';
+import { industryBySlug } from '../../data/industries';
+import { url } from '../../lib/url';
+import '../../styles/pages.css';
+
+// Ventures with their own section (Tidegard) are not generated here.
+export function getStaticPaths() {
+  return ventures.filter((v) => !v.href).map((venture) => ({ params: { slug: venture.slug }, props: { venture } }));
+}
+
+const { venture: v } = Astro.props as { venture: Venture };
+const inds = v.industries.map((s) => {
+  const i = industryBySlug(s);
+  if (!i) throw new Error(`ventures.ts: ${v.slug} lists unknown industry "${s}"`);
+  return i;
+});
+const others = ventures.filter((o) => o.slug !== v.slug).slice(0, 3);
+---
+
+<BaseLayout title={`${v.name} — ${v.tagline}`} description={v.summary}>
+  <PageIntro
+    eyebrow={`Our ventures · ${v.status}`}
+    icon={v.icon}
+    title={v.name}
+    lede={`${v.tagline}. ${v.summary}`}
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Ventures', href: '/ventures/' }]}
+  >
+    <div class="lx-intro-actions">
+      {
+        v.status === 'Coming soon' ? (
+          <a href={url('/contact/')} class="btn btn-primary">Get notified <Icon name="arrow-right" class="btn-icon" /></a>
+        ) : (
+          <a href={url('/contact/')} class="btn btn-primary">Book a demo <Icon name="arrow-right" class="btn-icon" /></a>
+        )
+      }
+      {v.site && (<a href={v.site.href} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">Open {v.site.label}</a>)}
+    </div>
+  </PageIntro>
+
+  <section class="section band">
+    <div class="container lx-split">
+      <div>
+        <p class="eyebrow">The problem</p>
+        <h2 style="margin-top:.7rem">Why we built {v.name}</h2>
+        <p class="lede" style="margin-top:1rem">{v.problem}</p>
+      </div>
+      <div>
+        {v.deploy && (<div class="lx-panel card"><h3>How it runs</h3><p class="lede" style="font-size:var(--text-sm)">{v.deploy}</p></div>)}
+        {v.integrations && (
+          <div class="lx-panel card">
+            <h3>Works with</h3>
+            <div class="lx-tags">{v.integrations.map((t) => <span class="lx-tag">{t}</span>)}</div>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Features</p>
+        <h2>What {v.name} does</h2>
+      </div>
+      <div class="lx-grid lx-grid-3">
+        {
+          v.features.map((f) => (
+            <article class="lx-card card tilt">
+              <div class="lx-card-head">
+                <span class="lx-chip"><Icon name={f.icon} /></span>
+                <h3>{f.title}</h3>
+              </div>
+              <p>{f.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    v.forYou && (
+      <section class="section band">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Benefits</p>
+            <h2>Good for you{v.forCustomers ? ', and for your customers' : ''}</h2>
+          </div>
+          <div class="lx-sides">
+            <div class="lx-side card"><h3>What your business gets</h3><Checks items={v.forYou} /></div>
+            {v.forCustomers && (<div class="lx-side card"><h3>What your customers get</h3><Checks items={v.forCustomers} /></div>)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    v.steps.length > 0 && (
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Getting started</p>
+            <h2>How you start</h2>
+          </div>
+          <Steps steps={v.steps} />
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Industries</p>
+        <h2>Built for</h2>
+      </div>
+      <div class="lx-pills">
+        {inds.map((i) => (<a class="lx-pill" href={url(`/industries/${i.slug}/`)}><Icon name={i.icon} line /> {i.title}</a>))}
+      </div>
+    </div>
+  </section>
+
+  {
+    v.faqs.length > 0 && (
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">FAQ</p>
+            <h2>Questions about {v.name}</h2>
+          </div>
+          <Faq items={v.faqs} />
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">More ventures</p>
+        <h2>Other LogiXhare products</h2>
+      </div>
+      <div class="lx-grid lx-grid-3">{others.map((o) => <VentureCard venture={o} />)}</div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading={v.status === 'Coming soon' ? `Hear first when ${v.name} opens` : `See ${v.name} working`}
+    body="Send us a message and we will set up a demo with your own kind of data."
+    primaryLabel={v.status === 'Coming soon' ? 'Get notified' : 'Book a demo'}
+    secondaryHref="/ventures/"
+    secondaryLabel="All ventures"
+  />
+</BaseLayout>

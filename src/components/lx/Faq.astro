@@ -1,0 +1,22 @@
+---
+interface Props { items: { q: string; a: string }[]; }
+const { items } = Astro.props;
+// FAQPage structured data, so search engines can show the answers directly.
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<div class="lx-faq">
+  {
+    items.map((f, i) => (
+      <details open={i === 0}>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))
+  }
+</div>
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />

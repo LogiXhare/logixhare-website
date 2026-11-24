@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBand from '../components/CtaBand.astro';
+import PageIntro from '../components/lx/PageIntro.astro';
+import { technologyGroups } from '../data/company';
+import '../styles/pages.css';
+---
+
+<BaseLayout title="Technologies" description="The technologies LogiXhare Technologies builds and runs on: web and app frameworks, databases, AI, Linux infrastructure, virtualisation, MikroTik, BGP and cloud.">
+  <PageIntro
+    eyebrow="Technologies"
+    title="The stack we build and run on"
+    lede="We choose proven, open tools that your team — or any other team — can maintain after us. This is what we actually use day to day, not a list of logos."
+  />
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="lx-grid lx-grid-3">
+        {
+          technologyGroups.map((g) => (
+            <article class="lx-card card">
+              <h3>{g.title}</h3>
+              <div class="lx-tags">{g.items.map((t) => <span class="lx-tag">{t}</span>)}</div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <CtaBand heading="Already running something?" body="We work with existing systems too — tell us what you run and what is not working." secondaryHref="/how-we-work/" secondaryLabel="How we work" />
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+import Icon from '../Icon.astro';
+import type { IconName } from '../../data/icons';
+import { url } from '../../lib/url';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede: string;
+  icon?: IconName;
+  crumbs?: { label: string; href: string }[];
+}
+const { eyebrow, title, lede, icon, crumbs = [] } = Astro.props;
+---
+
+<section class="lx-intro">
+  <div class="lx-intro-bg" aria-hidden="true"></div>
+  <div class="container">
+    {
+      crumbs.length > 0 && (
+        <nav class="lx-crumbs" aria-label="Breadcrumb">
+          {crumbs.map((c) => (
+            <>
+              <a href={url(c.href)}>{c.label}</a>
+              <span aria-hidden="true">/</span>
+            </>
+          ))}
+        </nav>
+      )
+    }
+    <div class="lx-intro-head">
+      {icon && <span class="lx-chip lx-chip-lg"><Icon name={icon} /></span>}
+      <p class="eyebrow">{eyebrow}</p>
+    </div>
+    <h1 class="display">{title}</h1>
+    <p class="lede">{lede}</p>
+    <slot />
+  </div>
+</section>

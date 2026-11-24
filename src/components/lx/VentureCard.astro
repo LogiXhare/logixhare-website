@@ -1,0 +1,18 @@
+---
+import Icon from '../Icon.astro';
+import { type Venture, ventureHref } from '../../data/ventures';
+import { url } from '../../lib/url';
+
+interface Props { venture: Venture; full?: boolean; }
+const { venture: v, full = false } = Astro.props;
+---
+
+<a class="lx-card card tilt" href={url(ventureHref(v))}>
+  <div class="lx-card-head lx-card-head-split">
+    <span class="lx-chip"><Icon name={v.icon} /></span>
+    <span class="lx-status" data-status={v.status}>{v.status}</span>
+  </div>
+  <h3>{v.name}</h3>
+  {full ? <p><strong>{v.tagline}.</strong> {v.summary}</p> : <p>{v.tagline}.</p>}
+  <span class="lx-card-link">Explore <Icon name="arrow-right" /></span>
+</a>

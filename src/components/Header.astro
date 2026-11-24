@@ -10,7 +10,9 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
 const isActive = (href: string) =>
   href === '/'
     ? currentPath.replace(/\/+$/, '') === base
-    : currentPath.startsWith(`${base}${href}`);
+    : currentPath.startsWith(`${base}${href}`) ||
+      // Tidegard keeps its own section but belongs under Ventures.
+      (href === '/ventures/' && currentPath.startsWith(`${base}/tidegard/`));
 ---
 
 <header class="site-header" id="site-header">

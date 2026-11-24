@@ -1,0 +1,17 @@
+---
+import Icon from '../Icon.astro';
+import type { Industry } from '../../data/industries';
+import { url } from '../../lib/url';
+
+interface Props { industry: Industry; }
+const { industry: i } = Astro.props;
+---
+
+<a class="lx-card card tilt" href={url(`/industries/${i.slug}/`)}>
+  <div class="lx-card-head">
+    <span class="lx-chip"><Icon name={i.icon} /></span>
+    <h3>{i.title}</h3>
+  </div>
+  <p>{i.short}</p>
+  <span class="lx-card-link">See solutions <Icon name="arrow-right" /></span>
+</a>

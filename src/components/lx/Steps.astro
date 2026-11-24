@@ -1,0 +1,15 @@
+---
+interface Props { steps: { title: string; body: string }[]; }
+const { steps } = Astro.props;
+---
+
+<ol class:list={['lx-steps', { 'lx-steps-3': steps.length === 3 }]}>
+  {
+    steps.map((s) => (
+      <li class="lx-step">
+        <h3>{s.title}</h3>
+        <p>{s.body}</p>
+      </li>
+    ))
+  }
+</ol>

@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import PageIntro from '../../components/lx/PageIntro.astro';
+import IndustryCard from '../../components/lx/IndustryCard.astro';
+import Checks from '../../components/lx/Checks.astro';
+import { industries } from '../../data/industries';
+import { buildVsBuy } from '../../data/company';
+import '../../styles/pages.css';
+---
+
+<BaseLayout
+  title="Industries"
+  description="Technology solutions for ISPs, retail, RMG, healthcare, education, banking, government, real estate, restaurants, NGOs and corporate offices in Bangladesh — from LogiXhare Technologies."
+>
+  <PageIntro
+    eyebrow="Industries"
+    title="Technology built for the way your industry works"
+    lede="A hospital, a garment factory and an ISP do not run the same systems. Pick your industry to see the problems we solve there, the services that fit and the LogiXhare products already built for it."
+  />
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="lx-grid lx-grid-3">
+        {industries.map((i) => <IndustryCard industry={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Ready or custom?</p>
+        <h2>A ready product or a custom build</h2>
+        <p class="lede">The first question most of our clients ask. We offer both, and we will tell you which one fits.</p>
+      </div>
+      <div class="lx-sides">
+        <div class="lx-side card">
+          <h3>Start from a LogiXhare product</h3>
+          <Checks items={buildVsBuy.ready} />
+        </div>
+        <div class="lx-side card">
+          <h3>Build it around your process</h3>
+          <Checks items={buildVsBuy.custom} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="Your industry not listed?"
+    body="Tell us how your business runs and we will tell you honestly whether we can help."
+    secondaryHref="/ventures/"
+    secondaryLabel="See our ventures"
+  />
+</BaseLayout>

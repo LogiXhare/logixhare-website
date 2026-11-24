@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { serviceCategories } from '../data/nav';
+import { ventures, ventureHref } from '../data/ventures';
 import { url } from '../lib/url';
 
 const year = new Date().getFullYear();
@@ -37,17 +38,24 @@ const contactCards = [
 
 const companyLinks = [
   { label: 'About us', href: url('/about/') },
-  { label: 'Services', href: url('/services/') },
-  { label: 'Tidegard', href: url('/tidegard/') },
-  { label: 'Tidegard docs', href: url('/tidegard/docs/') },
+  { label: 'How we work', href: url('/how-we-work/') },
+  { label: 'Technologies', href: url('/technologies/') },
+  { label: 'Industries', href: url('/industries/') },
   { label: 'Contact', href: url('/contact/') },
+];
+
+// Products — the same list as the Ventures page, so header, footer and hub
+// can never disagree.
+const ventureLinks = [
+  ...ventures.map((v) => ({ label: v.name, href: url(ventureHref(v)) })),
+  { label: 'Tidegard docs', href: url('/tidegard/docs/') },
 ];
 
 // One representative link per service category, so the footer stays scannable
 // instead of reprinting the whole mega-menu.
 const serviceLinks = serviceCategories.map((cat) => ({
   label: cat.label,
-  href: url(`/services/#${cat.id}`),
+  href: url(`/services/${cat.id}/`),
 }));
 
 const clientLinks = [
@@ -194,6 +202,11 @@ const socials = [
       <ul>{companyLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
     </nav>
 
+    <nav class="footer-col" aria-label="Ventures">
+      <span class="footer-heading">Ventures</span>
+      <ul>{ventureLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+    </nav>
+
     <nav class="footer-col" aria-label="Services">
       <span class="footer-heading">Services</span>
       <ul>{serviceLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
@@ -287,7 +300,7 @@ const socials = [
 
   .footer-grid {
     display: grid;
-    grid-template-columns: 1.6fr 1fr 1.3fr 1.2fr;
+    grid-template-columns: 1.5fr 1fr 1.1fr 1.2fr 1.1fr;
     gap: 2.5rem;
     padding-bottom: 3rem;
   }

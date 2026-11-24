@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import PageIntro from '../../components/lx/PageIntro.astro';
+import VentureCard from '../../components/lx/VentureCard.astro';
+import IndustryCard from '../../components/lx/IndustryCard.astro';
+import Steps from '../../components/lx/Steps.astro';
+import { serviceCategories, type ServiceCategory } from '../../data/nav';
+import { industries } from '../../data/industries';
+import { ventures } from '../../data/ventures';
+import { deliverySteps, engagementModels } from '../../data/company';
+import { url } from '../../lib/url';
+import '../../styles/pages.css';
+
+export function getStaticPaths() {
+  return serviceCategories.map((cat) => ({ params: { id: cat.id }, props: { cat } }));
+}
+
+const { cat } = Astro.props as { cat: ServiceCategory };
+const anchorOf = (href: string) => href.split('#')[1] ?? '';
+
+// Which products sit on top of this kind of work.
+const ventureMap: Record<string, string[]> = {
+  hosting: ['syncgpt'],
+  web: ['industry-chatbots', 'pos'],
+  software: ['isp-billing', 'pos', 'onekle'],
+  ai: ['amar-voice', 'syncgpt', 'industry-chatbots'],
+  network: ['isp-billing', 'tidegard'],
+  datacenter: ['tidegard'],
+  security: ['tidegard'],
+  growth: ['industry-chatbots'],
+  consulting: ['syncgpt', 'isp-billing'],
+};
+const related = (ventureMap[cat.id] ?? []).map((s) => ventures.find((v) => v.slug === s)!).filter(Boolean);
+const inds = industries.filter((i) => i.services.includes(cat.id)).slice(0, 6);
+const others = serviceCategories.filter((c) => c.id !== cat.id);
+---
+
+<BaseLayout title={`${cat.label} Services`} description={`${cat.summary} ${cat.items.map((i) => i.label).join(', ')} — from LogiXhare Technologies, Dhaka.`}>
+  <PageIntro
+    eyebrow="Services"
+    icon={cat.icon}
+    title={cat.label}
+    lede={cat.summary}
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Services', href: '/services/' }]}
+  >
+    <div class="lx-intro-actions">
+      <a href={url('/contact/')} class="btn btn-primary">Get a quote <Icon name="arrow-right" class="btn-icon" /></a>
+      <a href="#included" class="btn btn-ghost">What’s included</a>
+    </div>
+  </PageIntro>
+
+  <section class="section band" id="included">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">What’s included</p>
+        <h2>{cat.items.length} things we do under {cat.label}</h2>
+      </div>
+      <div class="lx-grid lx-grid-2">
+        {
+          cat.items.map((item) => (
+            <article class="lx-card card tilt" id={anchorOf(item.href)} style="scroll-margin-top:100px">
+              <div class="lx-card-head">
+                <span class="lx-chip"><Icon name={item.icon} /></span>
+                <h3>{item.label}</h3>
+              </div>
+              <p>{item.detail}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Ways to work with us</p>
+        <h2>Pick the model that suits you</h2>
+      </div>
+      <div class="lx-grid lx-grid-4">
+        {
+          engagementModels.map((m) => (
+            <article class="lx-card card">
+              <span class="lx-chip"><Icon name={m.icon} /></span>
+              <h3>{m.title}</h3>
+              <p>{m.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Process</p>
+        <h2>How a {cat.label} project runs</h2>
+      </div>
+      <Steps steps={deliverySteps} />
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Our ventures</p>
+            <h2>Related LogiXhare products</h2>
+          </div>
+          <div class="lx-grid lx-grid-3">{related.map((v) => <VentureCard venture={v} />)}</div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    inds.length > 0 && (
+      <section class="section band">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Industries</p>
+            <h2>Where this work is used most</h2>
+          </div>
+          <div class="lx-grid lx-grid-3">{inds.map((i) => <IndustryCard industry={i} />)}</div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">More services</p>
+        <h2>Other things we do</h2>
+      </div>
+      <div class="lx-pills">
+        {others.map((c) => (<a class="lx-pill" href={url(`/services/${c.id}/`)}><Icon name={c.icon} line /> {c.label}</a>))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading={`Need help with ${cat.label}?`}
+    body="Describe what you are trying to do. We will reply with a plan and a written quote."
+    secondaryHref="/services/"
+    secondaryLabel="All services"
+  />
+</BaseLayout>

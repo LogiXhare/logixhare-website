@@ -262,6 +262,65 @@ export const serviceCategories: ServiceCategory[] = [
     ],
   },
   {
+    id: 'ai',
+    label: 'AI & Automation',
+    icon: 'zap',
+    summary: 'Chatbots, voice agents and AI built into the software you already use — in Bangla and English.',
+    image: '/services/software.svg',
+    imageAlt:
+      'Business modules feeding a central database, with a reporting panel drawn from it',
+    items: [
+      {
+        label: 'AI Chatbots',
+        href: '/services/#ai-chatbots',
+        icon: 'chat',
+        blurb: 'Bangla & English bots for web, WhatsApp, Messenger.',
+        detail:
+          "Chatbots that answer your customers in Bangla, English or Banglish on your website, WhatsApp and Facebook Messenger — connected to your own billing, booking or product data so the answers are real, and handing over to a person with the full conversation when needed.",
+      },
+      {
+        label: 'Voice AI Agents',
+        href: '/services/#voice-ai',
+        icon: 'phone',
+        blurb: 'AI that makes and takes calls in Bangla.',
+        detail:
+          "Voice agents that hold a phone or WhatsApp call in everyday Bangla for reminders, confirmations and simple support, and write a summary of every call. Built on our Amar Voice platform, scripted with your team, and piloted on a small list before anything scales.",
+      },
+      {
+        label: 'Private AI Workspaces',
+        href: '/services/#ai-workspace',
+        icon: 'lock',
+        blurb: 'An AI assistant your organisation controls.',
+        detail:
+          "A shared AI assistant for your staff — drafting, translating, summarising and answering from your own documents — under accounts your organisation controls, instead of company data going into personal subscriptions. Available on SyncGPT or deployed on your own servers.",
+      },
+      {
+        label: 'AI in Your Software',
+        href: '/services/#ai-integration',
+        icon: 'code',
+        blurb: 'AI features added to your existing systems.',
+        detail:
+          "Search that understands questions, automatic summaries, smart replies, classification and forecasting added to the ERP, CRM or portal you already run — scoped to one measurable job at a time rather than “AI everywhere”.",
+      },
+      {
+        label: 'Document & Data Automation',
+        href: '/services/#document-ai',
+        icon: 'clipboard',
+        blurb: 'Read forms, invoices and IDs automatically.',
+        detail:
+          "Extracting data from forms, invoices, receipts and scanned documents into your system, with a person checking anything the software is not sure about — so data entry shrinks instead of moving to a different desk.",
+      },
+      {
+        label: 'Workflow & WhatsApp Automation',
+        href: '/services/#workflow-automation',
+        icon: 'refresh',
+        blurb: 'Routine work and messages that run themselves.',
+        detail:
+          "Approvals, reminders, reports and customer messages that run on a schedule or on an event — a payment, an order, an expiry — across email, SMS and WhatsApp, so routine follow-up stops depending on someone remembering it.",
+      },
+    ],
+  },
+  {
     id: 'network',
     label: 'IT & Networking',
     icon: 'network',
@@ -593,7 +652,8 @@ export interface NavLink {
 export const navItems: NavLink[] = [
   { href: '/', label: 'Home' },
   { href: '/services/', label: 'Services', mega: true },
-  { href: '/tidegard/', label: 'Tidegard' },
+  { href: '/industries/', label: 'Industries' },
+  { href: '/ventures/', label: 'Ventures' },
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'Contact' },
 ];

@@ -19,7 +19,7 @@ const hostingTiers = [
 
 <BaseLayout
   title="Services"
-  description="Hosting, web and eCommerce, custom software and ERP, IT and networking, cloud and data centre, cyber security, digital media, and managed IT services — from LogiXhare Technologies, Dhaka."
+  description="Hosting, web and eCommerce, custom software and ERP, AI and automation, IT and networking, cloud and data centre, cyber security, digital media, and managed IT services — from LogiXhare Technologies, Dhaka."
 >
   <section class="page-intro">
     <div class="page-intro-bg" aria-hidden="true"></div>
@@ -27,7 +27,7 @@ const hostingTiers = [
       <p class="eyebrow">Services</p>
       <h1 class="display">Everything we do, in plain terms</h1>
       <p class="lede">
-        Eight areas of work, and the specific things we deliver inside each one. If something you
+        Nine areas of work, and the specific things we deliver inside each one. If something you
         need is not on this page, ask — we would rather tell you it is outside what we do than take
         it on badly.
       </p>
@@ -59,8 +59,9 @@ const hostingTiers = [
                 <Icon name={cat.icon} />
               </span>
               <div>
-                <h2>{cat.label}</h2>
+                <h2><a href={url(`/services/${cat.id}/`)} class="cat-link">{cat.label}</a></h2>
                 <p class="lede">{cat.summary}</p>
+                <a href={url(`/services/${cat.id}/`)} class="cat-more">Open the {cat.label} page <Icon name="arrow-right" class="btn-icon" /></a>
               </div>
             </div>
             <div class="cat-art">
@@ -187,6 +188,20 @@ const hostingTiers = [
     height: 16px;
     color: var(--teal);
   }
+
+  .cat-link { color: inherit; }
+  .cat-link:hover { color: var(--teal); }
+  .cat-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    font: 600 var(--text-xs) / 1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+  .cat-more :global(svg) { width: 14px; height: 14px; }
 
   .cat-section {
     scroll-margin-top: 90px;

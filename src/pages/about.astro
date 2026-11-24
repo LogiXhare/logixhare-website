@@ -1,4 +1,5 @@
 ---
+import { url } from '../lib/url';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
@@ -71,6 +72,12 @@ const reasons = [
       <p class="lede">
         LogiXhare Technologies is based in Dhaka, Bangladesh. We're young — that matters enough to say plainly
         rather than dress up.
+      </p>
+      <p class="lede">
+        We build software, AI, networks and hosting for businesses across Bangladesh, organised around
+        the <a href={url('/industries/')}>industries</a> we serve — and we run our own
+        <a href={url('/ventures/')}>ventures</a>, from ISP billing and DDoS protection to Bangla AI
+        that talks on the phone.
       </p>
     </div>
   </section>
