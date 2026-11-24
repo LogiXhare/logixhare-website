@@ -31,6 +31,7 @@ const others = ventures.filter((o) => o.slug !== v.slug).slice(0, 3);
     eyebrow={`Our ventures · ${v.status}`}
     icon={v.icon}
     title={v.name}
+    art={`/art/ventures/${v.slug}.svg`}
     lede={`${v.tagline}. ${v.summary}`}
     crumbs={[{ label: 'Home', href: '/' }, { label: 'Ventures', href: '/ventures/' }]}
   >

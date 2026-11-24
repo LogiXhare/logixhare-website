@@ -52,7 +52,7 @@ export interface Venture {
 export const ventures: Venture[] = [
   {
     slug: 'isp-billing',
-    name: 'ISP Billing & NOC',
+    name: 'ISP billing & NOC',
     icon: 'network',
     status: 'Live',
     tagline: 'Billing, RADIUS and network operations for ISPs, in one system',
@@ -202,7 +202,7 @@ export const ventures: Venture[] = [
   },
   {
     slug: 'industry-chatbots',
-    name: 'Industry Chatbots',
+    name: 'Industry chatbots',
     icon: 'zap',
     status: 'On request',
     tagline: 'Bangla and English chatbots for websites, WhatsApp and Messenger',

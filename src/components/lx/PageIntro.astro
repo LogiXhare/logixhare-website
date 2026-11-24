@@ -8,14 +8,18 @@ interface Props {
   title: string;
   lede: string;
   icon?: IconName;
+  /** Artwork under public/, shown beside the copy on wide screens. */
+  art?: string;
+  artAlt?: string;
   crumbs?: { label: string; href: string }[];
 }
-const { eyebrow, title, lede, icon, crumbs = [] } = Astro.props;
+const { eyebrow, title, lede, icon, art, artAlt = '', crumbs = [] } = Astro.props;
 ---
 
 <section class="lx-intro">
   <div class="lx-intro-bg" aria-hidden="true"></div>
-  <div class="container">
+  <div class:list={['container', { 'lx-intro-split': art }]}>
+    <div class="lx-intro-copy">
     {
       crumbs.length > 0 && (
         <nav class="lx-crumbs" aria-label="Breadcrumb">
@@ -35,5 +39,13 @@ const { eyebrow, title, lede, icon, crumbs = [] } = Astro.props;
     <h1 class="display">{title}</h1>
     <p class="lede">{lede}</p>
     <slot />
+    </div>
+    {
+      art && (
+        <div class="lx-intro-art">
+          <img src={url(art)} alt={artAlt} width="640" height="400" decoding="async" fetchpriority="high" />
+        </div>
+      )
+    }
   </div>
 </section>

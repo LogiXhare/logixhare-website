@@ -63,7 +63,7 @@ a.lx-pill:hover { border-color: rgba(97, 192, 224, 0.5); background: var(--surfa
   border-radius: 999px;
   font: 600 0.72rem/1.2 var(--font-mono);
   letter-spacing: 0.05em;
-  text-transform: uppercase;
+  text-transform: none;
   border: 1px solid var(--line);
   color: var(--text-muted);
   background: var(--surface);
@@ -102,7 +102,7 @@ a.lx-pill:hover { border-color: rgba(97, 192, 224, 0.5); background: var(--surfa
   gap: 0.4rem;
   font: 600 var(--text-xs) / 1 var(--font-mono);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--teal);
 }
 .lx-card-link svg { width: 14px; height: 14px; }
@@ -214,3 +214,28 @@ a.lx-card:hover h3 { color: var(--teal); }
 .lx-panel + .lx-panel { margin-top: 1.25rem; }
 
 .lx-note { font-size: var(--text-sm); color: var(--text-soft); margin-top: 1rem; }
+
+/* ---------- artwork ---------- */
+/* Art panels are dark in both themes, like the service artwork. */
+.lx-card-has-art { overflow: hidden; }
+.lx-card-art {
+  display: block;
+  margin: -1.6rem -1.6rem 0.35rem;
+  background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
+  border-bottom: 1px solid var(--line);
+}
+.lx-card-art img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+
+.lx-intro-split { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; }
+.lx-intro-art {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
+  box-shadow: var(--shadow-card);
+}
+.lx-intro-art img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; }
+@media (max-width: 900px) {
+  .lx-intro-split { grid-template-columns: 1fr; }
+  .lx-intro-art { order: -1; max-width: 520px; }
+}

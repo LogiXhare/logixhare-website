@@ -35,7 +35,7 @@ export interface Industry {
 export const industries: Industry[] = [
   {
     slug: 'isp-telecom',
-    title: 'ISPs & Telecom',
+    title: 'ISPs & telecom',
     icon: 'network',
     short: 'Billing, RADIUS, NOC monitoring and DDoS protection for internet providers.',
     intro:
@@ -117,7 +117,7 @@ export const industries: Industry[] = [
   },
   {
     slug: 'healthcare',
-    title: 'Healthcare & Hospitals',
+    title: 'Healthcare & hospitals',
     icon: 'heart',
     short: 'Hospital systems, appointment bots and the uptime clinical work needs.',
     intro:
@@ -171,7 +171,7 @@ export const industries: Industry[] = [
   },
   {
     slug: 'banking-finance',
-    title: 'Banking & Financial Services',
+    title: 'Banking & financial services',
     icon: 'lock',
     short: 'Hardened infrastructure, security testing and compliance evidence.',
     intro:
@@ -198,7 +198,7 @@ export const industries: Industry[] = [
   },
   {
     slug: 'government',
-    title: 'Government & Public Sector',
+    title: 'Government & public sector',
     icon: 'building',
     short: 'Auditable systems, in-country infrastructure and procurement-ready documents.',
     intro:
@@ -225,7 +225,7 @@ export const industries: Industry[] = [
   },
   {
     slug: 'real-estate',
-    title: 'Real Estate & Construction',
+    title: 'Real estate & construction',
     icon: 'pin',
     short: 'Project and property systems, sales bots, and site connectivity.',
     intro:
@@ -252,7 +252,7 @@ export const industries: Industry[] = [
   },
   {
     slug: 'restaurants-hospitality',
-    title: 'Restaurants & Hospitality',
+    title: 'Restaurants & hospitality',
     icon: 'users',
     short: 'Restaurant POS, online ordering, bookings and guest Wi-Fi.',
     intro:
@@ -279,7 +279,7 @@ export const industries: Industry[] = [
   },
   {
     slug: 'ngo-microfinance',
-    title: 'NGOs & Microfinance',
+    title: 'NGOs & microfinance',
     icon: 'compass',
     short: 'Member, loan and field systems, and calls that reach members.',
     intro:
