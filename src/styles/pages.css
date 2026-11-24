@@ -224,6 +224,7 @@ a.lx-card:hover h3 { color: var(--teal); }
   background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
   border-bottom: 1px solid var(--line);
 }
+.lx-card-art picture { display: block; }
 .lx-card-art img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
 
 .lx-intro-split { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; }
@@ -234,6 +235,7 @@ a.lx-card:hover h3 { color: var(--teal); }
   background: linear-gradient(155deg, #0b1c31, #0e2740 60%, #081524);
   box-shadow: var(--shadow-card);
 }
+.lx-intro-art picture { display: block; }
 .lx-intro-art img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; }
 @media (max-width: 900px) {
   .lx-intro-split { grid-template-columns: 1fr; }

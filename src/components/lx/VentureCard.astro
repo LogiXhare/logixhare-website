@@ -1,5 +1,6 @@
 ---
 import Icon from '../Icon.astro';
+import Art from './Art.astro';
 import { type Venture, ventureHref } from '../../data/ventures';
 import { url } from '../../lib/url';
 
@@ -9,7 +10,7 @@ const { venture: v, full = false } = Astro.props;
 
 <a class="lx-card lx-card-has-art card tilt" href={url(ventureHref(v))}>
   <span class="lx-card-art">
-    <img src={url(`/art/ventures/${v.slug}.svg`)} alt="" width="640" height="400" loading="lazy" decoding="async" />
+    <Art src={`/art/ventures/${v.slug}.svg`} />
   </span>
   <div class="lx-card-head lx-card-head-split">
     <span class="lx-chip"><Icon name={v.icon} /></span>

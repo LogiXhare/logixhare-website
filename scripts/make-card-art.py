@@ -32,6 +32,21 @@ SKY_PALE = '#a3dbf0'
 RED = '#ff6b6b'
 GREEN = '#4cd08a'
 INDIGO = '#5870a8'
+LIME = '#bef264'           # the second accent: light lime, used sparingly
+
+# Staggered animation delays, so lit windows and packets never pulse in step.
+_SEQ = [0]
+
+
+def delay(period: float = 3.2) -> str:
+    _SEQ[0] += 1
+    return f'animation-delay:{(_SEQ[0] * 0.61) % period:.2f}s'
+
+
+def tag(svg: str, cls: str, period: float = 3.2) -> str:
+    """Give the first element of an SVG snippet an animation class."""
+    i = svg.index(' ')
+    return f'{svg[:i]} class="{cls}" style="{delay(period)}"{svg[i:]}'
 
 
 # Every projected point of the scene being built is recorded here, so the
@@ -79,6 +94,7 @@ class Scene:
             'base': ('url(#fTop)', 'url(#fLeft)', 'url(#fRight)'),
             'light': ('url(#lTop)', 'url(#lLeft)', 'url(#lRight)'),
             'glow': ('url(#gTop)', 'url(#gLeft)', 'url(#gRight)'),
+            'lime': ('url(#mTop)', 'url(#mLeft)', 'url(#mRight)'),
         }[tone]
         svg = (
             f'<polygon points="{pts(top)}" fill="{fills[0]}"/>'
@@ -126,15 +142,19 @@ class Scene:
                     u0 = margin + c * (cw + gap)
                     v0 = margin + r * (rh + gap)
                     glow = (face_name, r, c) in lit
-                    out.append(fn(x, y, z, w, d, u0, v0, u0 + cw, v0 + rh, SKY if glow else '#0c1f31', 0.85 if glow else 1))
+                    if glow:
+                        col = LIME if (r + c) % 2 else SKY
+                        out.append(tag(fn(x, y, z, w, d, u0, v0, u0 + cw, v0 + rh, col, 0.85), 'blink'))
+                    else:
+                        out.append(fn(x, y, z, w, d, u0, v0, u0 + cw, v0 + rh, '#0c1f31', 1))
         return ''.join(out)
 
     def cylinder(self, x, y, z, r, h, tone='base', bands: int = 0) -> None:
         cx, cy_bot = P(x, y, z)
         _, cy_top = P(x, y, z + h)
         rx, ry = r * 1.2247, r * 0.7071
-        grad = 'url(#cyl)' if tone == 'base' else 'url(#cylG)'
-        top = 'url(#fTop)' if tone == 'base' else 'url(#gTop)'
+        grad = {'base': 'url(#cyl)', 'glow': 'url(#cylG)', 'lime': 'url(#cylM)'}[tone]
+        top = {'base': 'url(#fTop)', 'glow': 'url(#gTop)', 'lime': 'url(#mTop)'}[tone]
         svg = (
             f'<path d="M{cx - rx:.1f},{cy_top:.1f} L{cx - rx:.1f},{cy_bot:.1f} A{rx:.1f},{ry:.1f} 0 0 0 {cx + rx:.1f},{cy_bot:.1f} L{cx + rx:.1f},{cy_top:.1f} Z" fill="{grad}"/>'
         )
@@ -177,29 +197,30 @@ class Scene:
         if kind == 'bars':
             for i, v in enumerate((0.35, 0.6, 0.45, 0.8, 0.55)):
                 a0, a1 = 0.1 + i * 0.17, 0.1 + i * 0.17 + 0.1
-                s += f'<polygon points="{pts([u(a0, 0.1), u(a1, 0.1), u(a1, 0.1 + v * 0.75), u(a0, 0.1 + v * 0.75)])}" fill="{SKY}" opacity="{0.55 + i * 0.08:.2f}"/>'
+                col = LIME if i == 3 else SKY
+                s += tag(f'<polygon points="{pts([u(a0, 0.1), u(a1, 0.1), u(a1, 0.1 + v * 0.75), u(a0, 0.1 + v * 0.75)])}" fill="{col}" opacity="{0.55 + i * 0.08:.2f}"/>', 'grow', 2.6)
         elif kind == 'line':
             line = [u(0.06 + i * 0.11, y) for i, y in enumerate((0.3, 0.42, 0.36, 0.6, 0.52, 0.75, 0.68, 0.86, 0.8))]
-            s += f'<polyline points="{pts(line)}" fill="none" stroke="{SKY}" stroke-width="2.2" stroke-linejoin="round"/>'
+            s += f'<polyline class="draw" points="{pts(line)}" fill="none" stroke="{LIME}" stroke-width="2.2" stroke-linejoin="round"/>'
         elif kind == 'pulse':
             line = [u(a, b) for a, b in ((0.05, 0.5), (0.3, 0.5), (0.38, 0.8), (0.46, 0.2), (0.54, 0.65), (0.6, 0.5), (0.95, 0.5))]
-            s += f'<polyline points="{pts(line)}" fill="none" stroke="{GREEN}" stroke-width="2.4" stroke-linejoin="round"/>'
+            s += f'<polyline class="draw" points="{pts(line)}" fill="none" stroke="{LIME}" stroke-width="2.4" stroke-linejoin="round"/>'
         elif kind == 'chat':
             for i, (a0, a1, b) in enumerate(((0.08, 0.6, 0.72), (0.4, 0.92, 0.48), (0.08, 0.7, 0.24))):
-                col = SKY if i % 2 == 0 else INDIGO
-                s += f'<polygon points="{pts([u(a0, b), u(a1, b), u(a1, b + 0.16), u(a0, b + 0.16)])}" fill="{col}" opacity=".85"/>'
+                col = (SKY, LIME, INDIGO)[i]
+                s += f'<polygon class="pop" style="animation-delay:{i * 0.9:.1f}s" points="{pts([u(a0, b), u(a1, b), u(a1, b + 0.16), u(a0, b + 0.16)])}" fill="{col}" opacity=".85"/>'
         elif kind == 'rows':
             for i in range(5):
                 b = 0.12 + i * 0.16
-                s += f'<polygon points="{pts([u(0.08, b), u(0.92, b), u(0.92, b + 0.08), u(0.08, b + 0.08)])}" fill="{SKY}" opacity="{0.35 + (i % 2) * 0.35:.2f}"/>'
+                s += tag(f'<polygon points="{pts([u(0.08, b), u(0.92, b), u(0.92, b + 0.08), u(0.08, b + 0.08)])}" fill="{LIME if i == 1 else SKY}" opacity="{0.35 + (i % 2) * 0.35:.2f}"/>', 'blink')
         elif kind == 'wave':
             for i in range(11):
                 a = 0.08 + i * 0.077
                 hgt = (0.15, 0.35, 0.6, 0.85, 0.5, 0.95, 0.65, 0.4, 0.75, 0.3, 0.15)[i]
-                s += f'<polygon points="{pts([u(a, 0.5 - hgt * 0.4), u(a + 0.04, 0.5 - hgt * 0.4), u(a + 0.04, 0.5 + hgt * 0.4), u(a, 0.5 + hgt * 0.4)])}" fill="{SKY}"/>'
+                s += f'<polygon class="wave" style="animation-delay:{i * 0.09:.2f}s" points="{pts([u(a, 0.5 - hgt * 0.4), u(a + 0.04, 0.5 - hgt * 0.4), u(a + 0.04, 0.5 + hgt * 0.4), u(a, 0.5 + hgt * 0.4)])}" fill="{LIME if i in (3, 5) else SKY}"/>'
         elif kind == 'map':
             for a, b in ((0.25, 0.3), (0.6, 0.7), (0.75, 0.35), (0.4, 0.6)):
-                s += f'<circle cx="{u(a, b)[0]:.1f}" cy="{u(a, b)[1]:.1f}" r="3.2" fill="{SKY}"/>'
+                s += tag(f'<circle cx="{u(a, b)[0]:.1f}" cy="{u(a, b)[1]:.1f}" r="3.2" fill="{LIME}"/>', 'blink')
             s += f'<polyline points="{pts([u(0.25, 0.3), u(0.4, 0.6), u(0.6, 0.7), u(0.75, 0.35)])}" fill="none" stroke="{SKY}" stroke-opacity=".6" stroke-width="1.5"/>'
         return s
 
@@ -213,25 +234,27 @@ class Scene:
 
     def link(self, a, b, z=0, color=SKY, dash=False, op=0.55) -> None:
         (x1, y1), (x2, y2) = P(*a, z), P(*b, z)
-        dash_attr = ' stroke-dasharray="5 6"' if dash else ''
+        dash_attr = ' class="flow" stroke-dasharray="5 6"' if dash else ''
+        packet = color if color == RED else (LIME if _SEQ[0] % 2 else SKY_PALE)
         self.add(-500, f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{color}" stroke-opacity="{op}" stroke-width="2"{dash_attr}/>'
-                       f'<circle cx="{x2:.1f}" cy="{y2:.1f}" r="3" fill="{color}"/>')
+                       f'<circle cx="{x2:.1f}" cy="{y2:.1f}" r="3" fill="{color}"/>'
+                       f'<circle class="packet" r="3.6" fill="{packet}" style="offset-path:path(\'M{x1:.1f} {y1:.1f}L{x2:.1f} {y2:.1f}\');{delay(2.8)}"/>')
 
     def bubble(self, sx, sy, w=70, h=34, color=SKY, lines=2) -> None:
         """A floating chat bubble, drawn flat in screen space above the scene."""
         tail = f'M{sx + 14},{sy + h} l-2,12 l14,-12 Z'
-        s = (f'<g filter="url(#soft)"><rect x="{sx}" y="{sy}" width="{w}" height="{h}" rx="10" fill="#10243a" stroke="{color}" stroke-opacity=".7"/>'
+        s = (f'<g class="float" style="{delay(4.5)}"><g filter="url(#soft)"><rect x="{sx}" y="{sy}" width="{w}" height="{h}" rx="10" fill="#10243a" stroke="{color}" stroke-opacity=".7"/>'
              f'<path d="{tail}" fill="#10243a" stroke="{color}" stroke-opacity=".7"/></g>')
         for i in range(lines):
             lw = (w - 24) * (1 if i == 0 else 0.62)
-            s += f'<rect x="{sx + 12}" y="{sy + 10 + i * 9}" width="{lw:.0f}" height="4" rx="2" fill="{color}" opacity=".85"/>'
-        self.screen.append(s)
+            s += f'<rect x="{sx + 12}" y="{sy + 10 + i * 9}" width="{lw:.0f}" height="4" rx="2" fill="{color if i == 0 else LIME}" opacity=".85"/>'
+        self.screen.append(s + '</g>')
 
     def badge(self, sx, sy, glyph: str, color=SKY, r=19, world=False) -> None:
         """A round floating badge with a simple glyph path drawn in a 24x24 box."""
         (self.overlay if world else self.screen).append(
-            f'<g filter="url(#soft)"><circle cx="{sx}" cy="{sy}" r="{r}" fill="#10243a" stroke="{color}" stroke-opacity=".8" stroke-width="1.5"/></g>'
-            f'<g transform="translate({sx - 12} {sy - 12})" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{glyph}</g>')
+            f'<g class="float" style="{delay(4.5)}"><g filter="url(#soft)"><circle cx="{sx}" cy="{sy}" r="{r}" fill="#10243a" stroke="{color}" stroke-opacity=".8" stroke-width="1.5"/></g>'
+            f'<g transform="translate({sx - 12} {sy - 12})" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{glyph}</g></g>')
 
     def arcs(self, sx, sy, n=3, color=SKY, start=14, step=11, sweep=(-60, 60)) -> None:
         s = ''
@@ -242,7 +265,7 @@ class Scene:
             x1, y1 = sx + r * math.cos(a1), sy + r * math.sin(a1)
             if TRACK is not None:
                 TRACK.extend([(x0, y0), (x1, y1), (sx, sy - r)])
-            s += f'<path d="M{x0:.1f},{y0:.1f} A{r},{r} 0 0 1 {x1:.1f},{y1:.1f}" fill="none" stroke="{color}" stroke-opacity="{0.9 - i * 0.22:.2f}" stroke-width="2.2" stroke-linecap="round"/>'
+            s += f'<path class="ping" style="animation-delay:{i * 0.35:.2f}s" d="M{x0:.1f},{y0:.1f} A{r},{r} 0 0 1 {x1:.1f},{y1:.1f}" fill="none" stroke="{LIME if i == 1 else color}" stroke-opacity="{0.9 - i * 0.22:.2f}" stroke-width="2.2" stroke-linecap="round"/>'
         self.overlay.append(s)
 
     # ---------------------------------------------------------- output
@@ -269,6 +292,33 @@ class Scene:
 '''
 
 
+# Animations live inside each SVG, so they run wherever the file is shown as
+# an <img>. Reduced-motion users get the still picture.
+STYLE = '''<style>
+.blink{animation:blink 3.2s ease-in-out infinite}
+.grow{transform-box:fill-box;transform-origin:50% 100%;animation:grow 2.6s ease-in-out infinite}
+.wave{transform-box:fill-box;transform-origin:50% 50%;animation:wave 1.1s ease-in-out infinite}
+.draw{stroke-dasharray:420;animation:draw 3.4s linear infinite}
+.flow{animation:flow 1.2s linear infinite}
+.packet{animation:move 2.8s linear infinite}
+.float{animation:float 4.5s ease-in-out infinite}
+.ping{animation:ping 2.2s ease-out infinite}
+.pop{animation:pop 4.5s ease-in-out infinite}
+.breathe{animation:breathe 5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:.9}50%{opacity:.25}}
+@keyframes grow{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.55)}}
+@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.3)}}
+@keyframes draw{0%{stroke-dashoffset:420}60%,100%{stroke-dashoffset:0}}
+@keyframes flow{to{stroke-dashoffset:-22}}
+@keyframes move{0%{offset-distance:0%;opacity:0}12%,88%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes ping{0%{opacity:.15}35%{opacity:1}100%{opacity:.15}}
+@keyframes pop{0%,12%{opacity:0}28%,100%{opacity:.9}}
+@keyframes breathe{0%,100%{opacity:.65}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.packet{display:none}}
+</style>'''
+STILL_STYLE = '<style>.packet{display:none}</style>'
+
 DEFS = f'''<defs>
 <linearGradient id="bg" x1="0" y1="0" x2="{W}" y2="{H}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#0d2136"/><stop offset=".55" stop-color="#0e2740"/><stop offset="1" stop-color="#071320"/></linearGradient>
 <linearGradient id="fTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d5675"/><stop offset="1" stop-color="#22455f"/></linearGradient>
@@ -280,6 +330,10 @@ DEFS = f'''<defs>
 <linearGradient id="gTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd3ee"/><stop offset="1" stop-color="#61c0e0"/></linearGradient>
 <linearGradient id="gLeft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d8fc0"/><stop offset="1" stop-color="#2f6f99"/></linearGradient>
 <linearGradient id="gRight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26557a"/><stop offset="1" stop-color="#1b4060"/></linearGradient>
+<linearGradient id="mTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4fbb0"/><stop offset="1" stop-color="#bef264"/></linearGradient>
+<linearGradient id="mLeft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9ccf45"/><stop offset="1" stop-color="#7fb12f"/></linearGradient>
+<linearGradient id="mRight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5f8f22"/><stop offset="1" stop-color="#46701a"/></linearGradient>
+<linearGradient id="cylM" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9ccf45"/><stop offset="1" stop-color="#46701a"/></linearGradient>
 <linearGradient id="roof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a5f9a"/><stop offset="1" stop-color="#2b4777"/></linearGradient>
 <linearGradient id="cyl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1d3f5a"/><stop offset=".55" stop-color="#163650"/><stop offset="1" stop-color="#0a1a29"/></linearGradient>
 <linearGradient id="cylG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3d8fc0"/><stop offset="1" stop-color="#1b4060"/></linearGradient>
@@ -287,6 +341,7 @@ DEFS = f'''<defs>
 <radialGradient id="head" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#3f6f93"/><stop offset="1" stop-color="#173550"/></radialGradient>
 <radialGradient id="pool" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="{SKY}" stop-opacity=".22"/><stop offset="1" stop-color="{SKY}" stop-opacity="0"/></radialGradient>
 <radialGradient id="shadow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#04101b" stop-opacity=".7"/><stop offset="1" stop-color="#04101b" stop-opacity="0"/></radialGradient>
+{STYLE}
 <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".45"/></filter>
 </defs>'''
 
@@ -300,7 +355,7 @@ def _floor() -> str:
     cx, cy = P(0, 0)
     return (f'<polygon points="{pts([a, b, c, d])}" fill="#0a1b2b" opacity=".55"/>'
             f'<path d="{"".join(lines)}" stroke="{SKY}" stroke-opacity=".1" stroke-width="1"/>'
-            f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="250" ry="120" fill="url(#pool)"/>')
+            f'<ellipse class="breathe" cx="{cx:.1f}" cy="{cy:.1f}" rx="250" ry="120" fill="url(#pool)"/>')
 
 
 FLOOR = _floor()
@@ -356,7 +411,7 @@ def retail() -> Scene:
     s.box(40, 30, 0, 60, 30, 34, 'light')
     s.panel(56, 34, 34, 34, 30, 'rows', 'left', depth_bias=2)
     for (x, y, h) in ((-40, 50, 22), (-14, 54, 30), (-30, 82, 18)):
-        s.box(x, y, 0, 24, 24, h, 'glow' if h == 30 else 'base')
+        s.box(x, y, 0, 24, 24, h, 'lime' if h == 30 else 'base')
     s.badge(560, 70, G['cart'])
     s.bubble(515, 150, 80, 36)
     return s
@@ -374,7 +429,7 @@ def manufacturing() -> Scene:
     s.cylinder(10, -70, 64, 9, 70, 'base', 2)
     s.box(-60, 20, 0, 170, 22, 14, 'light')
     for i, x in enumerate((-50, -10, 30, 70)):
-        s.box(x, 22, 14, 24, 18, 20, 'glow' if i == 2 else 'base')
+        s.box(x, 22, 14, 24, 18, 20, 'lime' if i == 2 else 'base')
     s.badge(560, 70, G['gear'])
     return s
 
@@ -402,7 +457,7 @@ def education() -> Scene:
     s.box(-38, -60, 0, 4, 4, 150, 'light', depth_bias=-30)
     fx, fy = P(-36, -58, 150)
     s.overlay.append(f'<path d="M{fx:.1f},{fy:.1f} l34,-6 l-6,12 l8,10 l-36,4 z" fill="{SKY}" opacity=".9"/>')
-    for i, (h, t) in enumerate(((10, 'glow'), (9, 'base'), (11, 'light'), (8, 'base'))):
+    for i, (h, t) in enumerate(((10, 'lime'), (9, 'base'), (11, 'light'), (8, 'glow'))):
         s.box(60 - i * 2, 40 + i * 2, i * 11, 46, 30, h, t, depth_bias=i)
     s.panel(-20, 40, 0, 64, 46, 'line', 'left')
     s.badge(560, 70, G['cap'])
@@ -420,7 +475,7 @@ def banking() -> Scene:
     s.gable(-104, -84, 92, 138, 88, 26)
     for i, (x, y, n) in enumerate(((60, 20, 4), (90, 40, 6), (60, 60, 3))):
         for k in range(n):
-            s.cylinder(x, y, k * 6, 12, 6, 'glow' if k == n - 1 else 'base')
+            s.cylinder(x, y, k * 6, 12, 6, ('lime' if i == 1 else 'glow') if k == n - 1 else 'base')
     s.badge(560, 70, G['shield'])
     s.badge(560, 125, G['taka'], SKY, 16)
     return s
@@ -463,7 +518,7 @@ def restaurant() -> Scene:
     for (x, y) in ((40, 10), (70, 60), (0, 60)):
         s.cylinder(x + 15, y + 15, 0, 3, 20)
         s.box(x, y, 20, 30, 30, 4, 'light')
-        s.cylinder(x + 15, y + 15, 24, 7, 2, 'glow')
+        s.cylinder(x + 15, y + 15, 24, 7, 2, 'lime' if x == 40 else 'glow')
     s.badge(560, 70, G['cup'])
     s.bubble(512, 150, 84, 36)
     return s
@@ -502,7 +557,7 @@ def v_isp_billing() -> Scene:
     s = Scene('An isometric billing server linked to a MikroTik router and homes, with a revenue dashboard')
     s.shadow(-100, -80, 50, 50)
     s.box(-100, -80, 0, 46, 46, 120, 'base', s.windows(-100, -80, 0, 46, 46, 120, 6, 1, 1, lit={('l', 0, 0), ('l', 2, 0), ('l', 4, 0), ('r', 1, 0), ('r', 3, 0)}))
-    s.box(-20, -40, 0, 56, 30, 18, 'glow')
+    s.box(-20, -40, 0, 56, 30, 18, 'lime')
     s.panel(-30, 30, 0, 90, 60, 'bars', 'left')
     for (x, y) in ((70, -40), (100, 0), (90, 50)):
         s.box(x, y, 0, 28, 24, 22, 'base', s.windows(x, y, 0, 28, 24, 22, 1, 1, 1, lit={('l', 0, 0)}))
@@ -525,8 +580,8 @@ def v_tidegard() -> Scene:
         s.box(x, y, 0, 10, 10, 10, 'base', s.on_left(x, y, 0, 10, 10, 0, 0, 10, 10, RED, 0.8), depth_bias=-5)
         s.link((x, y), (40, 20), color=RED, dash=True, op=0.5)
     cx, cy = P(-10, -10, 30)
-    s.overlay.append(f'<g transform="translate({cx - 70:.1f} {cy - 160:.1f}) scale(5.8)" filter="url(#soft)"><path d="M12 2l9 3.4v6.6c0 5.6-3.9 9.2-9 10.6-5.1-1.4-9-5-9-10.6V5.4z" fill="url(#gLeft)" stroke="{SKY_PALE}" stroke-width=".4"/>'
-                     f'<path d="M7.5 12l3 3 6-6.5" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></g>')
+    s.overlay.append(f'<g class="float"><g transform="translate({cx - 70:.1f} {cy - 160:.1f}) scale(5.8)" filter="url(#soft)"><path d="M12 2l9 3.4v6.6c0 5.6-3.9 9.2-9 10.6-5.1-1.4-9-5-9-10.6V5.4z" fill="url(#gLeft)" stroke="{SKY_PALE}" stroke-width=".4"/>'
+                     f'<path d="M7.5 12l3 3 6-6.5" fill="none" stroke="{LIME}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g></g>')
     TRACK.extend([(cx - 70, cy - 160), (cx + 70, cy - 30)])
     s.badge(560, 70, G['alert'], RED)
     return s
@@ -553,7 +608,7 @@ def v_syncgpt() -> Scene:
     s.panel(-70, -30, 20, 120, 90, 'chat', 'left', 2)
     for (x, y) in ((-60, 50), (-20, 60), (20, 55)):
         s.person(x, y)
-    s.box(80, 20, 0, 30, 30, 30, 'glow')
+    s.box(80, 20, 0, 30, 30, 30, 'lime')
     s.badge(560, 70, G['spark'])
     s.bubble(512, 150, 96, 36, SKY, 2)
     s.bubble(30, 90, 80, 30, INDIGO, 1)
@@ -568,7 +623,7 @@ def v_pos() -> Scene:
     s.box(40, -30, 46, 20, 20, 14, 'light')
     rx, ry = P(50, -10, 62)
     s.overlay.append(f'<path d="M{rx - 8:.1f},{ry:.1f} l16,0 l0,-26 l-4,3 l-4,-3 l-4,3 l-4,-3 z" fill="#e8f4fa" opacity=".9"/>')
-    for (x, y, h, t) in ((80, 40, 26, 'base'), (80, 70, 18, 'glow'), (110, 50, 34, 'base'), (-60, 50, 22, 'base')):
+    for (x, y, h, t) in ((80, 40, 26, 'base'), (80, 70, 18, 'lime'), (110, 50, 34, 'base'), (-60, 50, 22, 'glow')):
         s.box(x, y, 0, 26, 26, h, t)
     s.badge(560, 70, G['barcode'])
     s.badge(560, 125, G['taka'], SKY, 16)
@@ -583,7 +638,7 @@ def v_chatbots() -> Scene:
           + Scene.on_left(-40, -40, 0, 70, 70, 20, 16, 50, 22, SKY, 0.6))
     s.cylinder(-5, -5, 70, 3, 22, 'glow')
     hx, hy = P(-5, -5, 98)
-    s.overlay.append(f'<circle cx="{hx:.1f}" cy="{hy:.1f}" r="7" fill="{SKY}"/>')
+    s.overlay.append(f'<circle class="blink" cx="{hx:.1f}" cy="{hy:.1f}" r="7" fill="{LIME}"/>')
     s.phone(70, 40, 0, 'chat')
     s.box(-110, 30, 0, 50, 36, 30, 'base')
     s.panel(-110, 40, 30, 50, 34, 'chat', 'left', 1)
@@ -629,9 +684,14 @@ def main() -> None:
         out = os.path.join(root, group)
         os.makedirs(out, exist_ok=True)
         for slug, fn in scenes.items():
+            svg = fn().render()
             with open(os.path.join(out, f'{slug}.svg'), 'w') as f:
-                f.write(fn().render())
-            print(f'public/art/{group}/{slug}.svg')
+                f.write(svg)
+            # Browsers do not pass prefers-reduced-motion into an SVG shown as
+            # an <img>, so pages pick this still copy with <picture>.
+            with open(os.path.join(out, f'{slug}.still.svg'), 'w') as f:
+                f.write(svg.replace(STYLE, STILL_STYLE))
+            print(f'public/art/{group}/{slug}.svg (+ .still.svg)')
 
 
 if __name__ == '__main__':

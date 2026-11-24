@@ -1,5 +1,6 @@
 ---
 import Icon from '../Icon.astro';
+import Art from './Art.astro';
 import type { Industry } from '../../data/industries';
 import { url } from '../../lib/url';
 
@@ -9,7 +10,7 @@ const { industry: i } = Astro.props;
 
 <a class="lx-card lx-card-has-art card tilt" href={url(`/industries/${i.slug}/`)}>
   <span class="lx-card-art">
-    <img src={url(`/art/industries/${i.slug}.svg`)} alt="" width="640" height="400" loading="lazy" decoding="async" />
+    <Art src={`/art/industries/${i.slug}.svg`} />
   </span>
   <div class="lx-card-head">
     <span class="lx-chip"><Icon name={i.icon} /></span>

@@ -1,5 +1,6 @@
 ---
 import Icon from '../Icon.astro';
+import Art from './Art.astro';
 import type { IconName } from '../../data/icons';
 import { url } from '../../lib/url';
 
@@ -43,7 +44,7 @@ const { eyebrow, title, lede, icon, art, artAlt = '', crumbs = [] } = Astro.prop
     {
       art && (
         <div class="lx-intro-art">
-          <img src={url(art)} alt={artAlt} width="640" height="400" decoding="async" fetchpriority="high" />
+          <Art src={art} alt={artAlt} eager />
         </div>
       )
     }

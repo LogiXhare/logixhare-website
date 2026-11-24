@@ -16,7 +16,7 @@ const BASE = import.meta.env.BASE_URL.replace(/\/+$/, '');
  * not hashed, so a browser that saw the old logo keeps showing it. Images get
  * this version appended; bump it whenever a file in public/ is replaced in place.
  */
-export const ASSET_VERSION = '20261124';
+export const ASSET_VERSION = '20261125';
 const VERSIONED = /\.(png|jpe?g|svg|webp|gif|ico)$/i;
 
 export function url(path: string): string {

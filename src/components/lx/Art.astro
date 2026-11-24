@@ -1,0 +1,29 @@
+---
+/**
+ * Card / intro artwork from public/art. The SVGs animate themselves; viewers
+ * who asked for reduced motion get the still copy, because a browser does
+ * not pass that preference into an SVG loaded as an image.
+ */
+import { url } from '../../lib/url';
+
+interface Props {
+  src: string; // e.g. /art/ventures/pos.svg
+  alt?: string;
+  eager?: boolean;
+}
+const { src, alt = '', eager = false } = Astro.props;
+const still = src.replace(/\.svg$/, '.still.svg');
+---
+
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset={url(still)} />
+  <img
+    src={url(src)}
+    alt={alt}
+    width="640"
+    height="400"
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    fetchpriority={eager ? 'high' : undefined}
+  />
+</picture>
