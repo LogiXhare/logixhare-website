@@ -46,8 +46,12 @@ From the unpacked bundle:
 
 ```bash
 cd tidegard-$version/deployments/docker-compose
+cp /path/to/your-licence.json licence.json   # the licence LogiXhare issued
 sudo ./setup.sh "$version"        # once: the CA, every key and password, and .env
 ```
+
+The stack does not start without `licence.json`. See
+[Licence](#licence) below.
 
 `setup.sh` creates a certificate authority for the stack, a certificate for
 each service, and a random password for each database user. It never
@@ -102,23 +106,50 @@ enables and starts nothing. Then:
 2. Replace every `CHANGE_ME` in `/etc/tidegard/*.env`. A database that is
    not on the same host needs its CA file set: plaintext is only ever used
    over loopback.
-3. Start the incident manager first. It applies the database migrations:
+3. Install the licence LogiXhare issued:
+
+   ```bash
+   sudo install -m 0644 your-licence.json /etc/tidegard/licence.json
+   ```
+
+4. Start the incident manager first. It applies the database migrations:
 
    ```bash
    sudo systemctl enable --now tidegard-incident-manager
    ```
 
-4. Then the API and the collector:
+5. Then the API and the collector:
 
    ```bash
    sudo systemctl enable --now tidegard-api tidegard-collector
    ```
 
-5. The notifier when you have [configured it](../notifications/), and the
+6. The notifier when you have [configured it](../notifications/), and the
    mitigator only after reading the [mitigation overview](../mitigation/).
 
 Every service answers `/healthz` and `/readyz`: the API on its own address,
 the others on their metrics address.
+
+## Licence
+
+Each deployment runs under a licence file LogiXhare issues with your
+subscription. It names your organisation, the period paid for, and any
+limit on the number of routers. It holds no secret, but it is signed: a
+changed file is refused.
+
+- The collector and the API read it at start and every hour. To renew,
+  replace the file; no restart is needed.
+- From 30 days before the end, the NOC UI shows a banner. After the end
+  date, a grace period, normally 14 days, keeps everything working.
+- Without a valid licence, Tidegard keeps receiving and counting flows
+  but stops detecting, and the API answers
+  [`api.licence_inactive`](../../problems/api-licence-inactive/).
+  Signing in, withdrawing mitigations, the BGP view and the kill switch
+  keep working. Tidegard never touches your routers' forwarding because
+  of a licence, and it never withdraws an active mitigation early.
+- The collector's metrics show the state, as
+  `tidegard_licence_state{state="active"} 1` and
+  `tidegard_licence_days_to_expiry`.
 
 ## After installing
 

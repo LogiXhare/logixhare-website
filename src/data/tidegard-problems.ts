@@ -65,6 +65,11 @@ export const problemTypes: ProblemType[] = [
     "meaning": "The database cannot be reached. The API fails closed. Sent with <code>Retry-After</code>."
   },
   {
+    "code": "api.licence_inactive",
+    "status": 403,
+    "meaning": "No valid Tidegard licence: missing, invalid, expired past its grace period, not yet valid, or the host clock is behind. Signing in, <code>GET /api/v1/licence</code>, reading and withdrawing mitigations, the BGP view and the kill switch still answer. Install the licence file LogiXhare issued, or contact LogiXhare to renew."
+  },
+  {
     "code": "api.internal",
     "status": 500,
     "meaning": "Unexpected. The body carries nothing but this code and the request id."
