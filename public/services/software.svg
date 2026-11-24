@@ -19,7 +19,7 @@
       <stop offset="0" stop-color="#1d3f5a"/><stop offset=".5" stop-color="#173549"/><stop offset="1" stop-color="#0d2134"/>
     </linearGradient>
     <radialGradient id="pool" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#2dc7c9" stop-opacity=".2"/><stop offset="1" stop-color="#2dc7c9" stop-opacity="0"/>
+      <stop offset="0" stop-color="#61c0e0" stop-opacity=".2"/><stop offset="1" stop-color="#61c0e0" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="shadow" cx=".5" cy=".5" r=".5">
       <stop offset="0" stop-color="#04101b" stop-opacity=".7"/><stop offset="1" stop-color="#04101b" stop-opacity="0"/>
@@ -30,7 +30,7 @@
   <rect width="640" height="400" fill="url(#bg)"/>
 
   <polygon points="330,116 630,290 330,464 30,290" fill="#0a1b2b" opacity=".5"/>
-  <g stroke="#2dc7c9" stroke-opacity=".1" stroke-width="1">
+  <g stroke="#61c0e0" stroke-opacity=".1" stroke-width="1">
     <path d="M180 203L480 377M255 160L555 334"/><path d="M480 203L180 377"/>
   </g>
   <ellipse cx="310" cy="284" rx="235" ry="115" fill="url(#pool)"/>
@@ -52,7 +52,7 @@
     <g clip-path="url(#dashScreen)">
       <polygon points="-6,-108 -142,-186 -142,-176 -6,-98" fill="#8fb7cf" fill-opacity=".14"/>
       <!-- KPI bars, drawn along the screen plane -->
-      <g fill="#2dc7c9">
+      <g fill="#61c0e0">
         <polygon points="-30,-52 -42,-59 -42,-95 -30,-88" fill-opacity=".85" class="b"/>
         <polygon points="-52,-65 -64,-72 -64,-100 -52,-93" fill-opacity=".65"/>
         <polygon points="-74,-78 -86,-85 -86,-125 -74,-118" fill-opacity=".8"/>
@@ -64,7 +64,7 @@
         <polygon points="-78,-128 -140,-164 -140,-171 -78,-135"/>
       </g>
     </g>
-    <polyline points="0,-110 -152,-198" fill="none" stroke="#2dc7c9" stroke-opacity=".3" stroke-width="1.2"/>
+    <polyline points="0,-110 -152,-198" fill="none" stroke="#61c0e0" stroke-opacity=".3" stroke-width="1.2"/>
   </g>
 
   <!-- ===== database drums ===== -->
@@ -73,19 +73,19 @@
     <g>
       <path d="M-58 -26v34c0 12 26 21 58 21s58-9 58-21v-34Z" fill="url(#drum)"/>
       <ellipse cx="0" cy="-26" rx="58" ry="21" fill="#23496a"/>
-      <ellipse cx="0" cy="-26" rx="44" ry="15" fill="#2dc7c9" fill-opacity=".16"/>
+      <ellipse cx="0" cy="-26" rx="44" ry="15" fill="#61c0e0" fill-opacity=".16"/>
     </g>
     <g transform="translate(0 -46)">
       <path d="M-58 -26v34c0 12 26 21 58 21s58-9 58-21v-34Z" fill="url(#drum)"/>
       <ellipse cx="0" cy="-26" rx="58" ry="21" fill="#23496a"/>
-      <ellipse cx="0" cy="-26" rx="44" ry="15" fill="#2dc7c9" fill-opacity=".16"/>
+      <ellipse cx="0" cy="-26" rx="44" ry="15" fill="#61c0e0" fill-opacity=".16"/>
     </g>
     <g transform="translate(0 -92)">
       <path d="M-58 -26v34c0 12 26 21 58 21s58-9 58-21v-34Z" fill="url(#drum)"/>
       <ellipse cx="0" cy="-26" rx="58" ry="21" fill="#2a5274"/>
-      <ellipse cx="0" cy="-26" rx="44" ry="15" fill="#2dc7c9" fill-opacity=".22"/>
+      <ellipse cx="0" cy="-26" rx="44" ry="15" fill="#61c0e0" fill-opacity=".22"/>
     </g>
-    <g fill="#2dc7c9">
+    <g fill="#61c0e0">
       <circle cx="-44" cy="-4" r="3.4" class="b"/>
       <circle cx="-44" cy="-50" r="3.4" class="b b2"/>
       <circle cx="-44" cy="-96" r="3.4" class="b b3"/>
@@ -93,7 +93,7 @@
   </g>
 
   <!-- link, drums to dashboard -->
-  <g fill="none" stroke="#2dc7c9" stroke-opacity=".45" stroke-width="2.2" stroke-linecap="round">
+  <g fill="none" stroke="#61c0e0" stroke-opacity=".45" stroke-width="2.2" stroke-linecap="round">
     <path d="M208 232q46 -16 84 -4"/>
   </g>
 
@@ -103,21 +103,21 @@
       <polygon points="0,-18 30,-1 0,16 -30,-1" fill="url(#fTop)"/>
       <polygon points="-30,-1 0,16 0,30 -30,13" fill="url(#fLeft)"/>
       <polygon points="0,16 30,-1 30,13 0,30" fill="url(#fRight)"/>
-      <ellipse cx="0" cy="-16" rx="9" ry="5" fill="#2dc7c9" fill-opacity=".55"/>
+      <ellipse cx="0" cy="-16" rx="9" ry="5" fill="#61c0e0" fill-opacity=".55"/>
     </g>
     <g transform="translate(184 112)">
       <polygon points="0,-18 30,-1 0,16 -30,-1" fill="url(#fTop)"/>
       <polygon points="-30,-1 0,16 0,30 -30,13" fill="url(#fLeft)"/>
       <polygon points="0,16 30,-1 30,13 0,30" fill="url(#fRight)"/>
-      <ellipse cx="0" cy="-16" rx="9" ry="5" fill="#2dc7c9" fill-opacity=".75" class="b b2"/>
+      <ellipse cx="0" cy="-16" rx="9" ry="5" fill="#61c0e0" fill-opacity=".75" class="b b2"/>
     </g>
     <g transform="translate(256 76)">
       <polygon points="0,-18 30,-1 0,16 -30,-1" fill="url(#fTop)"/>
       <polygon points="-30,-1 0,16 0,30 -30,13" fill="url(#fLeft)"/>
       <polygon points="0,16 30,-1 30,13 0,30" fill="url(#fRight)"/>
-      <ellipse cx="0" cy="-16" rx="9" ry="5" fill="#2dc7c9" fill-opacity=".55"/>
+      <ellipse cx="0" cy="-16" rx="9" ry="5" fill="#61c0e0" fill-opacity=".55"/>
     </g>
-    <g fill="none" stroke="#2dc7c9" stroke-opacity=".32" stroke-width="1.6" stroke-dasharray="4 6">
+    <g fill="none" stroke="#61c0e0" stroke-opacity=".32" stroke-width="1.6" stroke-dasharray="4 6">
       <path d="M142 162L154 128M214 126L226 92"/>
       <path d="M112 178v16"/>
     </g>

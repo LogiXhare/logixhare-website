@@ -13,11 +13,11 @@
       <stop offset="0" stop-color="#112436"/><stop offset="1" stop-color="#0a1a29"/>
     </linearGradient>
     <linearGradient id="shieldFace" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#2dc7c9" stop-opacity=".34"/>
-      <stop offset="1" stop-color="#2dc7c9" stop-opacity=".1"/>
+      <stop offset="0" stop-color="#61c0e0" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#61c0e0" stop-opacity=".1"/>
     </linearGradient>
     <radialGradient id="pool" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#2dc7c9" stop-opacity=".2"/><stop offset="1" stop-color="#2dc7c9" stop-opacity="0"/>
+      <stop offset="0" stop-color="#61c0e0" stop-opacity=".2"/><stop offset="1" stop-color="#61c0e0" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="shadow" cx=".5" cy=".5" r=".5">
       <stop offset="0" stop-color="#04101b" stop-opacity=".7"/><stop offset="1" stop-color="#04101b" stop-opacity="0"/>
@@ -28,7 +28,7 @@
   <rect width="640" height="400" fill="url(#bg)"/>
 
   <polygon points="320,120 630,300 320,480 10,300" fill="#0a1b2b" opacity=".5"/>
-  <g stroke="#2dc7c9" stroke-opacity=".1" stroke-width="1">
+  <g stroke="#61c0e0" stroke-opacity=".1" stroke-width="1">
     <path d="M165 210L475 390M245 164L555 344"/><path d="M475 210L165 390"/>
   </g>
   <ellipse cx="330" cy="290" rx="235" ry="115" fill="url(#pool)"/>
@@ -47,7 +47,7 @@
           <rect x="-50" y="-50" width="44" height="13" rx="3"/>
           <rect x="-50" y="-32" width="44" height="13" rx="3"/>
         </g>
-        <g fill="#2dc7c9">
+        <g fill="#61c0e0">
           <circle cx="-44" cy="-80" r="3" class="b"/>
           <circle cx="-44" cy="-62" r="3" opacity=".6"/>
           <circle cx="-44" cy="-44" r="3" class="b b2"/>
@@ -70,30 +70,30 @@
     <path d="M0 -156 68 -126v74c0 30-30 50-68 66-38-16-68-36-68-66v-74l68-30Z"
           transform="translate(-6 2)" fill="#0f2b41"/>
     <path d="M0 -156 68 -126v74c0 30-30 50-68 66-38-16-68-36-68-66v-74l68-30Z"
-          fill="url(#shieldFace)" stroke="#2dc7c9" stroke-width="2.4" stroke-opacity=".9"/>
+          fill="url(#shieldFace)" stroke="#61c0e0" stroke-width="2.4" stroke-opacity=".9"/>
     <!-- scan band sweeping the face -->
     <g clip-path="none" opacity=".55">
-      <path d="M-62 -70h124" stroke="#7ee8e9" stroke-width="10" stroke-opacity=".35" class="sweep"/>
+      <path d="M-62 -70h124" stroke="#a3dbf0" stroke-width="10" stroke-opacity=".35" class="sweep"/>
     </g>
-    <polyline points="-24,-52 -6,-34 32,-86" fill="none" stroke="#7ee8e9" stroke-width="5"
+    <polyline points="-24,-52 -6,-34 32,-86" fill="none" stroke="#a3dbf0" stroke-width="5"
               stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 
   <!-- ===== padlock above ===== -->
   <g transform="translate(250 92)">
-    <path d="M-16 4v-14a16 16 0 0 1 32 0v14" fill="none" stroke="#2dc7c9" stroke-width="5" stroke-linecap="round"/>
+    <path d="M-16 4v-14a16 16 0 0 1 32 0v14" fill="none" stroke="#61c0e0" stroke-width="5" stroke-linecap="round"/>
     <polygon points="0,-6 30,11 0,28 -30,11" fill="url(#fTop)"/>
     <polygon points="-30,11 0,28 0,48 -30,31" fill="url(#fLeft)"/>
     <polygon points="0,28 30,11 30,31 0,48" fill="url(#fRight)"/>
-    <ellipse cx="0" cy="9" rx="7" ry="4" fill="#2dc7c9" fill-opacity=".8" class="b"/>
+    <ellipse cx="0" cy="9" rx="7" ry="4" fill="#61c0e0" fill-opacity=".8" class="b"/>
   </g>
 
   <!-- inbound traffic: accepted on the left, one dropped -->
-  <g stroke="#2dc7c9" stroke-width="2.4" stroke-linecap="round" fill="none">
+  <g stroke="#61c0e0" stroke-width="2.4" stroke-linecap="round" fill="none">
     <path d="M40 250h84" stroke-opacity=".5"/>
     <path d="M28 290h96" stroke-opacity=".5"/>
   </g>
-  <g fill="#2dc7c9">
+  <g fill="#61c0e0">
     <circle cx="92" cy="250" r="5" class="b"/>
     <circle cx="66" cy="290" r="5" class="b b2"/>
   </g>
