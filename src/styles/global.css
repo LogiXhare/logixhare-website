@@ -27,8 +27,8 @@
      contrast on a light ground. */
 
   /* ground & surfaces */
-  --bg: #ffffff;           /* page ground */
-  --bg-alt: #f6f8fc;       /* alternating bands, footer */
+  --bg: #f7fee7;           /* page ground: light lime */
+  --bg-alt: #f0fbd8;       /* alternating bands, footer: a shade deeper lime */
   --surface: #ffffff;      /* cards, panels */
   --surface-2: #eef4f9;    /* raised / hover state */
 
@@ -50,7 +50,7 @@
   --line: #dbe5ee;
   --line-soft: rgba(15, 32, 56, 0.09);
   --grid-line: rgba(15, 32, 56, 0.045);       /* hero graph-paper overlay */
-  --header-bg: rgba(255, 255, 255, 0.9);     /* sticky header, over blur */
+  --header-bg: rgba(247, 254, 231, 0.92);     /* sticky header, over blur */
 
   --shadow-card: 0 1px 2px rgba(15, 32, 56, 0.06), 0 16px 34px -22px rgba(15, 32, 56, 0.3);
   --shadow-lift: 0 10px 26px -12px rgba(59, 79, 158, 0.45);
@@ -78,7 +78,7 @@
   --text-3xl: clamp(2.35rem, 1.6rem + 3vw, 4rem);       /* page h1 / hero */
 
   /* --- layout --- */
-  --container: 1180px;
+  --container: none;      /* full width; the only side margin is the 1-inch gutter below */
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 24px;
@@ -235,7 +235,7 @@ button {
   width: 100%;
   max-width: var(--container);
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+  padding-inline: clamp(1.25rem, 5vw, 6rem); /* 6rem = 96px = 1 inch on desktop */
 }
 
 .section {
