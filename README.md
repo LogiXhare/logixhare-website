@@ -1,6 +1,8 @@
 # LogiXhare Technologies — Company Website
 
-Static site (Astro), auto-deployed via GitHub Actions to `earth.wetechi.com` (HestiaCP) over FTPS.
+Static site (Astro), built and deployed by GitHub Actions over SFTP. The host, the deploy
+account and its key are repository secrets (`SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`) and
+are deliberately not named here.
 
 ## Workflow
 
@@ -21,4 +23,7 @@ npm run dev
 
 ## Deploy credentials
 
-CI uses a HestiaCP FTPS account (`wetechi_deploy`) scoped only to the `logixhare.com` web root — stored as repo secrets (`FTP_HOST`, `FTP_USER`, `FTP_PASS`), never committed.
+CI signs in with an SFTP account restricted by OpenSSH to this site's web root, so a leaked
+key reaches nothing else on the host. The host, the account and the key are held as the
+repository secrets named above and are never committed. Rotating the key means replacing
+`SSH_PRIVATE_KEY` here and the matching public key in the account's `authorized_keys`.
